@@ -1,0 +1,4 @@
+<html>
+    <h1 tal:content="context/Title">Title</h1>
+    <p tal:content="context/Title">Text</p>
+</html>
