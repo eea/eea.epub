@@ -12,7 +12,9 @@ class ExportView(BrowserView):
         response.setHeader('Content-Type', 'application/xml+epub')
         response.setHeader('Content-Disposition', 'attachment; filename=%s.epub' % self.context.id)
 
-        templateOutput = self.template(self).encode('utf-8')
+        templateOutput = self.template(self)
+        templateOutput = templateOutput.decode('utf-8') # This encoding circus was required for including context.getText() in the template
+        templateOutput = templateOutput.encode('utf-8')
         inMemoryOutputFile = StringIO()
 
         zipFile = ZipFile(inMemoryOutputFile, 'w')
