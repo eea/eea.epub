@@ -1,8 +1,7 @@
-from Products.Five import BrowserView
-from zope.pagetemplate.pagetemplatefile import PageTemplateFile
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from StringIO import StringIO
 from zipfile import ZipFile
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from Products.Five import BrowserView
 
 class ExportView(BrowserView):
 
@@ -13,13 +12,17 @@ class ExportView(BrowserView):
         self.request = request
 
     def __call__(self):
-        self.request.response.setHeader('Content-Type', 'application/xml+epub')
-        self.request.response.setHeader('Content-Disposition', 'attachment; filename=%s.epub' % self.context.id)
-        template = self.template()
-        output = StringIO()
-        myzip = ZipFile(output, 'w')
-        myzip.writestr('mimetype', 'application/epub+zip')
-        myzip.writestr('chapter1.xhtml', template)
-        myzip.close()
-        output.seek(0)
-        return output.read()
+        response = self.request.response
+        response.setHeader('Content-Type', 'application/xml+epub')
+        response.setHeader('Content-Disposition', 'attachment; filename=%s.epub' % self.context.id)
+
+        templateOutput = self.template().encode('utf-8')
+        inMemoryOutputFile = StringIO()
+
+        zipFile = ZipFile(inMemoryOutputFile, 'w')
+        zipFile.writestr('mimetype', 'application/epub+zip')
+        zipFile.writestr('chapter1.xhtml', templateOutput)
+        zipFile.close()
+
+        inMemoryOutputFile.seek(0)
+        return inMemoryOutputFile.read()
