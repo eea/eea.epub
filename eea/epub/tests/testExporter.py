@@ -24,7 +24,7 @@ class ExporterTest(EEAMegaTestCase):
         zipFile = ZipFile(responseOutput, 'r')
         fileNames = zipFile.namelist()
         self.failUnless('mimetype' in fileNames)
-        self.failUnless('chapter1.xhtml' in fileNames)
+        self.failUnless('OEBPS/content.xhtml' in fileNames)
 
 def test_suite():
     from unittest import TestSuite, makeSuite
