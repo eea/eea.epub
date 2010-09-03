@@ -28,6 +28,7 @@ class EpubFile(object):
     
     def __init__(self, zipFile):
         self.zipFile = zipFile
+        self.cache = {}
 
     @property
     def rootFilePath(self):
@@ -36,18 +37,47 @@ class EpubFile(object):
         xml = stripNamespaces(xml)
         xml = xml.find('rootfiles')
         xml = xml.find('rootfile')
-        path = xml.get('full-path')
-        return path
+        return xml.get('full-path')
 
     @property
-    def title(self):
+    def rootFile(self):
+        if 'rootFile' in self.cache:
+            return self.cache['rootFile']
         fileContent = self.zipFile.read(self.rootFilePath)
         xml = ET.XML(fileContent)
         xml = stripNamespaces(xml)
+        self.cache['rootFile'] = xml
+        return xml
+
+    @property
+    def title(self):
+        xml = self.rootFile
         xml = xml.find('metadata')
         xml = xml.find('title')
-        title = xml.text
-        return title
+        return xml.text
+
+    @property
+    def chapterFiles(self):
+        xml = self.rootFile
+        xml = xml.find('manifest')
+        chapters = []
+        allowedContentTypes = [
+            'application/xhtml+xml',
+            'text/html',
+        ]
+        for elem in xml.getchildren():
+            if elem.get('media-type') in allowedContentTypes:
+                fileName = 'OEBPS/' + elem.get('href')
+                chapters.append(fileName)
+        return chapters
+
+    @property
+    def chapters(self):
+        chapters = []
+        for chapterFile in self.chapterFiles:
+            content = self.zipFile.read(chapterFile)
+            chapters.append(content)
+        return chapters
 
     @property
     def ploneID(self):
@@ -60,4 +90,9 @@ class ImportView(BrowserView):
     def importFile(self, epubFile):
         zipFile = ZipFile(epubFile, 'r')
         epub = EpubFile(zipFile)
-        self.context.invokeFactory('Folder', id=epub.ploneID)
+        folder = self.context[self.context.invokeFactory('Folder', id=epub.ploneID)]
+        folder.setTitle(epub.title)
+        count = 0
+        for text in epub.chapters:
+            count += 1;
+            folder.invokeFactory('Article', id=str(count))
