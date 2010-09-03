@@ -34,7 +34,7 @@ class ExportView(BrowserView):
 
         zipFile = ZipFile(inMemoryOutputFile, 'w')
         zipFile.writestr('mimetype', 'application/epub+zip')
-        zipFile.writestr('META-INF/container.xml', replace('META-INF/container', {}))
+        zipFile.writestr('META-INF/container.xml', replace('META-INF/container.xml', {}))
 
         zipFile.writestr('OEBPS/content.xhtml', templateOutput)
         zipFile.writestr('OEBPS/content.opf', replace('OEBPS/content.opf', variables))
