@@ -10,4 +10,12 @@
     allowed_interface=".interfaces.IExportView"
     />
 
+  <browser:page
+    for="*"
+    name="epub_import_view"
+    class=".import.ImportView"
+    permission="zope.Public"
+    allowed_interface=".interfaces.IImportView"
+    />
+
 </configure>
