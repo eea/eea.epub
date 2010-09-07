@@ -85,7 +85,15 @@ class EpubFile(object):
 
 class ImportView(BrowserView):
 
-    template = ViewPageTemplateFile('epub.pt')
+    template = ViewPageTemplateFile('epub_import_form.pt')
+
+    def __call__(self):
+        if self.request.environ['REQUEST_METHOD'] == 'GET':
+            return self.template()
+        elif self.request.environ['REQUEST_METHOD'] == 'POST':
+            httpFileUpload = self.request.form.values()[0]
+            epubFile = httpFileUpload.read()
+            self.importFile(epubFile)
 
     def importFile(self, epubFile):
         zipFile = ZipFile(epubFile, 'r')
