@@ -4,4 +4,9 @@ class IExportView(Interface):
     pass
 
 class IImportView(Interface):
-    pass
+    
+    def getNumberOfImportedProducts():
+        pass
+
+    def hasImportResults():
+        pass

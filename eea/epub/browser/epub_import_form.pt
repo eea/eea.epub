@@ -2,6 +2,9 @@
     <head>
     </head>
     <body>
+        <div tal:condition="python:view.hasImportResults()" class="portalMessage">
+            <p><span tal:content="python:view.getNumberOfImportedProducts()"></span> chapters imported successfully</p>
+        </div>
         <form method="post" action="./epub_import_view" enctype="multipart/form-data">
             <fieldset>
                 <input type="file" name="epubFile" />

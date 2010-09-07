@@ -89,11 +89,17 @@ class ImportView(BrowserView):
 
     def __call__(self):
         if self.request.environ['REQUEST_METHOD'] == 'GET':
-            return self.template()
+            return self.template(self)
         elif self.request.environ['REQUEST_METHOD'] == 'POST':
             httpFileUpload = self.request.form.values()[0]
-            self.importFile(httpFileUpload)
+            self.count = self.importFile(httpFileUpload)
             return self.template(self)
+
+    def getNumberOfImportedProducts(self):
+        return getattr(self, 'count', 0)
+
+    def hasImportResults(self):
+        return hasattr(self, 'count')
 
     def importFile(self, epubFile):
         zipFile = ZipFile(epubFile, 'r')
@@ -104,3 +110,4 @@ class ImportView(BrowserView):
         for text in epub.chapters:
             count += 1;
             folder.invokeFactory('Article', id=str(count))
+        return count
