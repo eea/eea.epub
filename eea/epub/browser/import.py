@@ -92,8 +92,8 @@ class ImportView(BrowserView):
             return self.template()
         elif self.request.environ['REQUEST_METHOD'] == 'POST':
             httpFileUpload = self.request.form.values()[0]
-            epubFile = httpFileUpload.read()
-            self.importFile(epubFile)
+            self.importFile(httpFileUpload)
+            return self.template(self)
 
     def importFile(self, epubFile):
         zipFile = ZipFile(epubFile, 'r')
