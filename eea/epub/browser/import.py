@@ -57,26 +57,22 @@ class EpubFile(object):
         return xml.text
 
     @property
-    def chapterFiles(self):
+    def chapters(self):
         xml = self.rootFile
         xml = xml.find('manifest')
-        chapters = []
         allowedContentTypes = [
             'application/xhtml+xml',
             'text/html',
         ]
+        chapters = []
         for elem in xml.getchildren():
             if elem.get('media-type') in allowedContentTypes:
                 fileName = 'OEBPS/' + elem.get('href')
-                chapters.append(fileName)
-        return chapters
-
-    @property
-    def chapters(self):
-        chapters = []
-        for chapterFile in self.chapterFiles:
-            content = self.zipFile.read(chapterFile)
-            chapters.append(content)
+                content = self.zipFile.read(fileName)
+                chapters.append({
+                    'id': elem.get('id'),
+                    'content': content,
+                })
         return chapters
 
     @property
@@ -107,7 +103,8 @@ class ImportView(BrowserView):
         folder = self.context[self.context.invokeFactory('Folder', id=epub.ploneID)]
         folder.setTitle(epub.title)
         count = 0
-        for text in epub.chapters:
+        for chapter in epub.chapters:
             count += 1;
-            folder.invokeFactory('Article', id=str(count))
+            article = folder[folder.invokeFactory('Article', id=chapter['id'])]
+            article.setText(chapter['content'])
         return count
