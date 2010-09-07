@@ -81,7 +81,7 @@ class EpubFile(object):
 
     @property
     def ploneID(self):
-        return self.title.strip().lower().replace(' ', '-')
+        return self.title.strip().strip('!@#$%^&*(()+').lower().replace(' ', '-')
 
 class ImportView(BrowserView):
 
