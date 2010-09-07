@@ -10,8 +10,7 @@ def replace(filePath, variables):
     f = open(filePath)
     content = f.read()
     f.close()
-    content = content % variables
-    return content
+    return content % variables
 
 class ExportView(BrowserView):
 
