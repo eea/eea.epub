@@ -50,6 +50,29 @@ class EpubFile(object):
         return xml
 
     @property
+    def coverImageData(self):
+        if 'coverImageData' in self.cache:
+            return self.cache['coverImageData']
+
+        xml = self.rootFile
+        xml = xml.find('metadata')
+
+        coverImageItemId = None
+        for elem in xml.findall('meta'):
+            if elem.get('name') == "cover":
+                coverImageItemId = elem.get("content")
+                break
+
+        if coverImageItemId != None:
+            for elem in self.rootFile.find('manifest').findall('item'):
+                if elem.get('id') == coverImageItemId:
+                    coverImageData = self.zipFile.read('OEBPS/' + elem.get('href'))
+                    self.cache['coverImageData'] = coverImageData
+                    return coverImageData
+
+        return None
+            
+    @property
     def title(self):
         xml = self.rootFile
         xml = xml.find('metadata')
@@ -100,8 +123,12 @@ class ImportView(BrowserView):
     def importFile(self, epubFile):
         zipFile = ZipFile(epubFile, 'r')
         epub = EpubFile(zipFile)
+
         folder = self.context[self.context.invokeFactory('Folder', id=epub.ploneID)]
         folder.setTitle(epub.title)
+        if epub.coverImageData != None:
+            folder.invokeFactory('Image', id='epub_cover', image=epub.coverImageData)
+
         count = 0
         for chapter in epub.chapters:
             count += 1;

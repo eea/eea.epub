@@ -19,8 +19,12 @@ class ImporterTest(EEAMegaTestCase):
     def test_folderStructure(self):
         rootEpubFolder = getattr(self.portal, 'from-urban-spaces-to-urban-ecosystems', None)
         self.failUnless(rootEpubFolder is not None)
-        brains = rootEpubFolder.getFolderContents()
+        brains = rootEpubFolder.getFolderContents({'portal_type':'Article'})
         self.failUnless(len(brains) == 1) # EPUB contained one chapter
+
+    def test_coverImage(self):
+        rootEpubFolder = getattr(self.portal, 'from-urban-spaces-to-urban-ecosystems', None)
+        self.failUnless(rootEpubFolder.epub_cover.portal_type == 'Image')
 
 def test_suite():
     from unittest import TestSuite, makeSuite
