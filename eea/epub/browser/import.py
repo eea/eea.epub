@@ -99,6 +99,24 @@ class EpubFile(object):
         return chapters
 
     @property
+    def creators(self):
+        creators = []
+        for elem in self.rootFile.find('metadata').findall('creator'):
+            creators.append(elem.text)
+        return creators
+
+    @property
+    def publicationDate(self):
+        pass
+
+    @property
+    def language(self):
+        elem = self.rootFile.find('metadata').find('language')
+        if elem != None:
+            return elem.text
+        return None
+
+    @property
     def ploneID(self):
         return self.title.strip().strip('!@#$%^&*()<>./+').lower().replace(' ', '-')
 
