@@ -142,7 +142,14 @@ class ImportView(BrowserView):
         zipFile = ZipFile(epubFile, 'r')
         epub = EpubFile(zipFile)
 
-        folder = self.context[self.context.invokeFactory('Folder', id=epub.ploneID)]
+        # Generate unique ID
+        id = epub.ploneID
+        count = 0
+        while hasattr(self.context, id):
+            count += 1
+            id = '%s-%i' % (epub.ploneID, count)
+
+        folder = self.context[self.context.invokeFactory('Folder', id=id)]
         folder.setTitle(epub.title)
         if epub.coverImageData != None:
             folder.invokeFactory('Image', id='epub_cover', image=epub.coverImageData)
