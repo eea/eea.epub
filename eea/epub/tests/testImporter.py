@@ -22,6 +22,7 @@ class ImporterTest(EEAMegaTestCase):
         brains = rootEpubFolder.getFolderContents({'portal_type':'Article'})
         self.failUnless(len(brains) == 1) # EPUB contained one chapter
         chapter = brains[0]
+        self.failUnless(chapter['id'] == 'chapter1.xhtml')
         self.failUnless(chapter['Title'] == 'Text')
 
     def test_coverImage(self):

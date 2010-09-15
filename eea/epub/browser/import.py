@@ -87,6 +87,7 @@ class EpubFile(object):
                 fileName = 'OEBPS/' + elem.get('href')
                 content = self.zipFile.read(fileName)
                 chapters.append({
+                    'id': elem.get('href'),
                     'title': elem.get('title'),
                     'content': content,
                 })
@@ -151,7 +152,7 @@ class ImportView(BrowserView):
         count = 0
         for chapter in epub.chapters:
             count += 1;
-            article = folder[folder.invokeFactory('Article', id=titleToId(chapter['title']))]
+            article = folder[folder.invokeFactory('Article', id=chapter['id'])]
             article.setTitle(chapter['title'])
             article.setText(chapter['content'])
             article.reindexObject()
