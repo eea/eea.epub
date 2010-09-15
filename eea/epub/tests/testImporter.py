@@ -34,6 +34,10 @@ class ImporterTest(EEAMegaTestCase):
         rootEpubFolder = getattr(self.portal, 'climate-change-impact-in-europe', None)
         self.failUnless(rootEpubFolder.epub_cover.portal_type == 'Image')
 
+    def test_creator(self):
+        rootEpubFolder = getattr(self.portal, 'climate-change-impact-in-europe', None)
+        self.failUnless(rootEpubFolder.Creator() == 'S\xc3\xb8ren Roug')
+
     def test_imagesImportedCorrectly(self):
         rootEpubFolder = getattr(self.portal, 'climate-change-impact-in-europe', None)
         brains = rootEpubFolder['Pictures'].getFolderContents({'portal_type': 'Image'})

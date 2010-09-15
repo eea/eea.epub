@@ -109,11 +109,14 @@ class EpubFile(object):
         return self.cache['images']
 
     @property
-    def creators(self):
-        creators = []
-        for elem in self.rootFile.find('metadata').findall('creator'):
-            creators.append(elem.text)
-        return creators
+    def creator(self):
+        if not 'creator' in self.cache:
+            elem = self.rootFile.find('metadata').find('creator')
+            if elem != None:
+                self.cache['creator'] = elem.text
+            else:
+                self.cache['creator'] = None
+        return self.cache['creator']
 
     @property
     def publicationDate(self):
@@ -161,7 +164,11 @@ class ImportView(BrowserView):
 
         folder = self.context[self.context.invokeFactory('Folder', id=id)]
         folder.setTitle(epub.title)
+        if epub.creator != None:
+            folder.setCreators([epub.creator])
         alsoProvides(folder, IImportedBook) 
+        folder.reindexObject()
+
         if epub.coverImageData != None:
             folder.invokeFactory('Image', id='epub_cover', image=epub.coverImageData)
         
