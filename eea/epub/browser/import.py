@@ -54,21 +54,14 @@ class EpubFile(object):
         if 'coverImageData' in self.cache:
             return self.cache['coverImageData']
 
-        xml = self.rootFile
-        xml = xml.find('metadata')
-
-        coverImageItemId = None
-        for elem in xml.findall('meta'):
-            if elem.get('name') == "cover":
-                coverImageItemId = elem.get("content")
-                break
-
-        if coverImageItemId != None:
-            for elem in self.rootFile.find('manifest').findall('item'):
-                if elem.get('id') == coverImageItemId:
-                    coverImageData = self.zipFile.read('OEBPS/' + elem.get('href'))
-                    self.cache['coverImageData'] = coverImageData
-                    return coverImageData
+        for elem in self.rootFile.find('manifest').findall('item'):
+            type = elem.get('media-type', '')
+            name = elem.get('type', '')
+            id = elem.get('id', '')
+            if type.startswith('image') and (name.startswith('cover') or id.startswith('cover')):
+                coverImageData = self.zipFile.read('OEBPS/' + elem.get('href'))
+                self.cache['coverImageData'] = coverImageData
+                return coverImageData
 
         return None
             
