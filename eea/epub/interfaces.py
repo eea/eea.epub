@@ -5,3 +5,6 @@ class IImportedBook(Interface):
 
 class IImportedChapter(Interface):
     """ Marker interface for each imported chapter """
+
+class IExportable(Interface):
+    """ Marker interface for all epub exporable content types """
