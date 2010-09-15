@@ -2,6 +2,8 @@ from elementtree import ElementTree as ET
 from zipfile import ZipFile
 from zope.app.pagetemplate import ViewPageTemplateFile
 from Products.Five import BrowserView
+from zope.interface import alsoProvides
+from eea.epub.interfaces import IImportedBook
 
 def titleToId(title):
     return title.strip().strip('!@#$%^&*()<>./+').lower().replace(' ', '-')
@@ -146,6 +148,7 @@ class ImportView(BrowserView):
 
         folder = self.context[self.context.invokeFactory('Folder', id=id)]
         folder.setTitle(epub.title)
+        alsoProvides(folder, IImportedBook) 
         if epub.coverImageData != None:
             folder.invokeFactory('Image', id='epub_cover', image=epub.coverImageData)
 

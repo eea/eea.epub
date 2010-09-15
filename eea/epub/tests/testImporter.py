@@ -2,6 +2,7 @@ import os.path
 from Globals import package_home
 from StringIO import StringIO
 from eea.pagedesign.tests.base import EEAMegaTestCase
+from eea.epub.interfaces import IImportedBook
 
 class ImporterTest(EEAMegaTestCase):
 
@@ -19,6 +20,7 @@ class ImporterTest(EEAMegaTestCase):
     def test_folderStructure(self):
         rootEpubFolder = getattr(self.portal, 'climate-change-impact-in-europe', None)
         self.failUnless(rootEpubFolder is not None)
+        self.failUnless(IImportedBook.providedBy(rootEpubFolder))
         brains = rootEpubFolder.getFolderContents({'portal_type':'Article'})
         self.failUnless(len(brains) == 1) # EPUB contained one chapter
         chapter = brains[0]
