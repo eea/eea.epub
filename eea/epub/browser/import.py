@@ -97,6 +97,17 @@ class EpubFile(object):
         return chapters
 
     @property
+    def images(self):
+        if not 'images' in self.cache:
+            self.cache['images'] = []
+            for elem in self.rootFile.find('manifest').getchildren():
+                if elem.get('media-type').startswith('image'):
+                    self.cache['images'].append({
+                        'href': elem.get('href'),
+                    })
+        return self.cache['images']
+
+    @property
     def creators(self):
         creators = []
         for elem in self.rootFile.find('metadata').findall('creator'):
@@ -152,6 +163,20 @@ class ImportView(BrowserView):
         alsoProvides(folder, IImportedBook) 
         if epub.coverImageData != None:
             folder.invokeFactory('Image', id='epub_cover', image=epub.coverImageData)
+        
+        for image in epub.images:
+            workingDirectory = folder
+            urlParts = image['href'].split('/')
+            for urlPart in urlParts:
+                if urlPart == urlParts[-1]:
+                    path = 'OEBPS/' + image['href']
+                    data = epub.zipFile.read(path)
+                    image = workingDirectory[workingDirectory.invokeFactory('Image', id=urlPart, image=data)]
+                    image.reindexObject()
+                elif not hasattr(workingDirectory, urlPart):
+                    workingDirectory = workingDirectory[workingDirectory.invokeFactory('Folder', id=urlPart)]
+                else:
+                    workingDirectory = workingDirectory[urlPart]
 
         count = 0
         for chapter in epub.chapters:

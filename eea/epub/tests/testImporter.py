@@ -33,6 +33,11 @@ class ImporterTest(EEAMegaTestCase):
         rootEpubFolder = getattr(self.portal, 'climate-change-impact-in-europe', None)
         self.failUnless(rootEpubFolder.epub_cover.portal_type == 'Image')
 
+    def test_imagesImportedCorrectly(self):
+        rootEpubFolder = getattr(self.portal, 'climate-change-impact-in-europe', None)
+        brains = rootEpubFolder['Pictures'].getFolderContents({'portal_type': 'Image'})
+        self.failUnless(len(brains) == 9)
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = makeSuite(ImporterTest)
