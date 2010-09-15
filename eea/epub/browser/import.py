@@ -119,10 +119,6 @@ class EpubFile(object):
         return self.cache['creator']
 
     @property
-    def publicationDate(self):
-        pass
-
-    @property
     def language(self):
         elem = self.rootFile.find('metadata').find('language')
         if elem != None:
