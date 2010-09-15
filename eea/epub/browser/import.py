@@ -4,6 +4,7 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from Products.Five import BrowserView
 from zope.interface import alsoProvides
 from eea.epub.interfaces import IImportedBook
+from eea.epub.interfaces import IImportedChapter
 
 def titleToId(title):
     return title.strip().strip('!@#$%^&*()<>./+').lower().replace(' ', '-')
@@ -158,5 +159,6 @@ class ImportView(BrowserView):
             article = folder[folder.invokeFactory('Article', id=chapter['id'])]
             article.setTitle(chapter['title'])
             article.setText(chapter['content'])
+            alsoProvides(article, IImportedChapter) 
             article.reindexObject()
         return count

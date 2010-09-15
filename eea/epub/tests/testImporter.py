@@ -3,6 +3,7 @@ from Globals import package_home
 from StringIO import StringIO
 from eea.pagedesign.tests.base import EEAMegaTestCase
 from eea.epub.interfaces import IImportedBook
+from eea.epub.interfaces import IImportedChapter
 
 class ImporterTest(EEAMegaTestCase):
 
@@ -24,6 +25,7 @@ class ImporterTest(EEAMegaTestCase):
         brains = rootEpubFolder.getFolderContents({'portal_type':'Article'})
         self.failUnless(len(brains) == 1) # EPUB contained one chapter
         chapter = brains[0]
+        self.failUnless(IImportedChapter.providedBy(chapter.getObject()))
         self.failUnless(chapter['id'] == 'chapter1.xhtml')
         self.failUnless(chapter['Title'] == 'Text')
 
