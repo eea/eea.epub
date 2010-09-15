@@ -3,6 +3,9 @@ from zipfile import ZipFile
 from zope.app.pagetemplate import ViewPageTemplateFile
 from Products.Five import BrowserView
 
+def titleToId(title):
+    return title.strip().strip('!@#$%^&*()<>./+').lower().replace(' ', '-')
+
 def elemTagWithoutNamespace(elem):
     """Remove the xmlns that ElementTree inserts before the tag name
 
@@ -74,19 +77,17 @@ class EpubFile(object):
 
     @property
     def chapters(self):
-        xml = self.rootFile
-        xml = xml.find('manifest')
-        allowedContentTypes = [
-            'application/xhtml+xml',
-            'text/html',
-        ]
+        guide = self.rootFile.find('guide')
+        if guide == None:
+            return []
+
         chapters = []
-        for elem in xml.getchildren():
-            if elem.get('media-type') in allowedContentTypes:
+        for elem in guide.getchildren():
+            if elem.get('type') == 'text':
                 fileName = 'OEBPS/' + elem.get('href')
                 content = self.zipFile.read(fileName)
                 chapters.append({
-                    'id': elem.get('id'),
+                    'title': elem.get('title'),
                     'content': content,
                 })
         return chapters
@@ -111,7 +112,7 @@ class EpubFile(object):
 
     @property
     def ploneID(self):
-        return self.title.strip().strip('!@#$%^&*()<>./+').lower().replace(' ', '-')
+        return titleToId(self.title)
 
 class ImportView(BrowserView):
 
@@ -150,6 +151,8 @@ class ImportView(BrowserView):
         count = 0
         for chapter in epub.chapters:
             count += 1;
-            article = folder[folder.invokeFactory('Article', id=chapter['id'])]
+            article = folder[folder.invokeFactory('Article', id=titleToId(chapter['title']))]
+            article.setTitle(chapter['title'])
             article.setText(chapter['content'])
+            article.reindexObject()
         return count

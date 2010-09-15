@@ -21,6 +21,8 @@ class ImporterTest(EEAMegaTestCase):
         self.failUnless(rootEpubFolder is not None)
         brains = rootEpubFolder.getFolderContents({'portal_type':'Article'})
         self.failUnless(len(brains) == 1) # EPUB contained one chapter
+        chapter = brains[0]
+        self.failUnless(chapter['Title'] == 'Text')
 
     def test_coverImage(self):
         rootEpubFolder = getattr(self.portal, 'climate-change-impact-in-europe', None)
