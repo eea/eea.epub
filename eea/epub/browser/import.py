@@ -5,6 +5,7 @@ from Products.Five import BrowserView
 from zope.interface import alsoProvides
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
+from eea.epub.interfaces import IImportedImage
 
 def titleToId(title):
     return title.strip().strip('!@#$%^&*()<>./+').lower().replace(' ', '-')
@@ -172,6 +173,7 @@ class ImportView(BrowserView):
                     path = 'OEBPS/' + image['href']
                     data = epub.zipFile.read(path)
                     image = workingDirectory[workingDirectory.invokeFactory('Image', id=urlPart, image=data)]
+                    alsoProvides(image, IImportedImage) 
                     image.reindexObject()
                 elif not hasattr(workingDirectory, urlPart):
                     workingDirectory = workingDirectory[workingDirectory.invokeFactory('Folder', id=urlPart)]

@@ -4,6 +4,7 @@ from StringIO import StringIO
 from eea.pagedesign.tests.base import EEAMegaTestCase
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
+from eea.epub.interfaces import IImportedImage
 
 class ImporterTest(EEAMegaTestCase):
 
@@ -36,6 +37,7 @@ class ImporterTest(EEAMegaTestCase):
     def test_imagesImportedCorrectly(self):
         rootEpubFolder = getattr(self.portal, 'climate-change-impact-in-europe', None)
         brains = rootEpubFolder['Pictures'].getFolderContents({'portal_type': 'Image'})
+        self.failUnless(IImportedImage.providedBy(brains[0].getObject()))
         self.failUnless(len(brains) == 9)
 
 def test_suite():

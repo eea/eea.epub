@@ -8,3 +8,6 @@ class IImportedChapter(Interface):
 
 class IExportable(Interface):
     """ Marker interface for all epub exporable content types """
+
+class IImportedImage(Interface):
+    """ Marker interface for imported epub images """
