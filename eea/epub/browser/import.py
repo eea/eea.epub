@@ -31,21 +31,21 @@ class EpubFile(object):
         self.cache = {}
 
     @property
-    def rootFilePath(self):
-        fileContent = self.zipFile.read('META-INF/container.xml')
-        xml = ET.XML(fileContent)
-        xml = stripNamespaces(xml)
-        xml = xml.find('rootfiles')
-        xml = xml.find('rootfile')
-        return xml.get('full-path')
-
-    @property
     def rootFile(self):
         if 'rootFile' in self.cache:
             return self.cache['rootFile']
-        fileContent = self.zipFile.read(self.rootFilePath)
+
+        file = self.zipFile.read('META-INF/container.xml')
+        xml = ET.XML(file)
+        xml = stripNamespaces(xml)
+        xml = xml.find('rootfiles')
+        xml = xml.find('rootfile')
+        rootFilePath = xml.get('full-path')
+
+        fileContent = self.zipFile.read(rootFilePath)
         xml = ET.XML(fileContent)
         xml = stripNamespaces(xml)
+
         self.cache['rootFile'] = xml
         return xml
 
