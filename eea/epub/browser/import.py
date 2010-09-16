@@ -93,14 +93,15 @@ class EpubFile(object):
                 html = ET.XML(fileContent)
                 html = stripNamespaces(html)
                 html = html.find('body')
-                if html != None:
-                    html = ET.tostring(html)
-                else:
-                    html = ''
+                description = html.find('p')
+                html.remove(description)
+                html = ET.tostring(html)
+                description = description.text.strip()
                 chapters.append({
                     'id': elem.get('href'),
                     'title': elem.get('title'),
                     'content': html,
+                    'description': description,
                 })
         return chapters
 
@@ -196,6 +197,7 @@ class ImportView(BrowserView):
             article = folder[folder.invokeFactory('Article', id=chapter['id'])]
             article.setTitle(chapter['title'])
             article.setText(chapter['content'])
+            article.setDescription(chapter['description'])
             alsoProvides(article, IImportedChapter) 
             article.reindexObject()
         return count
