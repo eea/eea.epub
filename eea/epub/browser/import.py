@@ -95,8 +95,11 @@ class EpubFile(object):
                 html = html.find('body')
                 description = html.find('p')
                 html.remove(description)
-                html = ET.tostring(html)
                 description = description.text.strip()
+                h1 = html.find('h1')
+                if h1 != None:
+                    html.remove(h1)
+                html = ET.tostring(html)
                 chapters.append({
                     'id': elem.get('href'),
                     'title': elem.get('title'),
