@@ -37,6 +37,12 @@ class ImporterTest(EEAMegaTestCase):
         # The first paragraph is used as description
         self.failUnless(chapter['Description'] == "The earth's climate has not changed many times in the course of its long history. Most of these changes occurred over hundreds, thousands or millions of years and were driven by natural phenomena such as variations in the Earth's orbit around the sun, variations in the Earth's axis, fluctuations in the sun's activity and volcanic eruptions.")
 
+    def test_originalFileSaved(self):
+        original = getattr(self.rootEpubFolder, 'original.epub')
+        self.failUnless(original.portal_type == 'File')
+        field = original.getField('file')
+        self.failUnless(field.getContentType(original) == 'application/epub+zip')
+
     def test_coverImage(self):
         self.failUnless(self.rootEpubFolder.epub_cover.portal_type == 'Image')
 

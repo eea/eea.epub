@@ -176,6 +176,12 @@ class ImportView(BrowserView):
         alsoProvides(folder, IImportedBook) 
         folder.reindexObject()
 
+        # Save original file, we might need it later
+        original = folder[folder.invokeFactory('File', id='original.epub')]
+        original.setFile(epubFile)
+        field = original.getField('file')
+        field.setContentType(original, 'application/epub+zip') 
+
         if epub.coverImageData != None:
             folder.invokeFactory('Image', id='epub_cover', image=epub.coverImageData)
         
