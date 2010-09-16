@@ -89,11 +89,18 @@ class EpubFile(object):
         for elem in guide.getchildren():
             if elem.get('type') == 'text':
                 fileName = 'OEBPS/' + elem.get('href')
-                content = self.zipFile.read(fileName)
+                fileContent = self.zipFile.read(fileName)
+                html = ET.XML(fileContent)
+                html = stripNamespaces(html)
+                html = html.find('body')
+                if html != None:
+                    html = ET.tostring(html)
+                else:
+                    html = ''
                 chapters.append({
                     'id': elem.get('href'),
                     'title': elem.get('title'),
-                    'content': content,
+                    'content': html,
                 })
         return chapters
 
