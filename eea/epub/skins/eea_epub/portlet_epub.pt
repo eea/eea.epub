@@ -1,0 +1,24 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    i18n:domain="plone">
+    <body>
+
+        <metal:portlet metal:define-macro="portlet" tal:define="view context/@@epub_toc_logic">
+
+            <dl id="document-toc" class="portlet epub">
+                <dt class="portletHeader">
+                    <span i18n:translate="label_tableofcontents">Contents</span>
+                </dt>
+                <dd class="portletItem">
+                    <ol>
+                        <li tal:define="navPoint in view/getNavPoints">
+                            <a tal:attributes="href navPoint/href" tal:content="navPoint/label"></a>
+                        </li>
+                    </ol>
+                </dd>
+            </dl>
+            <div class="visualClear">&nbsp;</div>
+
+        </metal:portlet>
+    </body>
+</html>
