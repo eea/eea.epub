@@ -169,7 +169,7 @@ class ImportView(BrowserView):
             count += 1
             id = '%s-%i' % (epub.ploneID, count)
 
-        folder = self.context[self.context.invokeFactory('Folder', id=id)]
+        folder = self.context[self.context.invokeFactory('EpubFile', id=id)]
         folder.setTitle(epub.title)
         if epub.creator != None:
             folder.setCreators([epub.creator])
@@ -203,7 +203,7 @@ class ImportView(BrowserView):
         count = 0
         for chapter in epub.chapters:
             count += 1;
-            article = folder[folder.invokeFactory('Article', id=chapter['id'])]
+            article = folder[folder.invokeFactory('News Item', id=chapter['id'])]
             article.setTitle(chapter['title'])
             article.setText(chapter['content'])
             article.setDescription(chapter['description'])
