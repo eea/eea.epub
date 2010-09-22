@@ -1,8 +1,10 @@
 from elementtree import ElementTree as ET
 from zipfile import ZipFile
 from zope.app.pagetemplate import ViewPageTemplateFile
-from Products.Five import BrowserView
 from zope.interface import alsoProvides
+from zope.app.annotation.interfaces import IAnnotations
+from persistent.dict import PersistentDict
+from Products.Five import BrowserView
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
@@ -55,6 +57,20 @@ class EpubFile(object):
 
         self.cache['rootFile'] = xml
         return xml
+
+    @property
+    def tocNavPoints(self):
+        filePath = 'OEBPS/toc.ncx'
+        fileContent = self.zipFile.read(filePath)
+        xml = ET.XML(fileContent)
+        xml = stripNamespaces(xml)
+        ret = []
+        for elem in xml.find('navMap'):
+            ret.append({
+                'label': elem.find('navLabel').find('text').text,
+                'href': elem.find('content').get('src'),
+            })
+        return ret
 
     @property
     def coverImageData(self):
@@ -173,6 +189,11 @@ class ImportView(BrowserView):
         folder.setTitle(epub.title)
         if epub.creator != None:
             folder.setCreators([epub.creator])
+
+        annotations = IAnnotations(folder.getCanonical())
+        mapping = annotations['eea.epub'] = PersistentDict({'toc': []})
+        mapping['toc'] = epub.tocNavPoints
+
         alsoProvides(folder, IImportedBook) 
         folder.reindexObject()
 
