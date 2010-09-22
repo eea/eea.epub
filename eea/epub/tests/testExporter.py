@@ -6,7 +6,7 @@ class ExporterTest(EpubFunctionalTestCase):
 
     def afterSetUp(self):
         self.setRoles(['Manager'])
-        self.article = self.portal[self.portal.invokeFactory('Article', id='testArticle')]
+        self.article = self.portal[self.portal.invokeFactory('News Item', id='testArticle')]
         self.article.setTitle('TestTitle')
         self.article.setText('TestText')
 
