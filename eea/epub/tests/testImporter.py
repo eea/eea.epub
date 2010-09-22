@@ -1,12 +1,12 @@
 import os.path
 from Globals import package_home
 from StringIO import StringIO
-from eea.pagedesign.tests.base import EEAMegaTestCase
+from eea.epub.tests.base import EpubFunctionalTestCase
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
 
-class ImporterTest(EEAMegaTestCase):
+class ImporterTest(EpubFunctionalTestCase):
 
     def afterSetUp(self):
         self.setRoles(['Manager'])

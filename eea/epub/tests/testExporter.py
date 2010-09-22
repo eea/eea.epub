@@ -1,8 +1,8 @@
 from zipfile import ZipFile
 from StringIO import StringIO
-from eea.pagedesign.tests.base import EEAMegaTestCase
+from eea.epub.tests.base import EpubFunctionalTestCase
 
-class ExporterTest(EEAMegaTestCase):
+class ExporterTest(EpubFunctionalTestCase):
 
     def afterSetUp(self):
         self.setRoles(['Manager'])
