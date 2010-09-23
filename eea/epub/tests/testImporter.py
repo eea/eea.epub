@@ -52,7 +52,6 @@ class ImporterTest(EpubFunctionalTestCase):
     def test_imagesImportedCorrectly(self):
         brains = self.rootEpubFolder['Pictures'].getFolderContents({'portal_type': 'Image'})
         img1 = brains[0].getObject()
-        import pdb; pdb.set_trace()
         self.failUnless(IImportedImage.providedBy(img1))
         self.failUnless(len(brains) == 9)
 
