@@ -112,13 +112,15 @@ class EpubFile(object):
                 description = html.find('p')
                 html.remove(description)
                 description = description.text.strip()
+                title = elem.get('title', '')
                 h1 = html.find('h1')
                 if h1 != None:
+                    title = h1.text
                     html.remove(h1)
                 html = ET.tostring(html)
                 chapters.append({
                     'id': elem.get('href'),
-                    'title': elem.get('title'),
+                    'title': title,
                     'content': html,
                     'description': description,
                 })
