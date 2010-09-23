@@ -29,6 +29,10 @@ class ImporterTest(EpubFunctionalTestCase):
         self.failUnless(img1.Title() == 'Sun')
         self.failUnless(img1.Description() == 'This is a sun or something')
 
+    def test_properties(self):
+        left_slots = self.rootEpubFolder.getProperty('left_slots')
+        self.failUnless(left_slots[0] == 'here/portlet_epub/macros/portlet')
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = makeSuite(ImporterTest)
