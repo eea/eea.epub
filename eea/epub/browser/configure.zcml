@@ -26,4 +26,12 @@
     allowed_interface=".interfaces.IEpubTocLogic"
     />
 
+  <browser:page
+    for="*"
+    name="epub_utils"
+    class=".epub_utils.EpubUtils"
+    permission="zope.Public"
+    allowed_interface=".interfaces.IEpubUtils"
+    />
+
 </configure>
