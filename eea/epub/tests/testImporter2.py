@@ -23,6 +23,12 @@ class ImporterTest(EpubFunctionalTestCase):
         navPoints = view.getNavPoints()
         self.failUnless(len(navPoints) == 10)
 
+    def test_imageMetadata(self):
+        brains = self.rootEpubFolder['Pictures'].getFolderContents({'portal_type': 'Image'})
+        img1 = brains[0].getObject()
+        self.failUnless(img1.Title() == 'Sun')
+        self.failUnless(img1.Description() == 'This is a sun or something')
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = makeSuite(ImporterTest)

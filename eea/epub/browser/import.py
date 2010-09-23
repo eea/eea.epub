@@ -125,33 +125,31 @@ class EpubFile(object):
         return chapters
 
     def findDeep(self, elem, href):
-        for child in elem.findall('img'):
-            if (child.tag == 'img') and (child.get('href') == href):
-                return elem
-            match = elem.findDeep(child)
+        for child in elem.getchildren():
+            if (child.tag == 'img') and (child.get('src') == href):
+                return child
+            match = self.findDeep(child, href)
             if match != None:
                 return match
 
     def findFirstImageMatchingHref(self, href):
-        ret = {
-            'title': '',
-            'alt': '',
-        }
         for chapter in self.chapters:
             body = chapter['content']
             if href in body:
                 xml = ET.XML(body)
                 xml = stripNamespaces(xml)
                 match = None
-                for elem in xml:
+                for elem in xml.getchildren():
                     match = self.findDeep(elem, href)
                     if match != None:
-                        ret = {
+                        return {
                             'title': match.get('title', ''),
                             'alt': match.get('alt', ''),
                         }
-                        break
-        return ret
+        return {
+            'title': '',
+            'alt': '',
+        }
 
     @property
     def images(self):
@@ -164,7 +162,7 @@ class EpubFile(object):
                     self.cache['images'].append({
                         'href': href,
                         'title': firstMatch['title'],
-                        'description': firstMatch['alt'],
+                        'alt': firstMatch['alt'],
                     })
         return self.cache['images']
 
@@ -246,9 +244,11 @@ class ImportView(BrowserView):
                 if urlPart == urlParts[-1]:
                     path = 'OEBPS/' + image['href']
                     data = epub.zipFile.read(path)
-                    image = workingDirectory[workingDirectory.invokeFactory('Image', id=urlPart, image=data)]
-                    alsoProvides(image, IImportedImage) 
-                    image.reindexObject()
+                    obj = workingDirectory[workingDirectory.invokeFactory('Image', id=urlPart, image=data)]
+                    obj.setTitle(image['title'])
+                    obj.setDescription(image['alt'])
+                    alsoProvides(obj, IImportedImage) 
+                    obj.reindexObject()
                 elif not hasattr(workingDirectory, urlPart):
                     workingDirectory = workingDirectory[workingDirectory.invokeFactory('Folder', id=urlPart)]
                 else:
