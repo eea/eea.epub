@@ -24,3 +24,7 @@ class EpubUtils(BrowserView):
 
     def isImportedImage(self):
         return IImportedImage.providedBy(self.context)
+
+    def getEpubFileDownlaodLink(self):
+        ebook = self.getEbook()
+        return ebook.absolute_url() + '/original.epub'

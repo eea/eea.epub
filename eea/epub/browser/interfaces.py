@@ -18,6 +18,9 @@ class IEpubTocLogic(Interface):
 
 class IEpubUtils(Interface):
 
+    def getEpubFileDownlaodLink():
+        pass
+
     def getEbook():
         pass
 

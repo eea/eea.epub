@@ -3,7 +3,7 @@
     i18n:domain="plone">
     <body>
 
-        <metal:portlet metal:define-macro="portlet" tal:define="view context/@@epub_toc_logic">
+        <metal:portlet metal:define-macro="portlet" tal:define="view context/@@epub_toc_logic; utils context/@@epub_utils">
 
             <dl id="document-toc" class="portlet epub" style="width:100%">
                 <dt class="portletHeader">
@@ -18,6 +18,8 @@
                 </dd>
             </dl>
             <div class="visualClear">&nbsp;</div>
+
+            <a class="downloadLink" tal:attributes="href utils/getEpubFileDownlaodLink">EPUB format</a>
 
         </metal:portlet>
     </body>
