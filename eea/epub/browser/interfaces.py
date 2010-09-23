@@ -10,3 +10,8 @@ class IImportView(Interface):
 
     def hasImportResults():
         pass
+
+class IEpubTocLogic(Interface):
+
+    def getNavPoints():
+        pass

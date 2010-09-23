@@ -23,7 +23,7 @@
     name="epub_toc_logic"
     class=".epub_toc_logic.EpubTocLogic"
     permission="zope.Public"
-    allowed_interface=".interfaces.IImportView"
+    allowed_interface=".interfaces.IEpubTocLogic"
     />
 
 </configure>
