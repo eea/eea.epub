@@ -124,14 +124,47 @@ class EpubFile(object):
                 })
         return chapters
 
+    def findDeep(self, elem, href):
+        for child in elem.findall('img'):
+            if (child.tag == 'img') and (child.get('href') == href):
+                return elem
+            match = elem.findDeep(child)
+            if match != None:
+                return match
+
+    def findFirstImageMatchingHref(self, href):
+        ret = {
+            'title': '',
+            'alt': '',
+        }
+        for chapter in self.chapters:
+            body = chapter['content']
+            if href in body:
+                xml = ET.XML(body)
+                xml = stripNamespaces(xml)
+                match = None
+                for elem in xml:
+                    match = self.findDeep(elem, href)
+                    if match != None:
+                        ret = {
+                            'title': match.get('title', ''),
+                            'alt': match.get('alt', ''),
+                        }
+                        break
+        return ret
+
     @property
     def images(self):
         if not 'images' in self.cache:
             self.cache['images'] = []
             for elem in self.rootFile.find('manifest').getchildren():
                 if elem.get('media-type').startswith('image'):
+                    href = elem.get('href')
+                    firstMatch = self.findFirstImageMatchingHref(href)
                     self.cache['images'].append({
-                        'href': elem.get('href'),
+                        'href': href,
+                        'title': firstMatch['title'],
+                        'description': firstMatch['alt'],
                     })
         return self.cache['images']
 
