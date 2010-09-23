@@ -5,7 +5,7 @@
 
         <metal:portlet metal:define-macro="portlet" tal:define="view context/@@epub_toc_logic">
 
-            <dl id="document-toc" class="portlet epub">
+            <dl id="document-toc" class="portlet epub" style="width:100%">
                 <dt class="portletHeader">
                     <span i18n:translate="label_tableofcontents">Contents</span>
                 </dt>
