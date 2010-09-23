@@ -18,7 +18,7 @@ class IEpubTocLogic(Interface):
 
 class IEpubUtils(Interface):
 
-    def getEpubFileDownlaodLink():
+    def getEpubFormatURL():
         pass
 
     def getEbook():
@@ -28,4 +28,7 @@ class IEpubUtils(Interface):
         pass
 
     def isImportedChapter():
+        pass
+
+    def isPartOfImportedBook():
         pass

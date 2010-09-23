@@ -5,6 +5,7 @@ from Products.CMFPlone import utils
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
+from eea.epub.interfaces import IExportable
 
 class EpubUtils(BrowserView):
 
@@ -16,6 +17,9 @@ class EpubUtils(BrowserView):
             obj = utils.parent(obj)
         return obj
 
+    def isEpubExportable(self):
+        return IExportable.providedBy(self.context)
+
     def isImportedEbook(self):
         return IImportedBook.providedBy(self.context)
 
@@ -25,6 +29,13 @@ class EpubUtils(BrowserView):
     def isImportedImage(self):
         return IImportedImage.providedBy(self.context)
 
-    def getEpubFileDownlaodLink(self):
-        ebook = self.getEbook()
-        return ebook.absolute_url() + '/original.epub'
+    def isPartOfImportedBook(self):
+        return self.isImportedEbook() or self.isImportedChapter() or self.isImportedImage()
+
+    def getEpubFormatURL(self):
+        if self.isPartOfImportedBook():
+            ebook = self.getEbook()
+            return ebook.absolute_url() + '/original.epub'
+        elif self.isEpubExportable():
+            return self.context.absolute_url() + '/epub_view'
+        return ''
