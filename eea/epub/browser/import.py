@@ -226,7 +226,7 @@ class ImportView(BrowserView):
         folder.manage_addProperty('left_slots',
                                   'here/portlet_epub/macros/portlet', 'lines')
 
-        annotations = IAnnotations(folder.getCanonical())
+        annotations = IAnnotations(folder)
         mapping = annotations['eea.epub'] = PersistentDict({'toc': []})
         mapping['toc'] = epub.tocNavPoints
 
