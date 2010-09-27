@@ -16,8 +16,10 @@ class ImporterTest(EpubFunctionalTestCase):
         fileContent = StringIO(f.read())
         f.close()
 
-        view = self.portal.restrictedTraverse('@@epub_import_view')
-        view.importFile(fileContent)
+        id = self.portal.invokeFactory('EpubFile', id='tmp')
+        tmp = getattr(self.portal, id)
+        view = tmp.restrictedTraverse('@@epub_import_view')
+        newId = view.importFile(fileContent)
 
         self.rootEpubFolder = getattr(self.portal, 'climate-change-impact-in-europe', None)
 

@@ -3,6 +3,7 @@ from zipfile import ZipFile
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import alsoProvides
 from zope.app.annotation.interfaces import IAnnotations
+import transaction
 from persistent.dict import PersistentDict
 from Products.Five import BrowserView
 from eea.epub.interfaces import IImportedBook
@@ -191,59 +192,45 @@ class EpubFile(object):
 
 class ImportView(BrowserView):
 
-    template = ViewPageTemplateFile('epub_import_form.pt')
-
     def __call__(self):
-        if self.request.environ['REQUEST_METHOD'] == 'GET':
-            return self.template(self)
-        elif self.request.environ['REQUEST_METHOD'] == 'POST':
+        if self.request.environ['REQUEST_METHOD'] == 'POST':
             httpFileUpload = self.request.form.values()[0]
-            self.count = self.importFile(httpFileUpload)
-            return self.template(self)
-
-    def getNumberOfImportedProducts(self):
-        return getattr(self, 'count', 0)
-
-    def hasImportResults(self):
-        return hasattr(self, 'count')
+            newId = self.importFile(httpFileUpload)
+            import pdb; pdb.set_trace()
+            return self.request.response.redirect(self.context.absolute_url())
 
     def importFile(self, epubFile):
         zipFile = ZipFile(epubFile, 'r')
         epub = EpubFile(zipFile)
 
-        # Generate unique ID
-        id = epub.ploneID
-        count = 0
-        while hasattr(self.context, id):
-            count += 1
-            id = '%s-%i' % (epub.ploneID, count)
+        transaction.savepoint()
 
-        folder = self.context[self.context.invokeFactory('EpubFile', id=id)]
-        folder.setTitle(epub.title)
+        context = self.context
+        context.setTitle(epub.title)
         if epub.creator != None:
-            folder.setCreators([epub.creator])
+            context.setCreators([epub.creator])
 
-        folder.manage_addProperty('left_slots',
+        context.manage_addProperty('left_slots',
                                   'here/portlet_epub/macros/portlet', 'lines')
 
-        annotations = IAnnotations(folder)
+        annotations = IAnnotations(context)
         mapping = annotations['eea.epub'] = PersistentDict({'toc': []})
         mapping['toc'] = epub.tocNavPoints
 
-        alsoProvides(folder, IImportedBook) 
-        folder.reindexObject()
+        alsoProvides(context, IImportedBook) 
+        context.reindexObject()
 
         # Save original file, we might need it later
-        original = folder[folder.invokeFactory('File', id='original.epub')]
+        original = context[context.invokeFactory('File', id='original.epub')]
         original.setFile(epubFile)
         field = original.getField('file')
         field.setContentType(original, 'application/epub+zip') 
 
         if epub.coverImageData != None:
-            folder.invokeFactory('Image', id='epub_cover', image=epub.coverImageData)
+            context.invokeFactory('Image', id='epub_cover', image=epub.coverImageData)
         
         for image in epub.images:
-            workingDirectory = folder
+            workingDirectory = context
             urlParts = image['href'].split('/')
             for urlPart in urlParts:
                 if urlPart == urlParts[-1]:
@@ -259,13 +246,13 @@ class ImportView(BrowserView):
                 else:
                     workingDirectory = workingDirectory[urlPart]
 
-        count = 0
         for chapter in epub.chapters:
-            count += 1;
-            article = folder[folder.invokeFactory('News Item', id=chapter['id'])]
+            article = context[context.invokeFactory('News Item', id=chapter['id'])]
             article.setTitle(chapter['title'])
             article.setText(chapter['content'])
             article.setDescription(chapter['description'])
             alsoProvides(article, IImportedChapter) 
             article.reindexObject()
-        return count
+
+        newId = context._renameAfterCreation(check_auto_id=False)
+        return newId
