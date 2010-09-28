@@ -159,7 +159,6 @@ class EpubFile(object):
                 for elem in xml.getchildren():
                     match = self.findDeep(elem, href)
                     if match != None:
-                        import pdb; pdb.set_trace()
                         return {
                             'title': match.get('title', ''),
                             'alt': match.get('alt', ''),
