@@ -97,35 +97,48 @@ class EpubFile(object):
         return xml.text
 
     @property
-    def chapters(self):
-        guide = self.rootFile.find('guide')
-        if guide == None:
-            return []
+    def page_resources(self):
+        if 'page_resources' in self.cache:
+            return self.cache['page_resources']
 
-        chapters = []
-        for elem in guide.getchildren():
-            if elem.get('type') == 'text':
-                fileName = 'OEBPS/' + elem.get('href')
-                fileContent = self.zipFile.read(fileName)
-                html = ET.XML(fileContent)
-                html = stripNamespaces(html)
-                html = html.find('body')
+        guide = self.rootFile.find('guide')
+        chapter_hrefs = []
+        if guide != None:
+            for elem in guide.findall('reference'):
+                if elem.get('type') == 'text':
+                    chapter_hrefs.append(elem.get('href'))
+
+        page_resources = []
+        for elem in self.rootFile.find('manifest').findall('item'):
+            if not elem.get('media-type') == 'application/xhtml+xml':
+                continue
+            href = elem.get('href')
+            fileName = 'OEBPS/' + elem.get('href')
+            fileContent = self.zipFile.read(fileName)
+            html = ET.XML(fileContent)
+            html = stripNamespaces(html)
+            html = html.find('body')
+            isChapter = href in chapter_hrefs
+            title = href
+            description = ''
+            if isChapter:
                 description = html.find('p')
                 html.remove(description)
                 description = description.text.strip()
-                title = elem.get('title', '')
                 h1 = html.find('h1')
                 if h1 != None:
                     title = h1.text
                     html.remove(h1)
-                html = ET.tostring(html)
-                chapters.append({
-                    'id': elem.get('href'),
-                    'title': title,
-                    'content': html,
-                    'description': description,
-                })
-        return chapters
+            html = ET.tostring(html)
+            page_resources.append({
+                'id': elem.get('href'),
+                'title': title,
+                'content': html,
+                'description': description,
+                'isChapter': isChapter,
+            })
+        self.cache['page_resources'] = page_resources
+        return page_resources
 
     def findDeep(self, elem, href):
         for child in elem.getchildren():
@@ -136,7 +149,8 @@ class EpubFile(object):
                 return match
 
     def findFirstImageMatchingHref(self, href):
-        for chapter in self.chapters:
+        chapters = [resource for resource in self.page_resources if resource['isChapter']]
+        for chapter in chapters:
             body = chapter['content']
             if href in body:
                 xml = ET.XML(body)
@@ -145,6 +159,7 @@ class EpubFile(object):
                 for elem in xml.getchildren():
                     match = self.findDeep(elem, href)
                     if match != None:
+                        import pdb; pdb.set_trace()
                         return {
                             'title': match.get('title', ''),
                             'alt': match.get('alt', ''),
@@ -246,12 +261,13 @@ class ImportView(BrowserView):
                 else:
                     workingDirectory = workingDirectory[urlPart]
 
-        for chapter in epub.chapters:
-            article = context[context.invokeFactory('News Item', id=chapter['id'])]
-            article.setTitle(chapter['title'])
-            article.setText(chapter['content'])
-            article.setDescription(chapter['description'])
-            alsoProvides(article, IImportedChapter) 
+        for resource in epub.page_resources:
+            article = context[context.invokeFactory('News Item', id=resource['id'])]
+            article.setTitle(resource['title'])
+            article.setText(resource['content'])
+            article.setDescription(resource['description'])
+            if resource['isChapter']:
+                alsoProvides(article, IImportedChapter) 
             article.reindexObject()
 
         newId = context._renameAfterCreation(check_auto_id=False)

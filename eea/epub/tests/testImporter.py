@@ -27,14 +27,15 @@ class ImporterTest(EpubFunctionalTestCase):
         self.failUnless(self.rootEpubFolder is not None)
         self.failUnless(IImportedBook.providedBy(self.rootEpubFolder))
 
-        # There should be one imported chapter
         brains = self.rootEpubFolder.getFolderContents({'portal_type':'News Item'})
-        self.failUnless(len(brains) == 1) # EPUB contained one chapter
 
+        # There should be one imported chapter
         chapter = brains[0]
         self.failUnless(IImportedChapter.providedBy(chapter.getObject()))
         self.failUnless(chapter['id'] == 'chapter1.xhtml')
         self.failUnless(chapter['Title'] == 'Climate change impact in Europe')
+
+        self.failUnless(brains[1].id == 'cover.xhtml')
 
         # The first paragraph is used as description
         self.failUnless(chapter['Description'] == "The earth's climate has not changed many times in the course of its long history. Most of these changes occurred over hundreds, thousands or millions of years and were driven by natural phenomena such as variations in the Earth's orbit around the sun, variations in the Earth's axis, fluctuations in the sun's activity and volcanic eruptions.")
