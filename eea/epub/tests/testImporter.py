@@ -27,7 +27,7 @@ class ImporterTest(EpubFunctionalTestCase):
         self.failUnless(self.rootEpubFolder is not None)
         self.failUnless(IImportedBook.providedBy(self.rootEpubFolder))
 
-        brains = self.rootEpubFolder.getFolderContents({'portal_type':'News Item'})
+        brains = self.rootEpubFolder.getFolderContents({'portal_type':'Document'})
 
         # There should be one imported chapter
         chapter = brains[0]

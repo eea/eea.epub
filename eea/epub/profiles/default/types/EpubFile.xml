@@ -14,7 +14,7 @@
  <property name="allowed_content_types">
   <element value="Image"/>
   <element value="File"/>
-  <element value="News Item"/>
+  <element value="Document"/>
   <element value="Folder"/>
  </property>
  <property name="allow_discussion">False</property>

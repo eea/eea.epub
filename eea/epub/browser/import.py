@@ -261,7 +261,7 @@ class ImportView(BrowserView):
                     workingDirectory = workingDirectory[urlPart]
 
         for resource in epub.page_resources:
-            article = context[context.invokeFactory('News Item', id=resource['id'])]
+            article = context[context.invokeFactory('Document', id=resource['id'])]
             article.setTitle(resource['title'])
             article.setText(resource['content'])
             article.setDescription(resource['description'])
