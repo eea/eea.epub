@@ -27,18 +27,13 @@ class ImporterTest(EpubFunctionalTestCase):
         self.failUnless(self.rootEpubFolder is not None)
         self.failUnless(IImportedBook.providedBy(self.rootEpubFolder))
 
-        brains = self.rootEpubFolder.getFolderContents({'portal_type':'Document'})
+        chapter = getattr(self.rootEpubFolder, 'chapter1.xhtml')
+        self.failUnless(IImportedChapter.providedBy(chapter))
+        self.failUnless(chapter.Title() == 'Climate change impact in Europe')
+        self.failUnless(chapter.Description() == "The earth's climate has not changed many times in the course of its long history. Most of these changes occurred over hundreds, thousands or millions of years and were driven by natural phenomena such as variations in the Earth's orbit around the sun, variations in the Earth's axis, fluctuations in the sun's activity and volcanic eruptions.")
 
-        # There should be one imported chapter
-        chapter = brains[0]
-        self.failUnless(IImportedChapter.providedBy(chapter.getObject()))
-        self.failUnless(chapter['id'] == 'chapter1.xhtml')
-        self.failUnless(chapter['Title'] == 'Climate change impact in Europe')
-
-        self.failUnless(brains[1].id == 'cover.xhtml')
-
-        # The first paragraph is used as description
-        self.failUnless(chapter['Description'] == "The earth's climate has not changed many times in the course of its long history. Most of these changes occurred over hundreds, thousands or millions of years and were driven by natural phenomena such as variations in the Earth's orbit around the sun, variations in the Earth's axis, fluctuations in the sun's activity and volcanic eruptions.")
+        chapter = getattr(self.rootEpubFolder, 'cover.xhtml')
+        self.failUnless(chapter.portal_type == "Document")
 
     def test_originalFileSaved(self):
         original = getattr(self.rootEpubFolder, 'original.epub')
