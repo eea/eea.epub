@@ -210,7 +210,6 @@ class ImportView(BrowserView):
         if self.request.environ['REQUEST_METHOD'] == 'POST':
             httpFileUpload = self.request.form.values()[0]
             newId = self.importFile(httpFileUpload)
-            import pdb; pdb.set_trace()
             return self.request.response.redirect(self.context.absolute_url())
 
     def importFile(self, epubFile):
