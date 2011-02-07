@@ -8,8 +8,8 @@ Changelog
 
 0.2 (2010-10-29)
 -------------------
-*Feature: add-to-folder menu item [thuliper, #3627]
-*Bug fix: image link fixes [thuliper, #3711]
+* Feature: add-to-folder menu item [thuliper, #3627]
+* Bug fix: image link fixes [thuliper, #3711]
 
 0.1 (2010-10-11)
 -------------------
