@@ -9,9 +9,12 @@ from Products.Five import BrowserView
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
+import urllib
+
 
 def titleToId(title):
     return title.strip().strip('!@#$%^&*()<>./+').lower().replace(' ', '-')
+
 
 def elemTagWithoutNamespace(elem):
     """Remove the xmlns that ElementTree inserts before the tag name
@@ -27,12 +30,17 @@ def elemTagWithoutNamespace(elem):
         return elem.tag.split('}')[1]
     return elem.tag
 
+
 def stripNamespaces(node):
     node.tag = elemTagWithoutNamespace(node)
     for elem in node.getchildren():
         elem.tag = elemTagWithoutNamespace(elem)
         stripNamespaces(elem)
     return node
+
+def cleanNames(name):
+    return "".join(map(lambda x:(x.isalnum() or x in ['.','/','-']) and x or "_", name))
+
 
 class EpubFile(object):
     
@@ -129,6 +137,9 @@ class EpubFile(object):
                 if h1 != None:
                     title = h1.text
                     html.remove(h1)
+            imgs = list(html.getiterator('img'))
+            for img in imgs:
+                img.attrib['src'] = cleanNames(img.attrib['src']) 
             html = ET.tostring(html)
             page_resources.append({
                 'id': elem.get('href'),
@@ -248,13 +259,15 @@ class ImportView(BrowserView):
             for urlPart in urlParts:
                 if urlPart == urlParts[-1]:
                     path = 'OEBPS/' + image['href']
+                    path = urllib.unquote(path)
                     data = epub.zipFile.read(path)
+                    urlPart = cleanNames(urlPart) 
                     obj = workingDirectory[workingDirectory.invokeFactory('Image', id=urlPart, image=data)]
                     obj.setTitle(image['title'])
                     obj.setDescription(image['alt'])
                     alsoProvides(obj, IImportedImage) 
                     obj.reindexObject()
-                elif not hasattr(workingDirectory, urlPart):
+                elif not urlPart in workingDirectory.objectIds():
                     workingDirectory = workingDirectory[workingDirectory.invokeFactory('Folder', id=urlPart)]
                 else:
                     workingDirectory = workingDirectory[urlPart]
