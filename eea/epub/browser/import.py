@@ -25,7 +25,8 @@ def elemTagWithoutNamespace(elem):
 
     http://stackoverflow.com/questions/1249876
     """
-    assert not isinstance(elem, str), 'Make sure you pass in the element, not the tag'
+    assert not isinstance(elem, str), \
+        'Make sure you pass in the element, not the tag'
     if '}' in elem.tag:
         return elem.tag.split('}')[1]
     return elem.tag
@@ -39,7 +40,9 @@ def stripNamespaces(node):
     return node
 
 def cleanNames(name):
-    return "".join(map(lambda x:(x.isalnum() or x in ['.','/','-']) and x or "_", name))
+    """ Remove non alpha numeric characters from argument minus exceptions """
+    return "".join(map(lambda x:(x.isalnum() or x in ['.','/','-']) and x or
+                                "_", name))
 
 
 class EpubFile(object):
@@ -90,7 +93,8 @@ class EpubFile(object):
             type = elem.get('media-type', '')
             name = elem.get('type', '')
             id = elem.get('id', '')
-            if type.startswith('image') and (name.startswith('cover') or id.startswith('cover')):
+            if type.startswith('image') and (name.startswith('cover')
+                                             or id.startswith('cover')):
                 coverImageData = self.zipFile.read('OEBPS/' + elem.get('href'))
                 self.cache['coverImageData'] = coverImageData
                 return coverImageData
@@ -160,7 +164,8 @@ class EpubFile(object):
                 return match
 
     def findFirstImageMatchingHref(self, href):
-        chapters = [resource for resource in self.page_resources if resource['isChapter']]
+        chapters = [resource for resource in self.page_resources if
+                    resource['isChapter']]
         for chapter in chapters:
             body = chapter['content']
             if href in body:
@@ -251,7 +256,8 @@ class ImportView(BrowserView):
         field.setContentType(original, 'application/epub+zip') 
 
         if epub.coverImageData != None:
-            context.invokeFactory('Image', id='epub_cover', image=epub.coverImageData)
+            context.invokeFactory('Image', id='epub_cover',
+                                  image=epub.coverImageData)
         
         for image in epub.images:
             workingDirectory = context
@@ -262,18 +268,22 @@ class ImportView(BrowserView):
                     path = urllib.unquote(path)
                     data = epub.zipFile.read(path)
                     urlPart = cleanNames(urlPart) 
-                    obj = workingDirectory[workingDirectory.invokeFactory('Image', id=urlPart, image=data)]
+                    obj = workingDirectory[workingDirectory.invokeFactory(
+                            'Image', id=urlPart, image=data)]
                     obj.setTitle(image['title'])
                     obj.setDescription(image['alt'])
                     alsoProvides(obj, IImportedImage) 
                     obj.reindexObject()
                 elif not urlPart in workingDirectory.objectIds():
-                    workingDirectory = workingDirectory[workingDirectory.invokeFactory('Folder', id=urlPart)]
+                    workingDirectory = \
+                    workingDirectory[workingDirectory.invokeFactory('Folder',
+                                                                    id=urlPart)]
                 else:
                     workingDirectory = workingDirectory[urlPart]
 
         for resource in epub.page_resources:
-            article = context[context.invokeFactory('Document', id=resource['id'])]
+            article = context[context.invokeFactory('Document',
+                                                    id=resource['id'])]
             article.setTitle(resource['title'])
             article.setText(resource['content'])
             article.setDescription(resource['description'])
