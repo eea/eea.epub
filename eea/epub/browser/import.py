@@ -228,7 +228,7 @@ class ImportView(BrowserView):
                 newId = self.importFile(httpFileUpload)
             except Exception:
                 return self.request.response.redirect(self.context.absolute_url() + 
-                        "/edit?portal_status_message=Please Upload only Epubs that were made with Adobe Indesign")
+                        "/edit?portal_status_message=An error occur during upload, your EPUB format may not be supported")
             return self.request.response.redirect(self.context.absolute_url())
 
     def importFile(self, epubFile):

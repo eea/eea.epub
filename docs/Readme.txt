@@ -18,7 +18,7 @@ Best practices when creating an epub:
 Epubs that were created with Indesign but failed to upload:
     
     * At this moment any errors that would appear on the site are surpressed by the info message:
-    "Please Upload only Epubs that were made with Adobe Indesign"
+    "An error occur during upload, your EPUB format may not be supported"
     If you've made the epub with Indesign and yet you get this info message then please reopen this 
     ticket and upload there the troubleing epub:
     https://svn.eionet.europa.eu/projects/Zope/ticket/3883
