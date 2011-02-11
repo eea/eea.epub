@@ -62,7 +62,6 @@ class EpubFile(object):
         xml = xml.find('rootfiles')
         xml = xml.find('rootfile')
         rootFilePath = xml.get('full-path')
-
         fileContent = self.zipFile.read(rootFilePath)
         xml = ET.XML(fileContent)
         xml = stripNamespaces(xml)
@@ -225,7 +224,11 @@ class ImportView(BrowserView):
     def __call__(self):
         if self.request.environ['REQUEST_METHOD'] == 'POST':
             httpFileUpload = self.request.form.values()[0]
-            newId = self.importFile(httpFileUpload)
+            try:
+                newId = self.importFile(httpFileUpload)
+            except Exception:
+                return self.request.response.redirect(self.context.absolute_url() + 
+                        "/edit?portal_status_message=Please Upload only Epubs that were made with Adobe Indesign")
             return self.request.response.redirect(self.context.absolute_url())
 
     def importFile(self, epubFile):
