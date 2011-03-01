@@ -3,6 +3,9 @@ Changelog
 [David Ichim - david.ichim@eaudeweb.ro]
 [Per Thulin - Valentine Web Systems]
 
+0.4-dev - (unreleased)
+----------------------
+
 0.3 - (2011-03-01)
 ------------------
  * Change: surpressed error messages with an info status message [ichimdav #3883]
