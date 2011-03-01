@@ -3,8 +3,8 @@ Changelog
 [David Ichim - david.ichim@eaudeweb.ro]
 [Per Thulin - Valentine Web Systems]
 
-0.3-dev (unreleased)
--------------------
+0.3 - (2011-03-01)
+------------------
  * Change: surpressed error messages with an info status message [ichimdav #3883]
  * Bug fix: fix epub file import [ichimdav #3883]
 
@@ -16,3 +16,4 @@ Changelog
 0.1 (2010-10-11)
 -------------------
  - Initial release
+
