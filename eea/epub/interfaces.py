@@ -1,3 +1,5 @@
+""" Marker Iterfaces for Epub
+"""
 from zope.interface import Interface
 
 class IImportedBook(Interface):

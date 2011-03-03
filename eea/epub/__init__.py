@@ -1,3 +1,5 @@
+""" Epub package init file
+"""
 from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CMFCore import utils
 from Globals import package_home

@@ -1,6 +1,8 @@
+""" Browser Import
+"""
 from elementtree import ElementTree as ET
 from zipfile import ZipFile
-from zope.app.pagetemplate import ViewPageTemplateFile
+#from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import alsoProvides
 from zope.app.annotation.interfaces import IAnnotations
 import transaction
@@ -13,6 +15,8 @@ import urllib
 
 
 def titleToId(title):
+    """ Return a stripped title to be made into an id
+    """
     return title.strip().strip('!@#$%^&*()<>./+').lower().replace(' ', '-')
 
 
@@ -33,6 +37,8 @@ def elemTagWithoutNamespace(elem):
 
 
 def stripNamespaces(node):
+    """ Strips Namespaces from xml elements
+    """
     node.tag = elemTagWithoutNamespace(node)
     for elem in node.getchildren():
         elem.tag = elemTagWithoutNamespace(elem)
@@ -41,23 +47,26 @@ def stripNamespaces(node):
 
 def cleanNames(name):
     """ Remove non alpha numeric characters from argument minus exceptions """
-    return "".join(map(lambda x:(x.isalnum() or x in ['.','/','-']) and x or
+    return "".join(map(lambda x:(x.isalnum() or x in ['.', '/', '-']) and x or
                                 "_", name))
 
 
 class EpubFile(object):
-    
+    """ EpubFile
+    """
     def __init__(self, zipFile):
         self.zipFile = zipFile
         self.cache = {}
 
     @property
     def rootFile(self):
+        """ Find root of the Epub
+        """
         if 'rootFile' in self.cache:
             return self.cache['rootFile']
 
-        file = self.zipFile.read('META-INF/container.xml')
-        xml = ET.XML(file)
+        rfile = self.zipFile.read('META-INF/container.xml')
+        xml = ET.XML(rfile)
         xml = stripNamespaces(xml)
         xml = xml.find('rootfiles')
         xml = xml.find('rootfile')
@@ -71,6 +80,8 @@ class EpubFile(object):
 
     @property
     def tocNavPoints(self):
+        """ Navigation for table of contents
+        """
         filePath = 'OEBPS/toc.ncx'
         fileContent = self.zipFile.read(filePath)
         xml = ET.XML(fileContent)
@@ -85,15 +96,17 @@ class EpubFile(object):
 
     @property
     def coverImageData(self):
+        """ Gets the cover image of the epub
+        """
         if 'coverImageData' in self.cache:
             return self.cache['coverImageData']
 
         for elem in self.rootFile.find('manifest').findall('item'):
-            type = elem.get('media-type', '')
+            mtype = elem.get('media-type', '')
             name = elem.get('type', '')
-            id = elem.get('id', '')
-            if type.startswith('image') and (name.startswith('cover')
-                                             or id.startswith('cover')):
+            mid = elem.get('id', '')
+            if mtype.startswith('image') and (name.startswith('cover')
+                                             or mid.startswith('cover')):
                 coverImageData = self.zipFile.read('OEBPS/' + elem.get('href'))
                 self.cache['coverImageData'] = coverImageData
                 return coverImageData
@@ -102,6 +115,8 @@ class EpubFile(object):
             
     @property
     def title(self):
+        """ Title of the epub
+        """
         xml = self.rootFile
         xml = xml.find('metadata')
         xml = xml.find('title')
@@ -109,6 +124,8 @@ class EpubFile(object):
 
     @property
     def page_resources(self):
+        """ Defines the epub page resources
+        """
         if 'page_resources' in self.cache:
             return self.cache['page_resources']
 
@@ -155,6 +172,8 @@ class EpubFile(object):
         return page_resources
 
     def findDeep(self, elem, href):
+        """ Find children in given element
+        """
         for child in elem.getchildren():
             if (child.tag == 'img') and (child.get('src') == href):
                 return child
@@ -163,6 +182,8 @@ class EpubFile(object):
                 return match
 
     def findFirstImageMatchingHref(self, href):
+        """ Finds the first image matching the given href
+        """
         chapters = [resource for resource in self.page_resources if
                     resource['isChapter']]
         for chapter in chapters:
@@ -185,6 +206,8 @@ class EpubFile(object):
 
     @property
     def images(self):
+        """ Returns the images of the epub
+        """
         if not 'images' in self.cache:
             self.cache['images'] = []
             for elem in self.rootFile.find('manifest').getchildren():
@@ -200,6 +223,8 @@ class EpubFile(object):
 
     @property
     def creator(self):
+        """ Sets the creator of the epub
+        """
         if not 'creator' in self.cache:
             elem = self.rootFile.find('metadata').find('creator')
             if elem != None:
@@ -210,6 +235,8 @@ class EpubFile(object):
 
     @property
     def language(self):
+        """ Checks for the language of the book found in the metadata
+        """
         elem = self.rootFile.find('metadata').find('language')
         if elem != None:
             return elem.text
@@ -217,21 +244,29 @@ class EpubFile(object):
 
     @property
     def ploneID(self):
+        """ Returns a title that can be turned into an id with the use of
+        titleToId
+        """
         return titleToId(self.title)
 
 class ImportView(BrowserView):
-
+    """ ImportView Browserview
+    """
     def __call__(self):
         if self.request.environ['REQUEST_METHOD'] == 'POST':
             httpFileUpload = self.request.form.values()[0]
             try:
                 newId = self.importFile(httpFileUpload)
             except Exception:
-                return self.request.response.redirect(self.context.absolute_url() + 
-                        "/edit?portal_status_message=An error occur during upload, your EPUB format may not be supported")
+                return self.request.response.redirect(
+                    self.context.absolute_url() +
+                    "/edit?portal_status_message=An error occur during upload,"
+                    "your EPUB format may not be supported")
             return self.request.response.redirect(self.context.absolute_url())
 
     def importFile(self, epubFile):
+        """ Imports the epub file
+        """
         zipFile = ZipFile(epubFile, 'r')
         epub = EpubFile(zipFile)
 
@@ -249,7 +284,7 @@ class ImportView(BrowserView):
         mapping = annotations['eea.epub'] = PersistentDict({'toc': []})
         mapping['toc'] = epub.tocNavPoints
 
-        alsoProvides(context, IImportedBook) 
+        alsoProvides(context, IImportedBook)
         context.reindexObject()
 
         # Save original file, we might need it later
