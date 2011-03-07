@@ -16,7 +16,7 @@ class IEpubTocLogic(Interface):
     """ IEpubTocLogic interface
     """
 
-    def getNavPoints():
+    def getNavPoints(): #pyflakes, #pylint: disable-msg = E0211
         """ getNavPoints interface method
         """
         pass
@@ -25,27 +25,27 @@ class IEpubUtils(Interface):
     """ IEpubUtils interface
     """
 
-    def getEpubFormatURL():
+    def getEpubFormatURL(): #pyflakes, #pylint: disable-msg = E0211
         """ getEpubFormatURL interface method
         """
         pass
 
-    def getEbook():
+    def getEbook(): #pyflakes, #pylint: disable-msg = E0211
         """ getEbook interface method
         """
         pass
 
-    def isImportedEbook():
+    def isImportedEbook(): #pyflakes, #pylint: disable-msg = E0211
         """ isImportedEbook interface method
         """
         pass
 
-    def isImportedChapter():
+    def isImportedChapter(): #pyflakes, #pylint: disable-msg = E0211
         """ isImportedChapter interface method
         """
         pass
 
-    def isPartOfImportedBook():
+    def isPartOfImportedBook(): #pyflakes, #pylint: disable-msg = E0211
         """ isPartOfImportedBook interface method
         """
         pass

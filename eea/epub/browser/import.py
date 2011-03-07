@@ -47,9 +47,8 @@ def stripNamespaces(node):
 
 def cleanNames(name):
     """ Remove non alpha numeric characters from argument minus exceptions """
-    return "".join(map(lambda x:(x.isalnum() or x in ['.', '/', '-']) and x or
-                                "_", name))
-
+    return "".join(map( #pyflakes, #pylint: disable-msg = W0141
+        lambda x:(x.isalnum() or x in ['.', '/', '-']) and x or "_", name))
 
 class EpubFile(object):
     """ EpubFile
@@ -256,7 +255,7 @@ class ImportView(BrowserView):
         if self.request.environ['REQUEST_METHOD'] == 'POST':
             httpFileUpload = self.request.form.values()[0]
             try:
-                newId = self.importFile(httpFileUpload)
+                newId = self.importFile(httpFileUpload) #pyflakes, #pylint: disable-msg = W0612
             except Exception:
                 return self.request.response.redirect(
                     self.context.absolute_url() +
@@ -264,7 +263,7 @@ class ImportView(BrowserView):
                     "your EPUB format may not be supported")
             return self.request.response.redirect(self.context.absolute_url())
 
-    def importFile(self, epubFile):
+    def importFile(self, epubFile): #pyflakes, #pylint: disable-msg = R0914
         """ Imports the epub file
         """
         zipFile = ZipFile(epubFile, 'r')

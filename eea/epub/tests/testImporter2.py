@@ -21,7 +21,7 @@ class ImporterTest(EpubFunctionalTestCase):
         fid = self.portal.invokeFactory('EpubFile', id='tmp')
         tmp = getattr(self.portal, fid)
         view = tmp.restrictedTraverse('@@epub_import_view')
-        newId = view.importFile(fileContent)
+        newId = view.importFile(fileContent) #pyflakes, #pylint: disable-msg = W0612
 
         self.rootEpubFolder = getattr(self.portal,
                         'climate-change-impact-in-europe', None)
