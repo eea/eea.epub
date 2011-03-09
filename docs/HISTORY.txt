@@ -3,8 +3,8 @@ Changelog
 [David Ichim - david.ichim@eaudeweb.ro]
 [Per Thulin - Valentine Web Systems]
 
-0.4-dev - (unreleased)
-----------------------
+0.4 - (2011-03-09)
+------------------
  * Change: cleaned test, added doctypes, fixed pylint violations warnings [ichimdav #4140]
 
 0.3 - (2011-03-01)
