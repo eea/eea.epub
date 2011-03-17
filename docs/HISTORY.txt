@@ -3,8 +3,8 @@ Changelog
 [David Ichim - david.ichim@eaudeweb.ro]
 [Per Thulin - Valentine Web Systems]
 
-0.5-dev - (unreleased)
-----------------------
+0.5 - (2011-03-17)
+------------------
  * Bug fix: fixed wrong anchors that spanned over paragraphs [ichimdav #4196]
  * Bug fix: Added translation domain to ZCML files [voineali #4139]
 
