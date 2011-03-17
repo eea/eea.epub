@@ -12,6 +12,9 @@ from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
 import urllib
+import re
+import logging
+logger = logging.getLogger('eea.epub.browser.import') 
 
 
 def titleToId(title):
@@ -159,7 +162,14 @@ class EpubFile(object):
             imgs = list(html.getiterator('img'))
             for img in imgs:
                 img.attrib['src'] = cleanNames(img.attrib['src']) 
+            ##### regex replace of <a /> with <a></a>
             html = ET.tostring(html)
+            def repl(m):
+                res = m.group(1) + '></a>'
+                return res
+            regex = r'(<a[^>]*)(/>)'
+            html = re.sub(regex, repl, html)
+
             page_resources.append({
                 'id': elem.get('href'),
                 'title': title,
@@ -255,8 +265,9 @@ class ImportView(BrowserView):
         if self.request.environ['REQUEST_METHOD'] == 'POST':
             httpFileUpload = self.request.form.values()[0]
             try:
-                newId = self.importFile(httpFileUpload) #pyflakes, #pylint: disable-msg = W0612
-            except Exception:
+                self.importFile(httpFileUpload) # new-id = 
+            except Exception, err:
+                logger.info(err)
                 return self.request.response.redirect(
                     self.context.absolute_url() +
                     "/edit?portal_status_message=An error occur during upload,"

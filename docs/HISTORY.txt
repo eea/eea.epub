@@ -5,6 +5,7 @@ Changelog
 
 0.5-dev - (unreleased)
 ----------------------
+ * Bug fix: fixed wrong anchors that spanned over paragraphs [ichimdav #4196]
  * Bug fix: Added translation domain to ZCML files [voineali #4139]
 
 0.4 - (2011-03-09)
