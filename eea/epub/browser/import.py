@@ -14,6 +14,7 @@ from eea.epub.interfaces import IImportedImage
 import urllib
 import re
 import logging
+from BeautifulSoup import BeautifulSoup
 logger = logging.getLogger('eea.epub.browser.import') 
 
 
@@ -169,7 +170,7 @@ class EpubFile(object):
                 return res
             regex = r'(<a[^>]*)(/>)'
             html = re.sub(regex, repl, html)
-
+            html = str(BeautifulSoup(html))
             page_resources.append({
                 'id': elem.get('href'),
                 'title': title,
@@ -267,7 +268,7 @@ class ImportView(BrowserView):
             try:
                 self.importFile(httpFileUpload) # new-id = 
             except Exception, err:
-                logger.info(err)
+                logger.debug(err)
                 return self.request.response.redirect(
                     self.context.absolute_url() +
                     "/edit?portal_status_message=An error occur during upload,"

@@ -6,6 +6,7 @@ Changelog
 
 0.6-dev - (unreleased)
 ----------------------
+ * Bug fix: clean epub import to prevent navigation portlet from miss-behaving [ichimdav #4242]
  * Bug fix: fixes #4242 Removed / clean up, the portlet epub and toc, 
    we can use standard plone nav [demarant]
  * Feature: force documents/chapters not to be renamed after title change [demarant]
