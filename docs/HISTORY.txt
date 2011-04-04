@@ -6,8 +6,10 @@ Changelog
 
 0.6-dev - (unreleased)
 ----------------------
- * Bug: fixes #4242 Removed / clean up, the portlet epub and toc, 
+ * Bug fix: fixes #4242 Removed / clean up, the portlet epub and toc, 
    we can use standard plone nav [demarant]
+ * Feature: force documents/chapters not to be renamed after title change [demarant]
+ 
 0.5 - (2011-03-17)
 ------------------
  * Bug fix: fixed wrong anchors that spanned over paragraphs [ichimdav #4196]
