@@ -332,6 +332,7 @@ class ImportView(BrowserView):
             article.setTitle(resource['title'])
             article.setText(resource['content'])
             article.setDescription(resource['description'])
+            article._at_rename_after_creation = False
             if resource['isChapter']:
                 alsoProvides(article, IImportedChapter) 
             article.reindexObject()
