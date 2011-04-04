@@ -287,9 +287,6 @@ class ImportView(BrowserView):
         if epub.creator != None:
             context.setCreators([epub.creator])
 
-        context.manage_addProperty('left_slots',
-                                  'here/portlet_epub/macros/portlet', 'lines')
-
         annotations = IAnnotations(context)
         mapping = annotations['eea.epub'] = PersistentDict({'toc': []})
         mapping['toc'] = epub.tocNavPoints
