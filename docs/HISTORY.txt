@@ -4,6 +4,9 @@ Changelog
 [Per Thulin - Valentine Web Systems]
 [demarant - Antonio De Marinis - EEA]
 
+0.7-dev - (unreleased)
+----------------------
+
 0.6 - (2011-04-07)
 ------------------
  * Bug fix: clean epub import to prevent navigation portlet from miss-behaving [ichimdav #4242]
