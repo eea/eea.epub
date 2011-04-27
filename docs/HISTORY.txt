@@ -1,17 +1,18 @@
 Changelog
 =========
+[Antonio De Marinis - Antonio.DeMarinis@eea.europa.eu]
 [David Ichim - david.ichim@eaudeweb.ro]
 [Per Thulin - Valentine Web Systems]
-[demarant - Antonio De Marinis - EEA]
+[Tiberiu Ichim - tiberiu.ichim@eaudeweb.ro]
 
 4.0-dev - (unreleased)
 ----------------------
- * Feature: new Plone 4 compatibility branch [tiberich #4121]
+ * Feature: Plone 4.0.4 compatible release [tiberich #4121]
 
 0.6 - (2011-04-07)
 ------------------
  * Bug fix: clean epub import to prevent navigation portlet from miss-behaving [ichimdav #4242]
- * Bug fix: fixes #4242 Removed / clean up, the portlet epub and toc, 
+ * Bug fix: fixes #4242 Removed / clean up, the portlet epub and toc,
    we can use standard plone nav [demarant]
  * Feature: force documents/chapters not to be renamed after title change [demarant]
 
