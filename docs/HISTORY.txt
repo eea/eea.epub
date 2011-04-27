@@ -7,6 +7,7 @@ Changelog
 
 4.0-dev - (unreleased)
 ----------------------
+ * Cleanup: Fixed all pylint, pyflakes violations [voineali #4121]
  * Feature: Plone 4.0.4 compatible release [tiberich #4121]
 
 0.6 - (2011-04-07)
