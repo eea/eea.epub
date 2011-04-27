@@ -1,7 +1,7 @@
 """ Functional tests for importing epubs
 """
 
-from Globals import package_home
+from App.Common import package_home
 from StringIO import StringIO
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
