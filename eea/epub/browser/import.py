@@ -304,7 +304,7 @@ class ImportView(BrowserView):
         original = context[context.invokeFactory('File', id='original.epub')]
         original.setFile(epubFile)
         field = original.getField('file')
-        field.setContentType(original, 'application/epub+zip') 
+        field.getRaw(original).setContentType('application/epub+zip') 
 
         if epub.coverImageData != None:
             context.invokeFactory('Image', id='epub_cover',

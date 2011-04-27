@@ -4,8 +4,9 @@ Changelog
 [Per Thulin - Valentine Web Systems]
 [demarant - Antonio De Marinis - EEA]
 
-0.7-dev - (unreleased)
+1.0-dev - (unreleased)
 ----------------------
+ * Feature: new Plone 4 compatibility branch [tiberich #4121]
 
 0.6 - (2011-04-07)
 ------------------
