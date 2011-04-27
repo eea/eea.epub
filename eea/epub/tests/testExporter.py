@@ -1,12 +1,15 @@
 """ Functional Tests
 """
-from zipfile import ZipFile
+
 from StringIO import StringIO
 from eea.epub.tests.base import EpubFunctionalTestCase
+from zipfile import ZipFile
+
 
 class ExporterTest(EpubFunctionalTestCase):
     """ ExporterTest functional testing class
     """
+
     def afterSetUp(self):
         """ Set up
         """
@@ -37,6 +40,7 @@ class ExporterTest(EpubFunctionalTestCase):
         fileNames = zipFile.namelist()
         self.failUnless('mimetype' in fileNames)
         self.failUnless('OEBPS/content.xhtml' in fileNames)
+
 
 def test_suite():
     """Test Suite"""

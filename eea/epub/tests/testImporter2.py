@@ -1,13 +1,15 @@
 """ Other functional tests for importing epubs
 """
-import os.path
 from Globals import package_home
 from StringIO import StringIO
 from eea.epub.tests.base import EpubFunctionalTestCase
+import os.path
+
 
 class ImporterTest(EpubFunctionalTestCase):
     """ ImporterTest class
     """
+
     def afterSetUp(self):
         """ After setup method
         """

@@ -1,20 +1,22 @@
 """ Browser Import
 """
-from elementtree import ElementTree as ET
-from zipfile import ZipFile
-#from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.interface import alsoProvides
-from zope.app.annotation.interfaces import IAnnotations
-import transaction
-from persistent.dict import PersistentDict
+
+from BeautifulSoup import BeautifulSoup
 from Products.Five import BrowserView
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
-import urllib
-import re
+from elementtree import ElementTree as ET
+from persistent.dict import PersistentDict
+from zipfile import ZipFile
+from zope.annotation.interfaces import IAnnotations
+from zope.interface import alsoProvides
 import logging
-from BeautifulSoup import BeautifulSoup
+import re
+import transaction
+import urllib
+
+
 logger = logging.getLogger('eea.epub.browser.import') 
 
 
@@ -165,12 +167,15 @@ class EpubFile(object):
                 img.attrib['src'] = cleanNames(img.attrib['src']) 
             ##### regex replace of <a /> with <a></a>
             html = ET.tostring(html)
+
             def repl(m):
                 res = m.group(1) + '></a>'
                 return res
             regex = r'(<a[^>]*)(/>)'
+
             html = re.sub(regex, repl, html)
             html = str(BeautifulSoup(html))
+
             page_resources.append({
                 'id': elem.get('href'),
                 'title': title,

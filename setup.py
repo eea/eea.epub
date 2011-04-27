@@ -30,6 +30,7 @@ setup(name='eea.epub',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'BeautifulSoup',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

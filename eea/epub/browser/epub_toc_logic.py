@@ -1,6 +1,6 @@
 """ Epub Table of contents logic Browserview
 """
-from zope.app.annotation.interfaces import IAnnotations
+from zope.annotation.interfaces import IAnnotations
 from Products.Five import BrowserView
 
 class EpubTocLogic(BrowserView):
