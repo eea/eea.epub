@@ -1,11 +1,12 @@
 """ Export as epub
 """
-import os.path
+
+from App.Common import package_home
+from Products.Five import BrowserView
 from StringIO import StringIO
 from zipfile import ZipFile
 from zope.app.pagetemplate import ViewPageTemplateFile
-from Globals import package_home
-from Products.Five import BrowserView
+import os.path
 
 def replace(filePath, variables):
     """ Replaces content from a file with given variables
