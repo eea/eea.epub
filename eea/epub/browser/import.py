@@ -6,7 +6,7 @@ from Products.Five import BrowserView
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
-from elementtree import ElementTree as ET
+import xml.etree.cElementTree as ET
 from persistent.dict import PersistentDict
 from zipfile import ZipFile
 from zope.annotation.interfaces import IAnnotations
@@ -15,7 +15,6 @@ import logging
 import re
 import transaction
 import urllib
-
 
 logger = logging.getLogger('eea.epub.browser.import')
 
@@ -148,6 +147,7 @@ class EpubFile(object):
             href = elem.get('href')
             fileName = 'OEBPS/' + elem.get('href')
             fileContent = self.zipFile.read(fileName)
+            fileContent = fileContent.replace("&nbsp;", " ")
             html = ET.XML(fileContent)
             html = stripNamespaces(html)
             html = html.find('body')
