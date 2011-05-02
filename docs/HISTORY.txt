@@ -6,6 +6,7 @@ Changelog
 
 0.7-dev - (unreleased)
 ----------------------
+ * Bug fix: Cleaned spaces defined as &nbsp that can't be read as xml [ichimdav #4271]
 
 0.6 - (2011-04-07)
 ------------------

@@ -146,6 +146,7 @@ class EpubFile(object):
             href = elem.get('href')
             fileName = 'OEBPS/' + elem.get('href')
             fileContent = self.zipFile.read(fileName)
+            fileContent = fileContent.replace("&nbsp;", " ")
             html = ET.XML(fileContent)
             html = stripNamespaces(html)
             html = html.find('body')
