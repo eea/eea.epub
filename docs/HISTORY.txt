@@ -4,8 +4,8 @@ Changelog
 [Per Thulin - Valentine Web Systems]
 [demarant - Antonio De Marinis - EEA]
 
-0.7-dev - (unreleased)
-----------------------
+0.7 - (2011-05-10)
+------------------
  * Bug fix: Cleaned spaces defined as &nbsp that can't be read as xml [ichimdav #4271]
 
 0.6 - (2011-04-07)
