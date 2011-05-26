@@ -5,9 +5,9 @@
 
   <genericsetup:registerProfile
       name="default"
-      title="eea.epub"
+      title="EEA Epub"
       directory="profiles/default"
-      description="Extension profile for eea.epub"
+      description="Extension profile for EEA Epub"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 

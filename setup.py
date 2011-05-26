@@ -2,20 +2,16 @@
 """
 from setuptools import setup, find_packages
 import os
-from os.path import join
 
-name = 'eea.epub'
-path = name.split('.') + ['version.txt']
-version = open(join(*path)).read().strip()
+NAME = 'eea.epub'
+PATH = name.split('.') + ['version.txt']
+VERSION = open(os.path.join(*PATH)).read().strip()
 
-
-setup(name='eea.epub',
-      version=version,
+setup(name=NAME,
+      version=VERSION,
       description="Publish Plone content in epub form",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from
-      # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
         "Programming Language :: Python",
@@ -34,7 +30,6 @@ setup(name='eea.epub',
       install_requires=[
           'setuptools',
           'BeautifulSoup',
-          # -*- Extra requirements: -*-
       ],
       entry_points="""
       # -*- Entry points: -*-
