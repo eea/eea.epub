@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 import os
 
 NAME = 'eea.epub'
-PATH = name.split('.') + ['version.txt']
+PATH = NAME.split('.') + ['version.txt']
 VERSION = open(os.path.join(*PATH)).read().strip()
 
 setup(name=NAME,
