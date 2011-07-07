@@ -13,4 +13,6 @@
         <implements interface="eea.epub.interfaces.IExportable" />
     </class>
 
+    <include package=".upgrades" />
+
 </configure>
