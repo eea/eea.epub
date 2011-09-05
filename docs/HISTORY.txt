@@ -4,7 +4,8 @@ Changelog
 
 4.0-dev - (unreleased)
 ----------------------
-
+* Bug fix: proper parsing of html entities by using an html parser instead of an xml one 
+  [ichimdav #4523]
 * Bug fix: Cleaned spaces defined as &nbsp that can't be read as xml
   [ichimdav #4271]
 

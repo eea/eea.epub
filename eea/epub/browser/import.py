@@ -15,6 +15,7 @@ import logging
 import re
 import transaction
 import urllib
+import lxml.html
 
 logger = logging.getLogger('eea.epub.browser.import')
 
@@ -147,9 +148,7 @@ class EpubFile(object):
             href = elem.get('href')
             fileName = 'OEBPS/' + elem.get('href')
             fileContent = self.zipFile.read(fileName)
-            fileContent = fileContent.replace("&nbsp;", " ")
-            html = ET.XML(fileContent)
-            html = stripNamespaces(html)
+            html = lxml.html.fromstring(fileContent)
             html = html.find('body')
             isChapter = href in chapter_hrefs
             title = href
@@ -166,7 +165,7 @@ class EpubFile(object):
             for img in imgs:
                 img.attrib['src'] = cleanNames(img.attrib['src'])
             ##### regex replace of <a /> with <a></a>
-            html = ET.tostring(html)
+            html = lxml.html.tostring(html)
 
             def repl(m):
                 """ Replace """
