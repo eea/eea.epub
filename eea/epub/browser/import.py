@@ -15,6 +15,9 @@ import urllib
 import re
 import logging
 from BeautifulSoup import BeautifulSoup
+import lxml.html
+
+
 logger = logging.getLogger('eea.epub.browser.import') 
 
 
@@ -146,9 +149,7 @@ class EpubFile(object):
             href = elem.get('href')
             fileName = 'OEBPS/' + elem.get('href')
             fileContent = self.zipFile.read(fileName)
-            fileContent = fileContent.replace("&nbsp;", " ")
-            html = ET.XML(fileContent)
-            html = stripNamespaces(html)
+            html = lxml.html.fromstring(fileContent)
             html = html.find('body')
             isChapter = href in chapter_hrefs
             title = href
@@ -163,13 +164,16 @@ class EpubFile(object):
                     html.remove(h1)
             imgs = list(html.getiterator('img'))
             for img in imgs:
-                img.attrib['src'] = cleanNames(img.attrib['src']) 
+                img.attrib['src'] = cleanNames(img.attrib['src'])
             ##### regex replace of <a /> with <a></a>
-            html = ET.tostring(html)
+            html = lxml.html.tostring(html)
+
             def repl(m):
+                """ Replace self closing a tags with html a tags """
                 res = m.group(1) + '></a>'
                 return res
             regex = r'(<a[^>]*)(/>)'
+
             html = re.sub(regex, repl, html)
             html = str(BeautifulSoup(html))
             page_resources.append({

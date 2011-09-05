@@ -6,6 +6,8 @@ Changelog
 
 0.8-dev - (unreleased)
 ----------------------
+* Bug fix: proper parsing of html entities by using an html parser instead of an xml one 
+  [ichimdav #4523]
 
 0.7 - (2011-05-10)
 ------------------
