@@ -4,8 +4,8 @@ Changelog
 [Per Thulin - Valentine Web Systems]
 [demarant - Antonio De Marinis - EEA]
 
-0.8-dev - (unreleased)
-----------------------
+0.8 - (2011-09-05)
+------------------
 * Bug fix: proper parsing of html entities by using an html parser instead of an xml one 
   [ichimdav #4523]
 
