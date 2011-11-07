@@ -105,17 +105,11 @@ Copyright and license
 The Initial Owner of the Original Code is European Environment Agency (EEA).
 All Rights Reserved.
 
-The EEA Faceted Navigation (the Original Code) is free software;
+The EEA Epub (the Original Code) is free software;
 you can redistribute it and/or modify it under the terms of the GNU
 General Public License as published by the Free Software Foundation;
 either version 2 of the License, or (at your option) any later
 version.
-
-Contributor(s): Per Thulin (Valentine Web Systems),
-                Antonio De Marinis (European Environment Agency),
-                Alec Ghica (Eau de Web),
-                David Ichim (Eau de Web),
-                Tiberiu Ichim (Eau de Web)
 
 More details under docs/License.txt
 
