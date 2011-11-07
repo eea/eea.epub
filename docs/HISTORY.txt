@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.0-dev - (unreleased)
-----------------------
+4.0 - (2011-11-06)
+------------------
 
 * Bug fix: proper parsing of html entities by using an html parser instead of an xml one 
   [ichimdav #4523]
