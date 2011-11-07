@@ -1,18 +1,19 @@
 Changelog
 =========
 
-
 4.0-dev - (unreleased)
 ----------------------
+
 * Bug fix: proper parsing of html entities by using an html parser instead of an xml one 
   [ichimdav #4523]
-* Bug fix: Cleaned spaces defined as &nbsp that can't be read as xml
+
+* Bug fix: cleaned spaces defined as &nbsp that can't be read as xml
   [ichimdav #4271]
 
-* Cleanup: Fixed all pylint, pyflakes violations
+* Cleanup: fixed all pylint, pyflakes violations
   [voineali #4121]
 
-* Feature: Added upgrade steps
+* Feature: added upgrade steps
   [voineali @4392]
 
 * Feature: Plone 4.0.4 compatible release
@@ -39,7 +40,7 @@ Changelog
 * Bug fix: fixed wrong anchors that spanned over paragraphs
   [ichimdav #4196]
 
-* Bug fix: Added translation domain to ZCML files
+* Bug fix: added translation domain to ZCML files
   [voineali #4139]
 
 
