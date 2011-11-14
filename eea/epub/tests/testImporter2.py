@@ -1,13 +1,15 @@
 """ Other functional tests for importing epubs
 """
-import os.path
-from Globals import package_home
+from App.Common import package_home
 from StringIO import StringIO
 from eea.epub.tests.base import EpubFunctionalTestCase
+import os.path
+
 
 class ImporterTest(EpubFunctionalTestCase):
     """ ImporterTest class
     """
+
     def afterSetUp(self):
         """ After setup method
         """
@@ -21,7 +23,7 @@ class ImporterTest(EpubFunctionalTestCase):
         fid = self.portal.invokeFactory('EpubFile', id='tmp')
         tmp = getattr(self.portal, fid)
         view = tmp.restrictedTraverse('@@epub_import_view')
-        newId = view.importFile(fileContent) #pyflakes, #pylint: disable-msg = W0612
+        view.importFile(fileContent)
 
         self.rootEpubFolder = getattr(self.portal,
                         'climate-change-impact-in-europe', None)

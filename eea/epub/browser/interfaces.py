@@ -5,47 +5,39 @@ from zope.interface import Interface
 class IExportView(Interface):
     """ IExportView interface
     """
-    pass
 
 class IImportView(Interface):
     """ IImportView interface
     """
-    pass
 
 class IEpubTocLogic(Interface):
     """ IEpubTocLogic interface
     """
 
-    def getNavPoints(): #pyflakes, #pylint: disable-msg = E0211
+    def getNavPoints():
         """ getNavPoints interface method
         """
-        pass
 
 class IEpubUtils(Interface):
     """ IEpubUtils interface
     """
 
-    def getEpubFormatURL(): #pyflakes, #pylint: disable-msg = E0211
+    def getEpubFormatURL():
         """ getEpubFormatURL interface method
         """
-        pass
 
-    def getEbook(): #pyflakes, #pylint: disable-msg = E0211
+    def getEbook():
         """ getEbook interface method
         """
-        pass
 
-    def isImportedEbook(): #pyflakes, #pylint: disable-msg = E0211
+    def isImportedEbook():
         """ isImportedEbook interface method
         """
-        pass
 
-    def isImportedChapter(): #pyflakes, #pylint: disable-msg = E0211
+    def isImportedChapter():
         """ isImportedChapter interface method
         """
-        pass
 
-    def isPartOfImportedBook(): #pyflakes, #pylint: disable-msg = E0211
+    def isPartOfImportedBook():
         """ isPartOfImportedBook interface method
         """
-        pass

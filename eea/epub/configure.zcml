@@ -1,13 +1,16 @@
 <configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:five="http://namespaces.zope.org/five"
-           i18n_domain="eea.epub">
+           xmlns:cmf="http://namespaces.zope.org/cmf"
+           i18n_domain="eea">
 
-  <five:registerPackage package="." />
-  <include file="profiles.zcml" />
-  <include package=".browser" />
+    <cmf:registerDirectory name="eea_epub"/>
 
-  <class class="Products.ATContentTypes.content.newsitem.ATNewsItem">
-      <implements interface="eea.epub.interfaces.IExportable" />
-  </class>
+    <include file="profiles.zcml" />
+    <include package=".browser" />
+
+    <class class="Products.ATContentTypes.content.newsitem.ATNewsItem">
+        <implements interface="eea.epub.interfaces.IExportable" />
+    </class>
+
+    <include package=".upgrades" />
 
 </configure>

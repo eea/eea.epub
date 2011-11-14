@@ -1,24 +1,23 @@
 """ Browser Import
 """
-from elementtree import ElementTree as ET
-from zipfile import ZipFile
-#from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.interface import alsoProvides
-from zope.app.annotation.interfaces import IAnnotations
-import transaction
-from persistent.dict import PersistentDict
+
+from BeautifulSoup import BeautifulSoup
 from Products.Five import BrowserView
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
-import urllib
-import re
+import xml.etree.cElementTree as ET
+from persistent.dict import PersistentDict
+from zipfile import ZipFile
+from zope.annotation.interfaces import IAnnotations
+from zope.interface import alsoProvides
 import logging
-from BeautifulSoup import BeautifulSoup
+import re
+import transaction
+import urllib
 import lxml.html
 
-
-logger = logging.getLogger('eea.epub.browser.import') 
+logger = logging.getLogger('eea.epub.browser.import')
 
 
 def titleToId(title):
@@ -54,8 +53,8 @@ def stripNamespaces(node):
 
 def cleanNames(name):
     """ Remove non alpha numeric characters from argument minus exceptions """
-    return "".join(map( #pyflakes, #pylint: disable-msg = W0141
-        lambda x:(x.isalnum() or x in ['.', '/', '-']) and x or "_", name))
+    return "".join(
+        (x if (x.isalnum() or x in ['.', '/', '-']) else '_') for x in name)
 
 class EpubFile(object):
     """ EpubFile
@@ -118,7 +117,7 @@ class EpubFile(object):
                 return coverImageData
 
         return None
-            
+
     @property
     def title(self):
         """ Title of the epub
@@ -169,13 +168,14 @@ class EpubFile(object):
             html = lxml.html.tostring(html)
 
             def repl(m):
-                """ Replace self closing a tags with html a tags """
+                """ Replace """
                 res = m.group(1) + '></a>'
                 return res
             regex = r'(<a[^>]*)(/>)'
 
             html = re.sub(regex, repl, html)
             html = str(BeautifulSoup(html))
+
             page_resources.append({
                 'id': elem.get('href'),
                 'title': title,
@@ -271,7 +271,7 @@ class ImportView(BrowserView):
         if self.request.environ['REQUEST_METHOD'] == 'POST':
             httpFileUpload = self.request.form.values()[0]
             try:
-                self.importFile(httpFileUpload) # new-id = 
+                self.importFile(httpFileUpload) # new-id =
             except Exception, err:
                 logger.debug(err)
                 return self.request.response.redirect(
@@ -280,7 +280,7 @@ class ImportView(BrowserView):
                     "your EPUB format may not be supported")
             return self.request.response.redirect(self.context.absolute_url())
 
-    def importFile(self, epubFile): #pyflakes, #pylint: disable-msg = R0914
+    def importFile(self, epubFile):
         """ Imports the epub file
         """
         zipFile = ZipFile(epubFile, 'r')
@@ -304,12 +304,12 @@ class ImportView(BrowserView):
         original = context[context.invokeFactory('File', id='original.epub')]
         original.setFile(epubFile)
         field = original.getField('file')
-        field.setContentType(original, 'application/epub+zip') 
+        field.getRaw(original).setContentType('application/epub+zip')
 
         if epub.coverImageData != None:
             context.invokeFactory('Image', id='epub_cover',
                                   image=epub.coverImageData)
-        
+
         for image in epub.images:
             workingDirectory = context
             urlParts = image['href'].split('/')
@@ -318,12 +318,12 @@ class ImportView(BrowserView):
                     path = 'OEBPS/' + image['href']
                     path = urllib.unquote(path)
                     data = epub.zipFile.read(path)
-                    urlPart = cleanNames(urlPart) 
+                    urlPart = cleanNames(urlPart)
                     obj = workingDirectory[workingDirectory.invokeFactory(
                             'Image', id=urlPart, image=data)]
                     obj.setTitle(image['title'])
                     obj.setDescription(image['alt'])
-                    alsoProvides(obj, IImportedImage) 
+                    alsoProvides(obj, IImportedImage)
                     obj.reindexObject()
                 elif not urlPart in workingDirectory.objectIds():
                     workingDirectory = \
@@ -340,7 +340,7 @@ class ImportView(BrowserView):
             article.setDescription(resource['description'])
             article._at_rename_after_creation = False
             if resource['isChapter']:
-                alsoProvides(article, IImportedChapter) 
+                alsoProvides(article, IImportedChapter)
             article.reindexObject()
 
         newId = context._renameAfterCreation(check_auto_id=False)
