@@ -30,6 +30,7 @@ setup(name=NAME,
       install_requires=[
           'setuptools',
           'BeautifulSoup',
+          'lxml',
       ],
       entry_points="""
       # -*- Entry points: -*-

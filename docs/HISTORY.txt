@@ -4,7 +4,8 @@ Changelog
 
 4.1-dev - (unreleased)
 ----------------------
-
+* Bug fix: Added dependencies to setup.py
+  [voineali]
 
 4.0-dev - (2011-11-06)
 ------------------
