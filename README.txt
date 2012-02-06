@@ -94,10 +94,10 @@ Source code
 ===========
 
 Latest source code (Plone 4 compatible):
-   https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/branches/plone4/
+   https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/trunk
 
 Plone 2 and 3 compatible:
-   https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/trunk/
+   https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/branches/plone25
 
 
 Copyright and license
