@@ -3,6 +3,8 @@ Changelog
 
 4.3-dev - (unreleased)
 ----------------------
+ * Feature: import epubs that are not created by Adobe Indesign which have the images
+   and the html pages in separate folder [ichimdav #5054]
 
 4.2 - (2012-02-06)
 ------------------

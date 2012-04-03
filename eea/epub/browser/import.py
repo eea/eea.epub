@@ -87,6 +87,7 @@ class EpubFile(object):
     def tocNavPoints(self):
         """ Navigation for table of contents
         """
+        
         filePath = 'OEBPS/toc.ncx'
         fileContent = self.zipFile.read(filePath)
         xml = ET.XML(fileContent)
@@ -131,6 +132,7 @@ class EpubFile(object):
     def page_resources(self):
         """ Defines the epub page resources
         """
+        
         if 'page_resources' in self.cache:
             return self.cache['page_resources']
 
@@ -147,6 +149,7 @@ class EpubFile(object):
                 continue
             href = elem.get('href')
             fileName = 'OEBPS/' + elem.get('href')
+            fileName = urllib.unquote(fileName)
             fileContent = self.zipFile.read(fileName)
             html = lxml.html.fromstring(fileContent)
             html = html.find('body')
@@ -223,6 +226,7 @@ class EpubFile(object):
     def images(self):
         """ Returns the images of the epub
         """
+        
         if not 'images' in self.cache:
             self.cache['images'] = []
             for elem in self.rootFile.find('manifest').getchildren():
@@ -283,6 +287,7 @@ class ImportView(BrowserView):
     def importFile(self, epubFile):
         """ Imports the epub file
         """
+        
         zipFile = ZipFile(epubFile, 'r')
         epub = EpubFile(zipFile)
 
@@ -314,34 +319,46 @@ class ImportView(BrowserView):
             workingDirectory = context
             urlParts = image['href'].split('/')
             for urlPart in urlParts:
+               if urlPart == urlParts[-1]:
+                   path = 'OEBPS/' + image['href']
+                   path = urllib.unquote(path)
+                   data = epub.zipFile.read(path)
+                   urlPart = cleanNames(urlPart)
+                   obj = workingDirectory[workingDirectory.invokeFactory(
+                           'Image', id=urlPart, image=data)]
+                   obj.setTitle(image['title'].strip())
+                   obj.setDescription(image['alt'])
+                   alsoProvides(obj, IImportedImage)
+                   obj.reindexObject()
+               elif not urlPart in workingDirectory.objectIds():
+                   workingDirectory = \
+                   workingDirectory[workingDirectory.invokeFactory('Folder',
+                                                                   id=urlPart)]
+               else:
+                   workingDirectory = workingDirectory[urlPart]
+
+        for resource in epub.page_resources:
+            workingDirectory = context
+            urlParts = resource['id'].split('/')
+            for urlPart in urlParts:
                 if urlPart == urlParts[-1]:
-                    path = 'OEBPS/' + image['href']
-                    path = urllib.unquote(path)
-                    data = epub.zipFile.read(path)
-                    urlPart = cleanNames(urlPart)
-                    obj = workingDirectory[workingDirectory.invokeFactory(
-                            'Image', id=urlPart, image=data)]
-                    obj.setTitle(image['title'])
-                    obj.setDescription(image['alt'])
-                    alsoProvides(obj, IImportedImage)
-                    obj.reindexObject()
+                    urlPart = urllib.unquote(urlPart)
+                    urlPart = urlPart.strip()
+                    article = context[context.invokeFactory('Document',
+                                                    id=urlPart)]
+                    article.setTitle(resource['title'])
+                    article.setText(resource['content'])
+                    article.setDescription(resource['description'])
+                    article._at_rename_after_creation = False
+                    if resource['isChapter']:
+                        alsoProvides(article, IImportedChapter)
+                    article.reindexObject()
                 elif not urlPart in workingDirectory.objectIds():
                     workingDirectory = \
                     workingDirectory[workingDirectory.invokeFactory('Folder',
                                                                     id=urlPart)]
                 else:
                     workingDirectory = workingDirectory[urlPart]
-
-        for resource in epub.page_resources:
-            article = context[context.invokeFactory('Document',
-                                                    id=resource['id'])]
-            article.setTitle(resource['title'])
-            article.setText(resource['content'])
-            article.setDescription(resource['description'])
-            article._at_rename_after_creation = False
-            if resource['isChapter']:
-                alsoProvides(article, IImportedChapter)
-            article.reindexObject()
 
         newId = context._renameAfterCreation(check_auto_id=False)
         return newId
