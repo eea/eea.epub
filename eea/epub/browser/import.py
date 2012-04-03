@@ -319,23 +319,23 @@ class ImportView(BrowserView):
             workingDirectory = context
             urlParts = image['href'].split('/')
             for urlPart in urlParts:
-               if urlPart == urlParts[-1]:
-                   path = 'OEBPS/' + image['href']
-                   path = urllib.unquote(path)
-                   data = epub.zipFile.read(path)
-                   urlPart = cleanNames(urlPart)
-                   obj = workingDirectory[workingDirectory.invokeFactory(
-                           'Image', id=urlPart, image=data)]
-                   obj.setTitle(image['title'].strip())
-                   obj.setDescription(image['alt'])
-                   alsoProvides(obj, IImportedImage)
-                   obj.reindexObject()
-               elif not urlPart in workingDirectory.objectIds():
-                   workingDirectory = \
-                   workingDirectory[workingDirectory.invokeFactory('Folder',
-                                                                   id=urlPart)]
-               else:
-                   workingDirectory = workingDirectory[urlPart]
+                if urlPart == urlParts[-1]:
+                    path = 'OEBPS/' + image['href']
+                    path = urllib.unquote(path)
+                    data = epub.zipFile.read(path)
+                    urlPart = cleanNames(urlPart)
+                    obj = workingDirectory[workingDirectory.invokeFactory(
+                            'Image', id=urlPart, image=data)]
+                    obj.setTitle(image['title'].strip())
+                    obj.setDescription(image['alt'])
+                    alsoProvides(obj, IImportedImage)
+                    obj.reindexObject()
+                elif not urlPart in workingDirectory.objectIds():
+                    workingDirectory = \
+                    workingDirectory[workingDirectory.invokeFactory('Folder',
+                                                                    id=urlPart)]
+                else:
+                    workingDirectory = workingDirectory[urlPart]
 
         for resource in epub.page_resources:
             workingDirectory = context
