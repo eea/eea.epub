@@ -344,9 +344,12 @@ class ImportView(BrowserView):
                 if urlPart == urlParts[-1]:
                     urlPart = urllib.unquote(urlPart)
                     urlPart = urlPart.strip()
+                    title = resource['title']
+                    # set title as the id part of the file if the original
+                    # title is equal to the id of the file
+                    title = urlPart if title == resource['id'] else title
                     article = workingDirectory[ \
                         workingDirectory.invokeFactory('Document', id=urlPart)]
-                    title = resource['title']
                     article.setTitle(title)
                     article.setText(resource['content'])
                     article.setDescription(resource['description'])
