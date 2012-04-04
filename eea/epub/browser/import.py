@@ -338,15 +338,16 @@ class ImportView(BrowserView):
                     workingDirectory = workingDirectory[urlPart]
 
         for resource in epub.page_resources:
+            
             workingDirectory = context
             urlParts = resource['id'].split('/')
             for urlPart in urlParts:
                 if urlPart == urlParts[-1]:
                     urlPart = urllib.unquote(urlPart)
                     urlPart = urlPart.strip()
-                    article = context[context.invokeFactory('Document',
-                                                    id=urlPart)]
-                    article.setTitle(resource['title'])
+                    article = workingDirectory[ \
+                        workingDirectory.invokeFactory('Document', id=urlPart)]
+                    article.setTitle(urlPart)
                     article.setText(resource['content'])
                     article.setDescription(resource['description'])
                     article._at_rename_after_creation = False
@@ -356,7 +357,7 @@ class ImportView(BrowserView):
                 elif not urlPart in workingDirectory.objectIds():
                     workingDirectory = \
                     workingDirectory[workingDirectory.invokeFactory('Folder',
-                                                                    id=urlPart)]
+                                                                 id=urlPart)]
                 else:
                     workingDirectory = workingDirectory[urlPart]
 
