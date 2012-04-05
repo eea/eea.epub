@@ -17,6 +17,9 @@ import transaction
 import urllib
 import lxml.html
 
+from zope.event import notify
+from eea.epub.browser.events import EpubImportedEvent
+
 logger = logging.getLogger('eea.epub.browser.import')
 
 
@@ -87,7 +90,6 @@ class EpubFile(object):
     def tocNavPoints(self):
         """ Navigation for table of contents
         """
-        
         filePath = 'OEBPS/toc.ncx'
         fileContent = self.zipFile.read(filePath)
         xml = ET.XML(fileContent)
@@ -303,6 +305,7 @@ class ImportView(BrowserView):
         mapping['toc'] = epub.tocNavPoints
 
         alsoProvides(context, IImportedBook)
+        notify(EpubImportedEvent(self.context))
         context.reindexObject()
 
         # Save original file, we might need it later
