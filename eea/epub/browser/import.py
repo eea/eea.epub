@@ -19,6 +19,7 @@ import lxml.html
 
 from zope.event import notify
 from eea.epub.browser.events import EpubImportedEvent
+from Products.statusmessages.interfaces import IStatusMessage
 
 logger = logging.getLogger('eea.epub.browser.import')
 
@@ -279,11 +280,13 @@ class ImportView(BrowserView):
             try:
                 self.importFile(httpFileUpload) # new-id =
             except Exception, err:
-                logger.debug(err)
+                msg = "An error occur during upload," \
+                      " your EPUB format may not be supported"
+                logger.exception(err)
+                IStatusMessage(self.request).addStatusMessage(
+                    msg, type='info')
                 return self.request.response.redirect(
-                    self.context.absolute_url() +
-                    "/edit?portal_status_message=An error occur during upload,"
-                    "your EPUB format may not be supported")
+                    self.context.absolute_url() + "/edit")
             return self.request.response.redirect(self.context.absolute_url())
 
     def importFile(self, epubFile):

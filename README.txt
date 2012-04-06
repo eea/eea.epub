@@ -29,7 +29,10 @@ EEA Epub features:
   2. Stores the original epub in the main folder for easy retrieval.
   3. Exports the Plone content back into an epub.
 
-EEA Epub makes the following assumptions:
+Epub compatibility
+==================
+
+EEA Epub makes the following assumptions about the loaded epub:
 
   1. You don't use unicode or other special characters into the name of the epub, images or links
   2. You've created the epub with "Adobe InDesign CS4" or "Sigil" which uses some standards for the following:
@@ -42,6 +45,13 @@ Best practices when creating an epub:
 
   1. Chapter names should not be all uppercase or use special characters
   2. Image names should not contain spaces, periods, / or other special characters
+
+Debugging
+=========
+
+At this moment any errors that would appear on the site are surpressed with a info message.
+
+If you want to see the detailed error check the Plone instance log usually found in buildout-folder/var/log.
 
 Installation
 ============
