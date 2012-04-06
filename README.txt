@@ -16,7 +16,8 @@ Epub content will imported as Plone folders, files, images and documents.
 
 Export to Epub is also available.
 
-Note that only epub files created with "Adobe InDesign CS4" are supported for import.
+As of version 4.3 epub files created with **Adobe InDesign CS4** and **Sigil** are tested and known
+to work with this package, previous versions of this package only supported epubs created with InDesign.
 
 
 Main features
@@ -24,13 +25,14 @@ Main features
 
 EEA Epub features:
 
-  1. Import epub files as Plone content.
-  2. Export into epub format.
+  1. Imports epub files as Plone content.
+  2. Stores the original epub in the main folder for easy retrieval.
+  3. Exports the Plone content back into an epub.
 
 EEA Epub makes the following assumptions:
 
   1. You don't use unicode or other special characters into the name of the epub, images or links
-  2. You've created the epub with "Adobe InDesign CS4" which uses some standards for thr following:
+  2. You've created the epub with "Adobe InDesign CS4" or "Sigil" which uses some standards for the following:
 
     * The table of contents is named toc.ncx and is placed inside OEBPS
     * Book text & images are placed inside the folder OEBPS or other folders that are children of OEBPS
@@ -40,16 +42,6 @@ Best practices when creating an epub:
 
   1. Chapter names should not be all uppercase or use special characters
   2. Image names should not contain spaces, periods, / or other special characters
-
-Epubs that were created with "Adobe inDesign CS4" but failed to upload:
-
-  1. At this moment any errors that would appear on the site are surpressed by the info message: "An error occur during upload, your EPUB format may not be supported"
-  2. If you've made the epub with "Adobe InDesign CS4" and yet you get this info message then please reopen this ticket and upload there the troubleing epub: https://svn.eionet.europa.eu/projects/Zope/ticket/3883
-
-More details about how to use this package can be found at the following link:
-
-  1. http://svn.eionet.europa.eu/projects/Zope/wiki/HowToEpub
-
 
 Installation
 ============
@@ -78,8 +70,9 @@ From "Add new" menu select "EpubFile" and upload an epub file.
 Dependecies
 ===========
 
-  1. Plone 4.x
-  2. BeautifulSoup
+  1. BeautifulSoup
+  2. Lxml
+  3. Plone 4.x
 
 
 Live demo
@@ -126,3 +119,4 @@ Funding
   EEA_ - European Enviroment Agency (EU)
 
 .. _EEA: http://www.eea.europa.eu/
+
