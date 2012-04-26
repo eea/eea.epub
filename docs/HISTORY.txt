@@ -1,6 +1,9 @@
 Changelog
 =========
 
+4.4-dev - (unreleased)
+----------------------
+
 4.3 - (2012-04-26)
 ------------------
  * Feature: import epubs that are not created by Adobe Indesign which have the images
