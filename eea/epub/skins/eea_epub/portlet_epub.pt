@@ -4,7 +4,10 @@
     <body>
 
         <metal:portlet metal:define-macro="portlet" tal:define="utils context/@@epub_utils">
-            <a class="downloadLink" tal:attributes="href utils/getEpubFormatURL" tal:condition="utils/getEpubFormatURL">EPUB format</a>
+            <a class="downloadLink" 
+               tal:attributes="href utils/getEpubFormatURL" 
+               tal:condition="utils/getEpubFormatURL"
+               i18n:translate="epub_format">EPUB format</a>
         </metal:portlet>
     </body>
 </html>
