@@ -1,19 +1,22 @@
-Changelog
+﻿Changelog
 =========
 
 4.4-dev - (unreleased)
 ----------------------
- * Change: Change code in eea.epub to fix translation problem
-   [prospchr refs #5159]  
+* Bug fix: fixed markup of HISTORY.txt file
+  [ciobabog refs #5231]
+* Change: Change code in eea.epub to fix translation problem
+  [prospchr refs #5159]  
 
 4.3 - (2012-04-26)
 ------------------
- * Feature: import epubs that are not created by Adobe Indesign which have the images
-   and the html pages in separate folder like those created by Sigil [ichimdav #5054] 
+* Feature: import epubs that are not created by Adobe Indesign which have the images
+  and the html pages in separate folder like those created by Sigil
+  [ichimdav #5054] 
 
 4.2 - (2012-02-06)
 ------------------
- * no changes
+* no changes
 
 4.1 - (2012-02-06)
 ------------------
@@ -21,7 +24,7 @@ Changelog
   [voineali]
 
 4.0-dev - (2011-11-06)
-------------------
+----------------------
 * Bug fix: proper parsing of html entities by using an html parser instead of an xml one 
   [ichimdav #4523]
 * Bug fix: cleaned spaces defined as &nbsp that can't be read as xml
