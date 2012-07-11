@@ -7,7 +7,7 @@
             <a class="downloadLink" 
                tal:attributes="href utils/getEpubFormatURL" 
                tal:condition="utils/getEpubFormatURL"
-               i18n:translate="epub_format">EPUB format</a>
+               i18n:translate="">EPUB format</a>
         </metal:portlet>
     </body>
 </html>
