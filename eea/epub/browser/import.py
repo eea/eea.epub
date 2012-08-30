@@ -58,7 +58,16 @@ def stripNamespaces(node):
 def cleanNames(name):
     """ Remove non alpha numeric characters from argument minus exceptions """
     return "".join(
-        (x if (x.isalnum() or x in ['.', '/', '-']) else '_') for x in name)
+        (x if (x.isalnum() or x in ['.', '/', '-', '#']) else '') for x in name)
+
+def checkFileName(fileName):
+    """ Check if fileName doesn't contain non allowed characters """ 
+    bad_file_name = ''
+    for i in fileName:
+        if not i.isalnum() and i not in [".", "_", "-", '/', '#']:
+            bad_file_name = fileName
+            break
+    return bad_file_name
 
 class EpubFile(object):
     """ EpubFile
@@ -147,7 +156,19 @@ class EpubFile(object):
                     chapter_hrefs.append(elem.get('href'))
 
         page_resources = []
-        for elem in self.rootFile.find('manifest').findall('item'):
+        bad_file_names = []
+        items = self.rootFile.find('manifest').findall('item')
+        chapter_links = []
+        for elem in items:
+            if not elem.get('media-type') == 'application/xhtml+xml':
+                continue
+            chapter_links.append(elem)
+            href = elem.get('href')
+            bad_file_name = checkFileName(href)
+            if bad_file_name:
+                bad_file_names.append(bad_file_name)
+
+        for elem in chapter_links:
             if not elem.get('media-type') == 'application/xhtml+xml':
                 continue
             href = elem.get('href')
@@ -170,6 +191,16 @@ class EpubFile(object):
             imgs = list(html.getiterator('img'))
             for img in imgs:
                 img.attrib['src'] = cleanNames(img.attrib['src'])
+
+            links = list(html.getiterator('a'))
+            for link in links:
+                page_href = link.attrib.get('href')
+                if page_href and page_href.find('Chapter02') != -1:
+                    for name in bad_file_names:
+                        found = page_href.find(name)
+                        if found >= 0:
+                            bad_file_name = True
+                            link.attrib['href'] = cleanNames(page_href)
             ##### regex replace of <a /> with <a></a>
             html = lxml.html.tostring(html)
 
@@ -188,6 +219,7 @@ class EpubFile(object):
                 'content': html,
                 'description': description,
                 'isChapter': isChapter,
+                'badName' : True if bad_file_name else False
             })
         self.cache['page_resources'] = page_resources
         return page_resources
@@ -349,6 +381,8 @@ class ImportView(BrowserView):
             for urlPart in urlParts:
                 if urlPart == urlParts[-1]:
                     urlPart = urllib.unquote(urlPart)
+                    if resource['badName']:
+                        urlPart = cleanNames(urlPart)
                     urlPart = urlPart.strip()
                     title = resource['title']
                     # set title as the id part of the file if the original
