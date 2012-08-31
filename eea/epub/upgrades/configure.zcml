@@ -15,4 +15,15 @@
 
   </genericsetup:upgradeSteps>
 
+  <genericsetup:upgradeSteps
+    source="*"
+    destination="4.5"
+    profile="eea.epub:default">
+
+    <genericsetup:upgradeDepends
+      title="Add portal_property clean_epub_filenames boolean"
+      import_steps="propertiestool"
+      />
+
+  </genericsetup:upgradeSteps>
 </configure>

@@ -20,6 +20,7 @@ import lxml.html
 from zope.event import notify
 from eea.epub.browser.events import EpubImportedEvent
 from Products.statusmessages.interfaces import IStatusMessage
+from Products.CMFCore.utils import getToolByName
 
 logger = logging.getLogger('eea.epub.browser.import')
 
@@ -144,6 +145,8 @@ class EpubFile(object):
     def page_resources(self):
         """ Defines the epub page resources
         """
+        props = getToolByName(self, 'portal_properties').site_properties
+        clean_epub_names = props.getProperty('clean_epub_file_names')
         
         if 'page_resources' in self.cache:
             return self.cache['page_resources']
@@ -157,6 +160,7 @@ class EpubFile(object):
 
         page_resources = []
         bad_file_names = []
+        bad_file_name = ""
         items = self.rootFile.find('manifest').findall('item')
         chapter_links = []
         for elem in items:
@@ -164,13 +168,12 @@ class EpubFile(object):
                 continue
             chapter_links.append(elem)
             href = elem.get('href')
-            bad_file_name = checkFileName(href)
-            if bad_file_name:
-                bad_file_names.append(bad_file_name)
+            if clean_epub_names:
+                bad_file_name = checkFileName(href)
+                if bad_file_name:
+                    bad_file_names.append(bad_file_name)
 
         for elem in chapter_links:
-            if not elem.get('media-type') == 'application/xhtml+xml':
-                continue
             href = elem.get('href')
             fileName = 'OEBPS/' + elem.get('href')
             fileName = urllib.unquote(fileName)
@@ -192,15 +195,17 @@ class EpubFile(object):
             for img in imgs:
                 img.attrib['src'] = cleanNames(img.attrib['src'])
 
-            links = list(html.getiterator('a'))
-            for link in links:
-                page_href = link.attrib.get('href')
-                if page_href and page_href.find('Chapter02') != -1:
-                    for name in bad_file_names:
-                        found = page_href.find(name)
-                        if found >= 0:
-                            bad_file_name = True
-                            link.attrib['href'] = cleanNames(page_href)
+            if clean_epub_names:
+                title = cleanNames(href)
+                links = list(html.getiterator('a'))
+                for link in links:
+                    page_href = link.attrib.get('href')
+                    if page_href and page_href.find('Chapter02') != -1:
+                        for name in bad_file_names:
+                            found = page_href.find(name)
+                            if found >= 0:
+                                bad_file_name = True
+                                link.attrib['href'] = cleanNames(page_href)
             ##### regex replace of <a /> with <a></a>
             html = lxml.html.tostring(html)
 
