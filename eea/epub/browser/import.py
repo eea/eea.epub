@@ -196,11 +196,10 @@ class EpubFile(object):
                 img.attrib['src'] = cleanNames(img.attrib['src'])
 
             if clean_epub_names:
-                title = cleanNames(href)
                 links = list(html.getiterator('a'))
                 for link in links:
                     page_href = link.attrib.get('href')
-                    if page_href and page_href.find('Chapter02') != -1:
+                    if page_href:
                         for name in bad_file_names:
                             found = page_href.find(name)
                             if found >= 0:
