@@ -1,6 +1,9 @@
 ﻿Changelog
 =========
 
+4.6-dev - (unreleased)
+----------------------
+
 4.5 - (2012-11-22)
 ------------------
 * Upgrade step: Within "Plone > Site setup > Add-ons" click on
