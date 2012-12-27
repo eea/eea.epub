@@ -26,4 +26,20 @@
       />
 
   </genericsetup:upgradeSteps>
+
+  <genericsetup:upgradeSteps
+    source="*"
+    destination="4.6"
+    profile="eea.epub:default">
+
+    <genericsetup:upgradeStep
+        title="Add application/epub+zip mimetype"
+        handler="eea.epub.upgrades.evolve46.installMimeTypes"
+      />
+
+    <genericsetup:upgradeStep
+        title="reindex all Epub Files"
+        handler="eea.epub.upgrades.evolve46.reindexFileEpubs"
+      />
+  </genericsetup:upgradeSteps>
 </configure>

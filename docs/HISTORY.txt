@@ -3,6 +3,8 @@
 
 4.6-dev - (unreleased)
 ----------------------
+* Feature: register epubs with application/epub+zip mimetype
+  [ichimdav #9068]
 
 4.5 - (2012-11-22)
 ------------------
