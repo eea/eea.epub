@@ -29,5 +29,8 @@ def reindexFileEpubs(self):
     catalog = getToolByName(self, 'portal_catalog')
     results = catalog.searchResults(filetype='application/zip')
     for brain in results:
-        name = brain.id
-        print name
+        if ".epub" in brain.id:
+            import pdb; pdb.set_trace()
+            obj = brain.getObject()
+            obj.setFormat('application/epub+zip')
+            logger.info('obj migrated %s' % obj.absolute_url(1))
