@@ -3,6 +3,9 @@
 
 4.6-dev - (unreleased)
 ----------------------
+* Upgrade step: Within "Plone > Site setup > Add-ons" click on
+  upgrade button available for eea.epub
+  [ichimdav #9068]
 * Feature: register epubs with application/epub+zip mimetype
   [ichimdav #9068]
 
