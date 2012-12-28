@@ -28,7 +28,7 @@ def reindexFileEpubs(self):
     """
     catalog = getToolByName(self, 'portal_catalog')
     results = catalog.searchResults(filetype=('application/zip', 
-        'application/x-xcf', 'application/octet', 
+        'application/x-xcf', 'application/octet-stream', 
         'application/xhtml+xml', 'text/css', 'text/html', 'text/xml'))
     for brain in results:
         if ".epub" in brain.id:
