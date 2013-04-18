@@ -14,25 +14,25 @@ def registerMimeType(self,  mimetype):
         mimetype = mimetype()
     mimetypes_registry = getToolByName(self, 'mimetypes_registry')
     mimetypes_registry.register(mimetype)
-    logger.info("Registered mimetype %s" % mimetype)
+    logger.info("Registered mimetype %s", mimetype)
 
 def installMimeTypes(self):
-    """ Install epub mimetype 
+    """ Install epub mimetype
     """
     logger.info("Installing epub_mimetype mimetype")
     registerMimeType(self, epub_mimetype)
     logger.info("Done Installing epub_mimetype mimetype")
 
 def reindexFileEpubs(self):
-    """ Reindex epubs which were uploaded through file upload 
+    """ Reindex epubs which were uploaded through file upload
     """
     catalog = getToolByName(self, 'portal_catalog')
-    results = catalog.searchResults(filetype=('application/zip', 
-        'application/x-xcf', 'application/octet-stream', 
+    results = catalog.searchResults(filetype=('application/zip',
+        'application/x-xcf', 'application/octet-stream',
         'application/xhtml+xml', 'text/css', 'text/html', 'text/xml'))
     for brain in results:
         if ".epub" in brain.id:
             obj = brain.getObject()
             obj.setFormat('application/epub+zip')
             obj.reindexObject()
-            logger.info('obj migrated %s' % obj.absolute_url(1))
+            logger.info('obj migrated %s', obj.absolute_url(1))
