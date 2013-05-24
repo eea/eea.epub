@@ -1,7 +1,7 @@
 """ Browser Import
 """
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from Products.Five import BrowserView
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
@@ -215,7 +215,7 @@ class EpubFile(object):
             regex = r'(<a[^>]*)(/>)'
 
             html = re.sub(regex, repl, html)
-            html = str(BeautifulSoup(html))
+            html = str(BeautifulSoup(html , 'lxml'))
 
             page_resources.append({
                 'id': elem.get('href'),

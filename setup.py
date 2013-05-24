@@ -29,7 +29,7 @@ setup(name=NAME,
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'BeautifulSoup',
+          'BeautifulSoup4',
           'lxml',
       ],
       entry_points="""
