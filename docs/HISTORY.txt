@@ -20,7 +20,7 @@ Changelog
   upgrade button available for eea.epub
   [ichimdav #3621]
 * Feature: use filename id when creating plone content, cleaning the filename
-  id when it contains illegal characters if boolean property 
+  id when it contains illegal characters if boolean property
   clean_epub_filename is enabled at portal_properties/site_properties
   [ichimdav #3621]
 
@@ -29,13 +29,13 @@ Changelog
 * Bug fix: fixed markup of HISTORY.txt file
   [ciobabog refs #5231]
 * Change: Change code in eea.epub to fix translation problem
-  [prospchr refs #5159]  
+  [prospchr refs #5159]
 
 4.3 - (2012-04-26)
 ------------------
-* Feature: import epubs that are not created by Adobe Indesign which have the 
+* Feature: import epubs that are not created by Adobe Indesign which have the
   images and the html pages in separate folder like those created by Sigil
-  [ichimdav #5054] 
+  [ichimdav #5054]
 
 4.2 - (2012-02-06)
 ------------------
@@ -48,8 +48,8 @@ Changelog
 
 4.0-dev - (2011-11-06)
 ----------------------
-* Bug fix: proper parsing of html entities by using an html parser instead of 
-  an xml one 
+* Bug fix: proper parsing of html entities by using an html parser instead of
+  an xml one
   [ichimdav #4523]
 * Bug fix: cleaned spaces defined as &nbsp that can't be read as xml
   [ichimdav #4271]
