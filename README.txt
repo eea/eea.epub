@@ -1,5 +1,6 @@
-EEA Epub product
-================
+========
+EEA Epub
+========
 A product which allows you to import in Plone epub files.
 
 Contents
@@ -29,7 +30,7 @@ EEA Epub features:
   2. Stores the original epub in the main folder for easy retrieval.
   3. Exports the Plone content back into an epub.
   4. Clean filename as you import the epub and they contain characters that wouldn't be allowed
-     as a Plone id. 
+     as a Plone id.
      This behaviour is on by default but it can be disabled by unchecking the boolean flag at portal_properties/site_properties
      'clean_epub_file_names'.
      If you find that the Document Pages added by the Epub process has broken links try to re-upload without this boolean flag.
