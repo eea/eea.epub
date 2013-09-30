@@ -5,7 +5,7 @@ from App.Common import package_home
 from Products.Five import BrowserView
 from StringIO import StringIO
 from zipfile import ZipFile
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 import os.path
 
 def replace(filePath, variables):
