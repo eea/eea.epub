@@ -31,6 +31,7 @@ setup(name=NAME,
           'setuptools',
           'BeautifulSoup4',
           'lxml',
+          'requests',
       ],
       entry_points="""
       # -*- Entry points: -*-

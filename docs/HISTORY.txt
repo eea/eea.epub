@@ -3,6 +3,8 @@ Changelog
 
 4.9-dev - (unreleased)
 ----------------------
+* Feature: major export improvements - image files, cover photo, css
+  [simiamih refs #16799]
 
 4.8 - (2013-10-04)
 ------------------
