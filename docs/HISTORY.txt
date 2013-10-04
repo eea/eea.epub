@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.8-dev - (unreleased)
-----------------------
+4.8 - (2013-10-04)
+------------------
 * Change: updated zope imports with the versions that require minimum Plone 4.1
   for eea.epub
   [ichimdav refs #15651]
