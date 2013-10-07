@@ -74,7 +74,7 @@ class ExportView(BrowserView):
                 try:
                     resp = requests.get(url, cookies=self.request.cookies,
                                         timeout=5)
-                except requests.exceptions.RequestException, e:
+                except requests.exceptions.RequestException:
                     img.extract()
                     continue
                 if resp.status_code == 200:
