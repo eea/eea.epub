@@ -47,6 +47,8 @@ class ExportView(BrowserView):
     template = ViewPageTemplateFile('epub.pt')
 
     def abs_url(self, image_source):
+        """ Return abs URL out of a `src` img attribute
+        """
         if image_source.startswith(('http:', 'https:')):
             return image_source
         else:
@@ -84,7 +86,8 @@ class ExportView(BrowserView):
                     zipFile.writestr('OEBPS/Images/%s' % fname, resp.content)
                     manifest.append(
                         '<item href="Images/%s" id="%s" media-type="%s"/>'
-                        % (fname, itemid, headers.get('content-type') or 'image/jpeg')
+                        % (fname, itemid,
+                           headers.get('content-type') or 'image/jpeg')
                     )
                     img['src'] = "Images/%s" % fname
                 else:
