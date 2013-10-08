@@ -265,3 +265,7 @@ img {
 	margin: 0 auto;
 }
 
+img.qr {
+	width: 200px;
+	padding: 20px;
+}

@@ -7,12 +7,17 @@ from StringIO import StringIO
 from zipfile import ZipFile
 import urlparse
 import requests
+import urllib2
+import logging
 
 from App.Common import package_home
 from Products.Five import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getMultiAdapter
 
+from eea.converter.utils import absolute_url
+
+logger = logging.getLogger('eea.epub')
 
 def static_path(filePath):
     """ Return abs path of a static file named `filename` which is available
@@ -60,7 +65,26 @@ class ExportView(BrowserView):
             else:
                 return urlparse.urljoin("%s/" % ob_url, image_source)
 
-    def handle_statics(self, zipFile, templateOutput):
+    def store_image(self, zipFile, url, itemid, filename=''):
+        """ Given an URL to an image, save it in zip and return path
+        """
+        try:
+            resp = requests.get(url, cookies=self.request.cookies, timeout=5)
+        except requests.exceptions.RequestException:
+            return ('', '')
+        if resp.status_code == 200:
+            headers = resp.headers
+            if not filename:
+                filename = "%s%s" % (itemid, url.strip('/').rsplit('/', 1)[-1])
+            zipFile.writestr('OEBPS/Images/%s' % filename, resp.content)
+            return ("Images/%s" % filename,
+                    '<item href="Images/%s" id="%s" media-type="%s"/>'
+                    % (filename, itemid,
+                       headers.get('content-type') or 'image/jpeg'))
+        else:
+            return ('', '')
+
+    def handle_statics(self, templateOutput, zipFile):
         """
         * Embedding images: looks for referenced images in content
         and properly save them in the epub
@@ -73,28 +97,13 @@ class ExportView(BrowserView):
         for i, img in enumerate(imgs):
             if img.get('src'):
                 url = self.abs_url(img['src'])
-                try:
-                    resp = requests.get(url, cookies=self.request.cookies,
-                                        timeout=5)
-                except requests.exceptions.RequestException:
-                    img.extract()
-                    continue
-                if resp.status_code == 200:
-                    headers = resp.headers
-                    itemid = 'image%05.d' % i
-                    fname = "%s%s" % (itemid, url.strip('/').rsplit('/', 1)[-1])
-                    zipFile.writestr('OEBPS/Images/%s' % fname, resp.content)
-                    manifest.append(
-                        '<item href="Images/%s" id="%s" media-type="%s"/>'
-                        % (fname, itemid,
-                           headers.get('content-type') or 'image/jpeg')
-                    )
-                    img['src'] = "Images/%s" % fname
+                itemid = 'image%05.d' % i
+                src, manifest_entry = self.store_image(zipFile, url, itemid)
+                if src:
+                    img['src'] = src
+                    manifest.append(manifest_entry)
                 else:
                     img.extract()
-            else:
-                img.extract()
-
         for img in os.listdir(static_path("OEBPS/Images")):
             rel_path = "OEBPS/Images/%s" % img
             if not os.path.isfile(static_path(rel_path)):
@@ -102,7 +111,7 @@ class ExportView(BrowserView):
             zipFile.writestr(rel_path, stream(rel_path))
             manifest.append('<item href="Images/%s" id="%s" media-type="%s"/>'
                             % (img, img, 'image/jpeg'))
-        return (manifest, soup.prettify())
+        return (soup, manifest)
 
     def set_cover(self, zipFile):
         """ Look for image inside the object and set it as cover
@@ -118,6 +127,76 @@ class ExportView(BrowserView):
                 ]}
         else:
             return {'metadata': [], 'manifest': []}
+
+    def fix_daviz(self, soup, zipFile):
+        """
+        Replace Daviz iframe with fallback images.
+        Must be called AFTER `handle_statistics`.
+
+        """
+        manifest = []
+        for (i, iframe) in enumerate(soup.find_all('iframe')):
+            src = iframe.get('src')
+            if u'embed-chart' in src:
+                src = src.replace('embed-chart', 'embed-chart.png')
+                src = absolute_url(self.context,
+                        url=src, default=src, view='embed-chart.png')
+                base = src.split('embed-chart.png')[0]
+                query = urlparse.parse_qs(urlparse.urlparse(src).query)
+                chart = query.get('chart')[0]
+            elif u'embed-dashboard' in src:
+                src = src.replace('embed-dashboard', 'embed-dashboard.png')
+                src = absolute_url(self.context,
+                        url=src, default=src, view='embed-dashboard.png')
+                base = src.split('embed-dashboard.png')[0]
+                query = urlparse.parse_qs(urlparse.urlparse(src).query)
+                chart = query.get('dashboard')[0]
+            else:
+                continue
+
+            src += '&tag:int=0&safe:int=0'
+
+            if not src.startswith('http'):
+                src = os.path.join(self.context.absolute_url(), src)
+            if not base.startswith('http'):
+                base = os.path.join(self.context.absolute_url(), base)
+
+            img_src = ''
+            try:
+                resp = requests.get(src, cookies=self.request.cookies,
+                                    timeout=5)
+            except Exception, err:
+                logger.exception(err)
+            else:
+                if resp.status_code == 200:
+                    itemid = 'daviz%02.d' % i
+                    fname = "%s.png" % itemid
+                    img_src, manifest_item = self.store_image(zipFile, src,
+                                                              itemid, fname)
+            if img_src:
+                iframe.replace(BeautifulSoup("<img src='%s' />" % img_src))
+                manifest.append(manifest_item)
+            else:
+                chart_url = u'%s#tab-%s' % (base, chart)
+                qr_url = (u"http://chart.apis.google.com"
+                          "/chart?cht=qr&chld=H|0&chs=%sx%s&chl=%s" % (
+                                    200, 200, urllib2.quote(chart_url)))
+                itemid = "daviz_qr%02.d" % i
+                fname = "%s.png" % itemid
+                qr_src, qr_manifest = self.store_image(zipFile, qr_url,
+                                                       itemid, fname)
+                message = BeautifulSoup(u'''
+                <div class="portalMessage warningMessage pdfMissingImage">
+                  <img class="qr" src="%(qr_url)s" />
+                  <span>
+                    This area contains interactive content
+                    which can not be displayed in an e-book.
+                    You may visit the online version at:
+                  </span>
+                  <a href="%(url)s">%(url)s</a>
+                </div>''' % {'url': chart_url, 'qr_url': qr_src})
+                iframe.replaceWith(message)
+        return (soup, manifest)
 
     def __call__(self):
         response = self.request.response
@@ -135,13 +214,15 @@ class ExportView(BrowserView):
         zipFile = ZipFile(inMemoryOutputFile, 'w')
 
         cover = self.set_cover(zipFile)
-        statics, templateOutput = self.handle_statics(zipFile, templateOutput)
+        soup, statics = self.handle_statics(templateOutput, zipFile)
+        soup, daviz = self.fix_daviz(soup, zipFile)
+        templateOutput = soup.prettify()
 
         variables = {
             'TITLE': self.context.Title(),
             'IDENTIFIER': self.context.absolute_url(),
             'METADATA_MORE': '\n'.join(cover['metadata']),
-            'MANIFEST_MORE': '\n'.join(cover['manifest'] + statics),
+            'MANIFEST_MORE': '\n'.join(cover['manifest'] + statics + daviz),
         }
 
         zipFile.writestr('mimetype', 'application/epub+zip')
