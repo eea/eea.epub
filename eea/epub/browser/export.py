@@ -185,6 +185,7 @@ class ExportView(BrowserView):
                 fname = "%s.png" % itemid
                 qr_src, qr_manifest = self.store_image(zipFile, qr_url,
                                                        itemid, fname)
+                manifest.append(qr_manifest)
                 message = BeautifulSoup(u'''
                 <div class="portalMessage warningMessage pdfMissingImage">
                   <img class="qr" src="%(qr_url)s" />
