@@ -269,3 +269,8 @@ img.qr {
 	width: 200px;
 	padding: 20px;
 }
+
+.figure-source-copyright {
+	text-align: right;
+	font-style: italic;
+}

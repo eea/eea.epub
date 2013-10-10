@@ -174,7 +174,7 @@ class ExportView(BrowserView):
                     img_src, manifest_item = self.store_image(zipFile, src,
                                                               itemid, fname)
             if img_src:
-                iframe.replace(BeautifulSoup("<img src='%s' />" % img_src))
+                iframe.replaceWith(BeautifulSoup("<img src='%s' />" % img_src))
                 manifest.append(manifest_item)
             else:
                 chart_url = u'%s#tab-%s' % (base, chart)
