@@ -7,7 +7,6 @@ from StringIO import StringIO
 from zipfile import ZipFile
 import urlparse
 import requests
-import urllib2
 import logging
 import re
 
@@ -180,24 +179,15 @@ class ExportView(BrowserView):
                 manifest.append(manifest_item)
             else:
                 chart_url = u'%s#tab-%s' % (base, chart)
-                qr_url = (u"http://chart.apis.google.com"
-                          "/chart?cht=qr&chld=H|0&chs=%sx%s&chl=%s" % (
-                                    200, 200, urllib2.quote(chart_url)))
-                itemid = "daviz_qr%02.d" % i
-                fname = "%s.png" % itemid
-                qr_src, qr_manifest = self.store_image(zipFile, qr_url,
-                                                       itemid, fname)
-                manifest.append(qr_manifest)
                 message = BeautifulSoup(u'''
                 <div class="portalMessage warningMessage pdfMissingImage">
-                  <img class="qr" src="%(qr_url)s" />
                   <span>
                     This area contains interactive content
                     which can not be displayed in an e-book.
                     You may visit the online version at:
                   </span>
                   <a href="%(url)s">%(url)s</a>
-                </div>''' % {'url': chart_url, 'qr_url': qr_src})
+                </div>''' % {'url': chart_url})
                 iframe.replaceWith(message)
         return (soup, manifest)
 
