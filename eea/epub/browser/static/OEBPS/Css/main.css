@@ -2,6 +2,9 @@
 }
 div.generated-style-2 {
 }
+body {
+	font: 85% "Times New Roman";
+}
 p {
 	font-family: "Times New Roman";
 	font-weight: normal;
@@ -273,4 +276,70 @@ img.qr {
 .figure-source-copyright {
 	text-align: right;
 	font-style: italic;
+}
+
+.portalMessage, .system-message{
+	color: #333333;
+	font-size: 100%;
+	margin: 1em 0;
+	padding: 0.5em 1em 0.5em 3.5em;
+	vertical-align: middle;
+	background: no-repeat scroll 1em 50% #C7E0E9;
+}
+.portalMessage p {
+	margin: 1em 0;
+}
+.informationMessage {
+	background: url(../Images/information.png)  no-repeat scroll 1em 50% #C7E0E9;
+}
+.warningMessage {
+	font-size: 140%;
+	background: url(../Images/error.png) no-repeat scroll 1em 50% #FFFABE;;
+}
+#error-handling, .errorMessage {
+	font-size: 160%;
+	background: url(../Images/exclamation.png) no-repeat scroll 1em 50% #FFFABE;
+}
+.thumbsUpMessage {
+	background: url(../Images/thumb_up.png) no-repeat scroll 1em 50% #C7E0E9;
+}
+.attentionMessage {
+	background: url(../Images/lightning.png) no-repeat scroll 1em 50% #C0CF99;
+}
+.yesMessage {
+	background: url(../Images/tick.png) no-repeat scroll 1em 50% #C7E0E9;
+}
+.noMessage {
+	background: url(../Images/cross.png) no-repeat scroll 1em 50% #C0CF99;
+}
+.rosetteMessage {
+	background: url(../Images/rosette.png) no-repeat scroll 1em 50% #FFFABE;
+	color: #666666;
+}
+.ideaMessage {
+	background: url(../Images/lightbulb.png) no-repeat scroll 1em 50% #C7E0E9;
+}
+.smileyMessage {
+	background: url(../Images/emoticon_smile.png) no-repeat scroll 1em 50% #FFFABE;
+}
+.noteMessage {
+	background: url(../Images/note.png)  no-repeat scroll 1em 50% #C7E0E9;
+}
+.documentByLine {
+	font-size: 85%;
+	font-weight: normal;
+	color: #808285;
+	margin: 0 0 0.5em 0;
+	clear: both;
+}
+.discussion {
+	margin-top: 1em;
+}
+.visualHighlight {
+	background-color: #ececec;
+}
+.discreet {
+	color: #808285;
+	font-size: 85%;
+	font-weight: normal;
 }
