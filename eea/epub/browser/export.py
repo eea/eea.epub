@@ -9,6 +9,7 @@ import urlparse
 import requests
 import urllib2
 import logging
+import re
 
 from App.Common import package_home
 from Products.Five import BrowserView
@@ -76,6 +77,7 @@ class ExportView(BrowserView):
             headers = resp.headers
             if not filename:
                 filename = "%s%s" % (itemid, url.strip('/').rsplit('/', 1)[-1])
+                filename = re.sub(r'[^a-zA-Z0-9\.]', '_', filename)
             zipFile.writestr('OEBPS/Images/%s' % filename, resp.content)
             return ("Images/%s" % filename,
                     '<item href="Images/%s" id="%s" media-type="%s"/>'
@@ -109,7 +111,7 @@ class ExportView(BrowserView):
             if not os.path.isfile(static_path(rel_path)):
                 continue
             zipFile.writestr(rel_path, stream(rel_path))
-            manifest.append('<item href="Images/%s" id="%s" media-type="%s"/>'
+            manifest.append('<item href="Images/%s" id="%s" media-type="%s" />'
                             % (img, img, 'image/jpeg'))
         return (soup, manifest)
 
@@ -122,7 +124,7 @@ class ExportView(BrowserView):
             return {
                 'metadata': ['<meta name="cover" content="cover"/>'],
                 'manifest': [
-                    '<item href="Images/%s" id="cover" media-type="%s"/>' %
+                    '<item href="Images/%s" id="cover" media-type="%s" />' %
                     (image.filename, image.content_type)
                 ]}
         else:
