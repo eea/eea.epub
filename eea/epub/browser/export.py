@@ -162,7 +162,7 @@ class ExportView(BrowserView):
             if h1 and h1.text:
                 chapters.append((h1.text, ''))
             else:
-                chapters.append('Content')
+                chapters.append(('Content', ''))
         chap_xmls = [chapter_tpl % ({'title': title,
                                      'i': (i + 1),
                                      'offset': offset})
