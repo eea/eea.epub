@@ -3,7 +3,7 @@ Changelog
 
 5.0-dev - (unreleased)
 ----------------------
-* Feature: epub export uses fallback images for embedded Daviz
+* Feature: improved epub - daviz reference, toc, styles
   [simiamih refs #16799]
 
 4.9 - (2013-10-07)

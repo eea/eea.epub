@@ -17,7 +17,15 @@ from zope.component import getMultiAdapter
 
 from eea.converter.utils import absolute_url
 
+
 logger = logging.getLogger('eea.epub')
+
+
+def slugify(title):
+    """ Very basic slugify for ids or filenames
+    """
+    return re.sub(r'[^a-zA-Z0-9\.]', '_', title)
+
 
 def static_path(filePath):
     """ Return abs path of a static file named `filename` which is available
@@ -76,7 +84,7 @@ class ExportView(BrowserView):
             headers = resp.headers
             if not filename:
                 filename = "%s%s" % (itemid, url.strip('/').rsplit('/', 1)[-1])
-                filename = re.sub(r'[^a-zA-Z0-9\.]', '_', filename)
+                filename = slugify(filename)
             zipFile.writestr('OEBPS/Images/%s' % filename, resp.content)
             return ("Images/%s" % filename,
                     '<item href="Images/%s" id="%s" media-type="%s"/>'
@@ -129,6 +137,38 @@ class ExportView(BrowserView):
         else:
             return {'metadata': [], 'manifest': []}
 
+    def set_toc(self, soup):
+        """
+        Build the table of contents for toc.ncx and return it
+        as xml utf-8 string.
+        Headings Level 2 are used to generate the table of contents.
+
+        """
+        chapters = []
+        chapter_tpl = u"""
+                      <navPoint id="navpoint-%(i)d" playOrder="%(i)d">
+                        <navLabel>
+                          <text>%(title)s</text>
+                        </navLabel>
+                        <content src="content.xhtml#%(offset)s"/>
+                      </navPoint>"""
+        for (i, h2) in enumerate(soup.find_all("h2")):
+            title = h2.text
+            offset = h2.get("id") or "%s_%d" % (slugify(title), i)
+            chapters.append((title, offset))
+            h2['id'] = offset
+        if not chapters:
+            h1 = soup.find("h1")
+            if h1 and h1.text:
+                chapters.append((h1.text, ''))
+            else:
+                chapters.append('Content')
+        chap_xmls = [chapter_tpl % ({'title': title,
+                                     'i': (i + 1),
+                                     'offset': offset})
+                     for (i, (title, offset)) in enumerate(chapters)]
+        return u"\n".join(chap_xmls).encode("utf-8")
+
     def fix_daviz(self, soup, zipFile):
         """
         Replace Daviz iframe with fallback images.
@@ -175,7 +215,8 @@ class ExportView(BrowserView):
                     img_src, manifest_item = self.store_image(zipFile, src,
                                                               itemid, fname)
             if img_src:
-                iframe.replaceWith(BeautifulSoup("<img src='%s' />" % img_src))
+                iframe.replaceWith(
+                    BeautifulSoup("<img src='%s' />" % img_src).find("img"))
                 manifest.append(manifest_item)
             else:
                 chart_url = u'%s#tab-%s' % (base, chart)
@@ -209,6 +250,7 @@ class ExportView(BrowserView):
         cover = self.set_cover(zipFile)
         soup, statics = self.handle_statics(templateOutput, zipFile)
         soup, daviz = self.fix_daviz(soup, zipFile)
+        toc = self.set_toc(soup)
         templateOutput = soup.prettify()
 
         variables = {
@@ -216,6 +258,7 @@ class ExportView(BrowserView):
             'IDENTIFIER': self.context.absolute_url(),
             'METADATA_MORE': '\n'.join(cover['metadata']),
             'MANIFEST_MORE': '\n'.join(cover['manifest'] + statics + daviz),
+            'TOC': toc,
         }
 
         zipFile.writestr('mimetype', 'application/epub+zip')
