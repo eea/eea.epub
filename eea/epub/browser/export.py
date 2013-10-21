@@ -13,9 +13,10 @@ import re
 from App.Common import package_home
 from Products.Five import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import getMultiAdapter
+from zope.component import getMultiAdapter, queryUtility
 
 from eea.converter.utils import absolute_url
+from eea.converter.interfaces import IConvert
 
 
 logger = logging.getLogger('eea.epub')
@@ -125,17 +126,23 @@ class ExportView(BrowserView):
     def set_cover(self, zipFile):
         """ Look for image inside the object and set it as cover
         """
-        if hasattr(self.context, "image_large"):
-            image = self.context.image_large
-            zipFile.writestr('OEBPS/Images/%s' % image.filename, image.data)
-            return {
-                'metadata': ['<meta name="cover" content="cover"/>'],
-                'manifest': [
-                    '<item href="Images/%s" id="cover" media-type="%s" />' %
-                    (image.filename, image.content_type)
-                ]}
-        else:
-            return {'metadata': [], 'manifest': []}
+        pdf_adapt = getMultiAdapter((self.context.aq_inner, self.request),
+                                    name="download.pdf")
+        pdf_file = pdf_adapt.make_pdf_cover()
+        converter = queryUtility(IConvert)
+        data = converter(None, path_from=pdf_file)
+        try:
+            os.unlink(pdf_file)
+        except Exception, err:
+            logger.warn(err)
+
+        zipFile.writestr('OEBPS/Images/%s' % "cover.png", data)
+        return {
+            'metadata': ['<meta name="cover" content="cover"/>'],
+            'manifest': [
+                '<item href="Images/%s" id="cover" media-type="%s" />' %
+                ("cover.png", "image/png")
+            ]}
 
     def set_toc(self, soup):
         """
