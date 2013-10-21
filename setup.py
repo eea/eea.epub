@@ -32,6 +32,7 @@ setup(name=NAME,
           'BeautifulSoup4',
           'lxml',
           'requests',
+          'collective.sendaspdf',
           'eea.converter > 6.4',
       ],
       entry_points="""
