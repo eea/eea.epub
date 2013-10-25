@@ -240,11 +240,7 @@ class ExportView(BrowserView):
         return (soup, manifest)
 
     def __call__(self):
-        response = self.request.response
-        response.setHeader('Content-Type', 'application/xml+epub')
-        response.setHeader(
-                'Content-Disposition', 'attachment; filename=%s.epub' %
-                                                                self.context.id)
+        
 
         templateOutput = self.template(self)
         # This encoding circus was required for including context.getText() 
@@ -259,6 +255,12 @@ class ExportView(BrowserView):
         soup, daviz = self.fix_daviz(soup, zipFile)
         toc = self.set_toc(soup)
         templateOutput = soup.prettify()
+
+        response = self.request.response
+        response.setHeader('Content-Type', 'application/xml+epub')
+        response.setHeader(
+                'Content-Disposition', 'attachment; filename=%s.epub' %
+                                                                self.context.id)
 
         variables = {
             'TITLE': self.context.Title(),
