@@ -236,7 +236,7 @@ class ExportView(BrowserView):
                   </span>
                   <a href="%(url)s">%(url)s</a>
                 </div>''' % {'url': chart_url})
-                iframe.replaceWith(message)
+                iframe.replaceWith(message.find("div"))
         return (soup, manifest)
 
     def __call__(self):
