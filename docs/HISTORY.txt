@@ -3,6 +3,8 @@ Changelog
 
 5.1-dev - (unreleased)
 ----------------------
+* links were missing any style
+  [simiamih refs #16799]
 
 5.0 - (2013-10-22)
 ------------------
