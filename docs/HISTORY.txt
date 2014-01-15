@@ -3,10 +3,12 @@ Changelog
 
 5.2-dev - (unreleased)
 ----------------------
+* Bug fix: Updated old URLs pointing Trac
+  [ghicaale refs #18003]
 
 5.1 - (2013-11-20)
 ------------------
-* links were missing any style
+* Bug fix: links were missing any style
   [simiamih refs #16799]
 
 5.0 - (2013-10-22)

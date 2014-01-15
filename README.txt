@@ -126,7 +126,7 @@ More details under docs/License.txt
 Links
 =====
 
-  1. EEA Epub wiki page: https://svn.eionet.europa.eu/projects/Zope/wiki/HowToEpub
+  1. EEA Epub wiki page: http://taskman.eionet.europa.eu/projects/zope/wiki/HowToEpub
 
 
 Funding
