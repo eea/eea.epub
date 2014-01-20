@@ -26,31 +26,31 @@ Main features
 
 EEA Epub features:
 
-  1. Imports epub files as Plone content.
-  2. Stores the original epub in the main folder for easy retrieval.
-  3. Exports the Plone content back into an epub.
-  4. Clean filename as you import the epub and they contain characters that wouldn't be allowed
-     as a Plone id.
-     This behaviour is on by default but it can be disabled by unchecking the boolean flag at portal_properties/site_properties
-     'clean_epub_file_names'.
-     If you find that the Document Pages added by the Epub process has broken links try to re-upload without this boolean flag.
+1. Imports epub files as Plone content.
+2. Stores the original epub in the main folder for easy retrieval.
+3. Exports the Plone content back into an epub.
+4. Clean filename as you import the epub and they contain characters that wouldn't be allowed
+   as a Plone id.
+   This behaviour is on by default but it can be disabled by unchecking the boolean flag at portal_properties/site_properties
+   **clean_epub_file_names**.
+   If you find that the Document Pages added by the Epub process has broken links try to re-upload without this boolean flag.
 
 Epub compatibility
 ==================
 
 EEA Epub makes the following assumptions about the loaded epub:
 
-  1. You don't use unicode or other special characters into the name of the epub, images or links
-  2. You've created the epub with "Adobe InDesign CS4" or "Sigil" which uses some standards for the following:
+1. You don't use unicode or other special characters into the name of the epub, images or links
+2. You've created the epub with "Adobe InDesign CS4" or "Sigil" which uses some standards for the following:
 
-    * The table of contents is named toc.ncx and is placed inside OEBPS
-    * Book text & images are placed inside the folder OEBPS or other folders that are children of OEBPS
-    * Items ids doesn't contain the following characters . / \ ( if possible stick to letters, numbers and - _ )
+   * The table of contents is named toc.ncx and is placed inside OEBPS
+   * Book text & images are placed inside the folder OEBPS or other folders that are children of OEBPS
+   * Items ids doesn't contain the following characters . / \ ( if possible stick to letters, numbers and - _ )
 
 Best practices when creating an epub:
 
-  1. Chapter names should not be all uppercase or use special characters
-  2. Image names should not contain spaces, periods, / or other special characters
+1. Chapter names should not be all uppercase or use special characters
+2. Image names should not contain spaces, periods, / or other special characters
 
 Debugging
 =========
@@ -72,11 +72,11 @@ To get started you will simply need to add the package to your "eggs" and
 "eea.epub" package using the quick-installer or via the "Add-on
 Products" section in "Site Setup".
 
-  .. _`zc.buildout`: http://pypi.python.org/pypi/zc.buildout/
+.. _`zc.buildout`: http://pypi.python.org/pypi/zc.buildout/
 
 You can download a sample buildout at:
 
-  https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/buildouts
+https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/buildouts
 
 Getting started
 ===============
@@ -86,9 +86,9 @@ From "Add new" menu select "EpubFile" and upload an epub file.
 Dependecies
 ===========
 
-  1. BeautifulSoup
-  2. Lxml
-  3. Plone 4.x
+1. BeautifulSoup
+2. Lxml
+3. Plone 4.x
 
 
 Live demo
@@ -96,7 +96,7 @@ Live demo
 
 Here some live production demos at EEA (European Environment Agency)
 
-  1. http://www.eea.europa.eu/soer/synthesis
+1. http://www.eea.europa.eu/soer/synthesis
 
 
 Source code
@@ -126,13 +126,12 @@ More details under docs/License.txt
 Links
 =====
 
-  1. EEA Epub wiki page: http://taskman.eionet.europa.eu/projects/zope/wiki/HowToEpub
+1. EEA Epub wiki page: http://taskman.eionet.europa.eu/projects/zope/wiki/HowToEpub
 
 
 Funding
 =======
 
-  EEA_ - European Enviroment Agency (EU)
+EEA_ - European Enviroment Agency (EU)
 
 .. _EEA: http://www.eea.europa.eu/
-
