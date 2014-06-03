@@ -39,4 +39,8 @@
                     handler=".events.handle_epub_import" />
     </configure>
 
+  <browser:resourceDirectory
+    name="eea.epub.images"
+    directory="./img" />
+
 </configure>

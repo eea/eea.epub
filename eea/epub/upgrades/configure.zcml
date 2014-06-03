@@ -1,29 +1,18 @@
 <configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:zcml="http://namespaces.zope.org/zcml"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    i18n_domain="eea">
+        xmlns="http://namespaces.zope.org/zope"
+        xmlns:zcml="http://namespaces.zope.org/zcml"
+        xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+        i18n_domain="eea">
 
+    <!-- 4.0 => 5.3 -->
     <genericsetup:upgradeSteps
-        source="*"
-        destination="4.0"
+        source="4.6"
+        destination="5.3"
         profile="eea.epub:default">
 
         <genericsetup:upgradeDepends
-            title="Import all steps from eea.epub profile"
-            import_profile="eea.epub:default"
-            />
-
-    </genericsetup:upgradeSteps>
-
-    <genericsetup:upgradeSteps
-        source="*"
-        destination="4.5"
-        profile="eea.epub:default">
-
-        <genericsetup:upgradeDepends
-            title="Add portal_property clean_epub_filenames boolean"
-            import_steps="propertiestool"
+            title="Import steps with changes from eea.epub: actions"
+            import_steps="actions"
             />
 
     </genericsetup:upgradeSteps>
@@ -46,6 +35,30 @@
 
     </genericsetup:upgradeSteps>
 
+    <genericsetup:upgradeSteps
+        source="*"
+        destination="4.5"
+        profile="eea.epub:default">
+
+        <genericsetup:upgradeDepends
+            title="Add portal_property clean_epub_filenames boolean"
+            import_steps="propertiestool"
+            />
+
+    </genericsetup:upgradeSteps>
+
+    <!-- => 4.0 -->
+    <genericsetup:upgradeSteps
+        source="*"
+        destination="4.0"
+        profile="eea.epub:default">
+
+        <genericsetup:upgradeDepends
+            title="Import all steps from eea.epub profile"
+            import_profile="eea.epub:default"
+            />
+
+    </genericsetup:upgradeSteps>
 
 
 </configure>
