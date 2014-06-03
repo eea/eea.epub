@@ -3,6 +3,9 @@ Changelog
 
 5.3-dev - (unreleased)
 ----------------------
+* Upgrade step: Within "Plone > Site setup > Add-ons" click on
+  upgrade button available for eea.epub
+  [voineali refs #19882]
 * Change: Moved EPUB related images and actions from eea.soercontent package
   [voineali refs #19882]
 
