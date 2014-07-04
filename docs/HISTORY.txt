@@ -3,6 +3,8 @@ Changelog
 
 5.4-dev - (unreleased)
 ----------------------
+* Change: Removed collective.sendaspdf dependency
+  [voineali refs #20268]
 
 5.3 - (2014-06-06)
 ------------------

@@ -1,8 +1,4 @@
 <?xml version="1.0"?>
 <metadata>
- <description>eea.epub profile</description>
  <version>5.3</version>
- <dependencies>
-  <dependency>profile-collective.sendaspdf:default</dependency>
- </dependencies>
 </metadata>
