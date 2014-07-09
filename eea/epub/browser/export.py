@@ -129,6 +129,9 @@ class ExportView(BrowserView):
         pdf_adapt = getMultiAdapter((self.context.aq_inner, self.request),
                                     name="download.pdf")
         pdf_file = pdf_adapt.make_pdf_cover()
+        if not pdf_file:
+            return {}
+
         converter = queryUtility(IConvert)
         data = converter(None, path_from=pdf_file)
         try:
@@ -240,10 +243,10 @@ class ExportView(BrowserView):
         return (soup, manifest)
 
     def __call__(self):
-        
+
 
         templateOutput = self.template(self)
-        # This encoding circus was required for including context.getText() 
+        # This encoding circus was required for including context.getText()
         # in the template
         if not isinstance(templateOutput, unicode):
             templateOutput = templateOutput.decode('utf-8')
@@ -260,15 +263,21 @@ class ExportView(BrowserView):
         response.setHeader('Content-Type', 'application/xml+epub')
         response.setHeader(
                 'Content-Disposition', 'attachment; filename=%s.epub' %
-                                                                self.context.id)
+                                        self.context.id)
 
         variables = {
             'TITLE': self.context.Title(),
             'IDENTIFIER': self.context.absolute_url(),
-            'METADATA_MORE': '\n'.join(cover['metadata']),
-            'MANIFEST_MORE': '\n'.join(cover['manifest'] + statics + daviz),
             'TOC': toc,
+            'METADATA_MORE': '',
+            'MANIFEST_MORE': '\n'.join(statics + daviz),
         }
+
+        if cover:
+            variables.update({
+                'METADATA_MORE': '\n'.join(cover['metadata']),
+                'MANIFEST_MORE': '\n'.join(cover['manifest'] + statics + daviz),
+            })
 
         zipFile.writestr('mimetype', 'application/epub+zip')
         zipFile.writestr('META-INF/container.xml',

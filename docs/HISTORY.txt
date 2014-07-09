@@ -3,6 +3,8 @@ Changelog
 
 5.4-dev - (unreleased)
 ----------------------
+* Bug fix: Export to epub even if there is no PDF cover set for content-type
+  [voineali refs #20268]
 * Change: Removed collective.sendaspdf dependency
   [voineali refs #20268]
 
