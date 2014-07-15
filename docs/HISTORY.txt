@@ -1,6 +1,9 @@
 Changelog
 =========
 
+5.5-dev - (unreleased)
+----------------------
+
 5.4 - (2014-07-15)
 ------------------
 * Bug fix: Export to epub even if there is no PDF cover set for content-type
