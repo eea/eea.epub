@@ -6,13 +6,16 @@
 
     <cmf:registerDirectory name="eea_epub"/>
 
+    <include file="permissions.zcml" />
     <include file="profiles.zcml" />
+
     <include package=".browser" />
+    <include package=".subtypes" />
+    <include package=".upgrades" />
+
 
     <class class="Products.ATContentTypes.content.newsitem.ATNewsItem">
         <implements interface="eea.epub.interfaces.IExportable" />
     </class>
-
-    <include package=".upgrades" />
 
 </configure>

@@ -3,6 +3,8 @@ Changelog
 
 5.5-dev - (unreleased)
 ----------------------
+* Feature: Added "Can download ePub" and "Can customize ePub" permissions
+  [voineali refs #20436]
 
 5.4 - (2014-07-15)
 ------------------

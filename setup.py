@@ -32,7 +32,7 @@ setup(name=NAME,
           'BeautifulSoup4',
           'lxml',
           'requests',
-          'eea.converter > 6.8',
+          'eea.converter > 7.0',
       ],
       entry_points="""
       # -*- Entry points: -*-

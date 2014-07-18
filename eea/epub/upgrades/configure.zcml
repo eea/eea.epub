@@ -4,6 +4,19 @@
         xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
         i18n_domain="eea">
 
+    <!-- 5.3 => 5.5 -->
+    <genericsetup:upgradeSteps
+        source="5.3"
+        destination="5.5"
+        profile="eea.epub:default">
+
+        <genericsetup:upgradeDepends
+            title="Import steps with changes from eea.epub: actions rolemap"
+            import_steps="actions rolemap"
+            />
+
+    </genericsetup:upgradeSteps>
+
     <!-- 4.0 => 5.3 -->
     <genericsetup:upgradeSteps
         source="4.6"

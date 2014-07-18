@@ -10,10 +10,11 @@ import requests
 import logging
 import re
 
+from zope.publisher.interfaces import NotFound
 from App.Common import package_home
 from Products.Five import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import getMultiAdapter, queryUtility
+from zope.component import queryMultiAdapter, queryUtility
 
 from eea.converter.utils import absolute_url
 from eea.converter.interfaces import IConvert
@@ -66,8 +67,9 @@ class ExportView(BrowserView):
         if image_source.startswith(('http:', 'https:')):
             return image_source
         else:
-            ctxt_state = getMultiAdapter((self.context.aq_inner, self.request),
-                                         name=u'plone_context_state')
+            ctxt_state = queryMultiAdapter(
+                (self.context.aq_inner, self.request),
+                 name=u'plone_context_state')
             ob_url = ctxt_state.object_url()
             if image_source.startswith('/'):
                 return urlparse.urljoin(ob_url, image_source)
@@ -126,7 +128,7 @@ class ExportView(BrowserView):
     def set_cover(self, zipFile):
         """ Look for image inside the object and set it as cover
         """
-        pdf_adapt = getMultiAdapter((self.context.aq_inner, self.request),
+        pdf_adapt = queryMultiAdapter((self.context.aq_inner, self.request),
                                     name="download.pdf")
         pdf_file = pdf_adapt.make_pdf_cover()
         if not pdf_file:
@@ -244,6 +246,10 @@ class ExportView(BrowserView):
 
     def __call__(self):
 
+        support = queryMultiAdapter((self.context, self.request),
+                                    name='epub.support')
+        if not getattr(support, 'can_download', None):
+            raise NotFound(self.context, self.__name__, self.request)
 
         templateOutput = self.template(self)
         # This encoding circus was required for including context.getText()
