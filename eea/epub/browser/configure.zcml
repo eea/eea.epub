@@ -4,7 +4,7 @@
 
   <browser:page
     for="*"
-    name="epub_view"
+    name="download.epub"
     class=".export.ExportView"
     permission="zope.Public"
     allowed_interface=".interfaces.IExportView"

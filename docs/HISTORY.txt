@@ -3,6 +3,10 @@ Changelog
 
 5.5-dev - (unreleased)
 ----------------------
+* Upgrade step: Within "Plone > Site setup > Add-ons" click on
+  upgrade button available for eea.epub
+* Change: Renamed epub_view to download.epub
+  [voineali refs #20393]
 * Feature: Added "Can download ePub" and "Can customize ePub" permissions
   [voineali refs #20436]
 

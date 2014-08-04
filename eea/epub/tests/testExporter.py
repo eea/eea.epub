@@ -20,7 +20,7 @@ class ExporterTest(EpubFunctionalTestCase):
         self.article.setText('TestText')
 
         context = self.article
-        view = context.restrictedTraverse('@@epub_view')
+        view = context.restrictedTraverse('@@download.epub')
         self.response = view.request.response
         self.responseOutput = view()
 

@@ -17,7 +17,7 @@ class EpubUtils(BrowserView):
         """ Retrieve the Ebook
         """
         obj = self.context
-        portal_url = getToolByName(obj, 'portal_url')	    
+        portal_url = getToolByName(obj, 'portal_url')
         portal = portal_url.getPortalObject()
         while not IImportedBook.providedBy(obj) \
                 and aq_base(obj) is not aq_base(portal):
@@ -51,12 +51,12 @@ class EpubUtils(BrowserView):
                 or self.isImportedChapter() or self.isImportedImage()
 
     def getEpubFormatURL(self):
-        """ Returns the url of the original epub or the epub_view if
+        """ Returns the url of the original epub or the download.epub if
         the book is marked as isEpubExportable
         """
         if self.isPartOfImportedBook():
             ebook = self.getEbook()
             return ebook.absolute_url() + '/original.epub'
         elif self.isEpubExportable():
-            return self.context.absolute_url() + '/epub_view'
+            return self.context.absolute_url() + '/download.epub'
         return ''

@@ -4,7 +4,7 @@
  <object name="document_actions">
   <object name="download_as_epub" meta_type="CMF Action">
    <property name="title">Download as ePub</property>
-   <property name="url_expr">string:$object_url/epub_view</property>
+   <property name="url_expr">string:$object_url/download.epub</property>
    <property name="available_expr">object/@@epub.support/can_download</property>
    <property
       name="icon_expr">string:$portal_url/++resource++eea.epub.images/download-epub.png</property>
