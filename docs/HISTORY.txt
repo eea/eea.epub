@@ -3,6 +3,8 @@ Changelog
 
 5.5-dev - (unreleased)
 ----------------------
+* Upgrade step: Assign "Can download ePub" permission to
+  CommonEditor
 * Upgrade step: Within "Plone > Site setup > Add-ons" click on
   upgrade button available for eea.epub
 * Change: Renamed epub_view to download.epub
