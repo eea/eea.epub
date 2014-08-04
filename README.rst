@@ -83,6 +83,21 @@ Getting started
 
 From "Add new" menu select "EpubFile" and upload an epub file.
 
+Custom permissions
+==================
+Custom permissions added by this package
+
+Can download ePub (eea.epub.download)
+-------------------------------------
+Assign this permission to roles that you want to be able to download content as ePub
+Default: Owner, Manager, Editor
+
+Can customize ePub (eea.epub.customize)
+---------------------------------------
+Assign this permission to roles that you want to be able to contextually customize
+the output ePub look and feel
+Default: Manager, Site Administrator
+
 Dependecies
 ===========
 
