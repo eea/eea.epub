@@ -4,6 +4,7 @@
 from StringIO import StringIO
 from eea.epub.tests.base import EpubFunctionalTestCase
 from zipfile import ZipFile
+from Products.Five.security import newInteraction
 
 
 class ExporterTest(EpubFunctionalTestCase):
@@ -22,6 +23,7 @@ class ExporterTest(EpubFunctionalTestCase):
         context = self.article
         view = context.restrictedTraverse('@@download.epub')
         self.response = view.request.response
+        newInteraction()
         self.responseOutput = view()
 
     def test_responseHeaders(self):
