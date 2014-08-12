@@ -1,8 +1,8 @@
 Changelog
 =========
 
-5.5-dev - (unreleased)
-----------------------
+5.5 - (2014-08-12)
+------------------
 * Upgrade step: Assign "Can download ePub" permission to
   CommonEditor
 * Upgrade step: Within "Plone > Site setup > Add-ons" click on
