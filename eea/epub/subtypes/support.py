@@ -9,7 +9,6 @@ from eea.converter.interfaces import ISupport
 class Support(BrowserView):
     """ PDF Support
     """
-    @property
     def can_download(self):
         """ Can download context as ePub
         """

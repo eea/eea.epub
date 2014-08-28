@@ -248,7 +248,7 @@ class ExportView(BrowserView):
 
         support = queryMultiAdapter((self.context, self.request),
                                     name='epub.support')
-        if not getattr(support, 'can_download', None):
+        if not getattr(support, 'can_download', lambda: False)():
             raise NotFound(self.context, self.__name__, self.request)
 
         templateOutput = self.template(self)
