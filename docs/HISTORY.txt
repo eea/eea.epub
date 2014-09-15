@@ -1,6 +1,9 @@
 Changelog
 =========
 
+5.8-dev - (unreleased)
+----------------------
+
 5.7 - (2014-09-15)
 ------------------
 * Change: Made @@epub.support/can_download accessible from URL
