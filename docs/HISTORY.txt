@@ -3,6 +3,8 @@ Changelog
 
 5.8-dev - (unreleased)
 ----------------------
+* Feature: Added "Download as ePub" action also within export_actions category
+  [voineali refs #22686]
 
 5.7 - (2014-09-15)
 ------------------
