@@ -1,6 +1,9 @@
 Changelog
 =========
 
+5.9.dev0 - (unreleased)
+-----------------------
+
 5.8 - (2015-02-03)
 ------------------
 * Feature: Added "Download as ePub" action also within export_actions category
