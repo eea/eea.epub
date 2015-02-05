@@ -6,8 +6,5 @@
         <title tal:content="python:context.Title()">[Title]</title>
         <link rel="stylesheet" href="Css/main.css" type="text/css" />
     </head>
-    <body tal:replace="structure python:context.getText().decode('utf-8')">
-        ...
-    </body>
+    <body tal:replace="structure python:view.body()" />
 </html>
-

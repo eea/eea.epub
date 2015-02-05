@@ -14,10 +14,10 @@ from zope.publisher.interfaces import NotFound
 from App.Common import package_home
 from Products.Five import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import queryMultiAdapter, queryUtility
+from zope.component import queryMultiAdapter, queryUtility, queryAdapter
 
 from eea.converter.utils import absolute_url
-from eea.converter.interfaces import IConvert
+from eea.converter.interfaces import IConvert, IPDFOptionsMaker
 
 
 logger = logging.getLogger('eea.epub')
@@ -75,6 +75,25 @@ class ExportView(BrowserView):
                 return urlparse.urljoin(ob_url, image_source)
             else:
                 return urlparse.urljoin("%s/" % ob_url, image_source)
+
+    def body(self):
+        """ Return ePub body based on pdf.body
+        """
+        options = queryAdapter(self.context, IPDFOptionsMaker, name='pdf.body')
+        path = getattr(options, 'body', '')
+        path = path.replace(self.context.absolute_url() + '/', '', 1)
+        if not path:
+            return u""
+
+        try:
+            html = self.context.restrictedTraverse(path)
+            soup = BeautifulSoup(html())
+            html = soup.find(id='content-core')
+            html = html.decode()
+        except Exception, err:
+            return u"<body></body>"
+
+        return html
 
     def store_image(self, zipFile, url, itemid, filename=''):
         """ Given an URL to an image, save it in zip and return path
