@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
         <title tal:content="python:context.Title()">[Title]</title>
         <link rel="stylesheet" href="Css/main.css" type="text/css" />
+        <link rel="stylesheet" href="Css/print.css" type="text/css" />
     </head>
     <body tal:replace="structure python:view.body()" />
 </html>

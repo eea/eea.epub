@@ -76,6 +76,28 @@ class ExportView(BrowserView):
             else:
                 return urlparse.urljoin("%s/" % ob_url, image_source)
 
+    @property
+    def print_css(self):
+        """ Print CSS
+        """
+        if getattr(self, '_print_css', None) is None:
+            print_css = []
+            urls = getattr(self, '_css', [])
+            for src in urls:
+                try:
+                    resp = requests.get(
+                        src, cookies=self.request.cookies, timeout=5)
+                except Exception, err:
+                    logger.exception(err)
+                else:
+                    if resp.status_code == 200:
+                        css = resp.content
+                        if isinstance(css, unicode):
+                            css = css.encode('utf-8')
+                        print_css.append(css)
+            self._print_css = '\n'.join(print_css)
+        return self._print_css
+
     def body(self):
         """ Return ePub body based on pdf.body
         """
@@ -88,7 +110,10 @@ class ExportView(BrowserView):
         try:
             html = self.context.restrictedTraverse(path)
             soup = BeautifulSoup(html())
-            html = soup.find(id='content-core')
+            self._css = [css.get('href') for css in
+                         soup.find_all(media='print', rel='stylesheet')
+                         if css.get('href')]
+            html = soup.find(id='content')
             html = html.decode()
         except Exception, err:
             return u"<body></body>"
@@ -310,6 +335,7 @@ class ExportView(BrowserView):
 
         zipFile.writestr('OEBPS/content.xhtml', templateOutput.encode("utf-8"))
         zipFile.writestr('OEBPS/Css/main.css', stream("OEBPS/Css/main.css"))
+        zipFile.writestr('OEBPS/Css/print.css', self.print_css)
         zipFile.writestr('OEBPS/content.opf', replace(
                                             'OEBPS/content.opf', variables))
         zipFile.writestr('OEBPS/toc.ncx', replace('OEBPS/toc.ncx', variables))
