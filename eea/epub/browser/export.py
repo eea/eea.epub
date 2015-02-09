@@ -95,7 +95,10 @@ class ExportView(BrowserView):
                         if isinstance(css, unicode):
                             css = css.encode('utf-8')
                         print_css.append(css)
-            self._print_css = '\n'.join(print_css)
+
+            print_css = '\n'.join(print_css)
+            print_css = print_css.replace('@media print', "@media all")
+            self._print_css = print_css
         return self._print_css
 
     def body(self):
@@ -167,6 +170,15 @@ class ExportView(BrowserView):
             zipFile.writestr(rel_path, stream(rel_path))
             manifest.append('<item href="Images/%s" id="%s" media-type="%s" />'
                             % (img, img, 'image/jpeg'))
+
+        for img in os.listdir(static_path("OEBPS/Fonts")):
+            rel_path = "OEBPS/Fonts/%s" % img
+            if not os.path.isfile(static_path(rel_path)):
+                continue
+            zipFile.writestr(rel_path, stream(rel_path))
+            # manifest.append('<item href="Fonts/%s" id="%s" media-type="%s" />'
+            #                 % (img, img, 'image/jpeg'))
+
         return (soup, manifest)
 
     def set_cover(self, zipFile):
@@ -288,6 +300,31 @@ class ExportView(BrowserView):
                 iframe.replaceWith(message.find("div"))
         return (soup, manifest)
 
+    def cleanup(self, templateOutput):
+        """ Remove unnecessary items
+        """
+        soup = BeautifulSoup(templateOutput)
+
+        # Remove relatedItems
+        for item in soup.find_all(id='languageCodes'):
+            item.clear()
+
+        # Remove relatedItems
+        for item in soup.find_all(class_='documentExportActions'):
+            item.clear()
+
+        # Remove relatedItems
+        for item in soup.find_all(id='relatedItems'):
+            item.clear()
+
+        for item in soup.find_all(class_='relatedItems'):
+            item.clear()
+
+        for item in soup.find_all(id='socialmedia-viewlet'):
+            item.clear()
+
+        return soup.decode()
+
     def __call__(self):
 
         support = queryMultiAdapter((self.context, self.request),
@@ -304,6 +341,7 @@ class ExportView(BrowserView):
         zipFile = ZipFile(inMemoryOutputFile, 'w')
 
         cover = self.set_cover(zipFile)
+        templateOutput = self.cleanup(templateOutput)
         soup, statics = self.handle_statics(templateOutput, zipFile)
         soup, daviz = self.fix_daviz(soup, zipFile)
         toc = self.set_toc(soup)
@@ -336,6 +374,7 @@ class ExportView(BrowserView):
         zipFile.writestr('OEBPS/content.xhtml', templateOutput.encode("utf-8"))
         zipFile.writestr('OEBPS/Css/main.css', stream("OEBPS/Css/main.css"))
         zipFile.writestr('OEBPS/Css/print.css', self.print_css)
+        zipFile.writestr('OEBPS/Css/fonts.css', stream("OEBPS/Css/fonts.css"))
         zipFile.writestr('OEBPS/content.opf', replace(
                                             'OEBPS/content.opf', variables))
         zipFile.writestr('OEBPS/toc.ncx', replace('OEBPS/toc.ncx', variables))
