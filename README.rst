@@ -3,6 +3,7 @@ EEA Epub
 ========
 A product which allows you to import in Plone epub files.
 
+
 Contents
 ========
 
@@ -34,6 +35,9 @@ EEA Epub features:
    This behaviour is on by default but it can be disabled by unchecking the boolean flag at portal_properties/site_properties
    **clean_epub_file_names**.
    If you find that the Document Pages added by the Epub process has broken links try to re-upload without this boolean flag.
+5. Possibility to temporarily disable dynamic ePub creation by adding an item
+   called 'action-download-epub' within context
+
 
 Epub compatibility
 ==================
@@ -52,12 +56,14 @@ Best practices when creating an epub:
 1. Chapter names should not be all uppercase or use special characters
 2. Image names should not contain spaces, periods, / or other special characters
 
+
 Debugging
 =========
 
 At this moment any errors that would appear on the site are surpressed with a info message.
 
 If you want to see the detailed error check the Plone instance log usually found in buildout-folder/var/log.
+
 
 Installation
 ============
@@ -78,10 +84,12 @@ You can download a sample buildout at:
 
 https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/buildouts
 
+
 Getting started
 ===============
 
 From "Add new" menu select "EpubFile" and upload an epub file.
+
 
 Custom permissions
 ==================
@@ -97,6 +105,19 @@ Can customize ePub (eea.epub.customize)
 Assign this permission to roles that you want to be able to contextually customize
 the output ePub look and feel
 Default: Manager, Site Administrator
+
+
+Disable ePub export
+===================
+You have the possibility to temporarily disable dynamic ePub export contextually
+by adding a static ePub file (or a Python Script, Page Template, etc)
+within context called **action-download-epub**. This way /download.epub will
+return this file instead of generating one based on context data.
+
+.. note::
+
+  This works only with folderish items.
+
 
 Dependecies
 ===========

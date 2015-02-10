@@ -332,6 +332,13 @@ class ExportView(BrowserView):
         if not getattr(support, 'can_download', lambda: False)():
             raise NotFound(self.context, self.__name__, self.request)
 
+        # Fallback ePub provided
+        fallback = self.context.restrictedTraverse('action-download-epub', None)
+        if fallback and fallback.absolute_url().startswith(
+                self.context.absolute_url()):
+            return self.request.response.redirect(
+                self.context.absolute_url() + '/action-download-epub')
+
         templateOutput = self.template(self)
         # This encoding circus was required for including context.getText()
         # in the template
