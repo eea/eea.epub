@@ -10,6 +10,8 @@
     <include file="profiles.zcml" />
 
     <include package=".browser" />
+    <include package=".events" />
+    <include package=".rules" />
     <include package=".subtypes" />
     <include package=".upgrades" />
 

@@ -1,4 +1,4 @@
-""" PDF Support
+""" ePub Support
 """
 from zope.interface import implementer
 from zope.security import checkPermission
@@ -7,7 +7,7 @@ from eea.converter.interfaces import ISupport
 
 @implementer(ISupport)
 class Support(BrowserView):
-    """ PDF Support
+    """ ePub Support
     """
     def can_download(self):
         """ Can download context as ePub

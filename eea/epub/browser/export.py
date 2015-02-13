@@ -120,7 +120,7 @@ class ExportView(BrowserView):
                          if css.get('href')]
             html = soup.find(id='content')
             html = html.decode()
-        except Exception, err:
+        except Exception:
             return u"<body></body>"
 
         return html

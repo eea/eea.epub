@@ -18,8 +18,9 @@ Epub content will imported as Plone folders, files, images and documents.
 
 Export to Epub is also available.
 
-As of version 4.3 epub files created with **Adobe InDesign CS4** and **Sigil** are tested and known
-to work with this package, previous versions of this package only supported epubs created with InDesign.
+As of version 4.3 epub files created with **Adobe InDesign CS4** and **Sigil**
+are tested and known to work with this package, previous versions of this
+package only supported epubs created with InDesign.
 
 
 Main features
@@ -30,14 +31,17 @@ EEA Epub features:
 1. Imports epub files as Plone content.
 2. Stores the original epub in the main folder for easy retrieval.
 3. Exports the Plone content back into an epub.
-4. Clean filename as you import the epub and they contain characters that wouldn't be allowed
-   as a Plone id.
-   This behaviour is on by default but it can be disabled by unchecking the boolean flag at portal_properties/site_properties
+4. Clean filename as you import the epub and they contain characters that
+   wouldn't be allowed as a Plone id.
+   This behaviour is on by default but it can be disabled by unchecking
+   the boolean flag at portal_properties/site_properties
    **clean_epub_file_names**.
-   If you find that the Document Pages added by the Epub process has broken links try to re-upload without this boolean flag.
+   If you find that the Document Pages added by the Epub process has broken
+   links try to re-upload without this boolean flag.
 5. Possibility to temporarily disable dynamic ePub creation by adding an item
    called 'action-download-epub' within context
-6. Asynchronously generate ePub files and notify users by email when ePub is ready
+6. Asynchronously generate ePub files and notify users by email
+   when ePub is ready
 
 
 Epub compatibility
@@ -45,12 +49,16 @@ Epub compatibility
 
 EEA Epub makes the following assumptions about the loaded epub:
 
-1. You don't use unicode or other special characters into the name of the epub, images or links
-2. You've created the epub with "Adobe InDesign CS4" or "Sigil" which uses some standards for the following:
+1. You don't use unicode or other special characters into the name
+   of the epub, images or links
+2. You've created the epub with "Adobe InDesign CS4" or "Sigil" which uses
+   some standards for the following:
 
    * The table of contents is named toc.ncx and is placed inside OEBPS
-   * Book text & images are placed inside the folder OEBPS or other folders that are children of OEBPS
-   * Items ids doesn't contain the following characters . / \ ( if possible stick to letters, numbers and - _ )
+   * Book text & images are placed inside the folder OEBPS or other folders
+     that are children of OEBPS
+   * Items ids doesn't contain the following characters . / \ ( if
+     possible stick to letters, numbers and - _ )
 
 Best practices when creating an epub:
 
@@ -61,9 +69,11 @@ Best practices when creating an epub:
 Debugging
 =========
 
-At this moment any errors that would appear on the site are surpressed with a info message.
+At this moment any errors that would appear on the site are surpressed
+with a info message.
 
-If you want to see the detailed error check the Plone instance log usually found in buildout-folder/var/log.
+If you want to see the detailed error check the Plone instance log usually
+found in buildout-folder/var/log.
 
 
 Installation
@@ -87,12 +97,15 @@ https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/buildouts
 
 Asynchronous setup
 ------------------
-By default all ePubs are NOT generated asynchronous, therefore some extra config is
-needed within your buildout in order for this to work properly.
+By default all ePubs are **NOT** generated asynchronous. You'll need `eea.pdf`_
+installed in order to be able to enable asynchronous download.
+
+Also some extra config is needed within your buildout in order for this
+to work properly.
 
 First of all you'll need a folder were to store generated ePub files. For this
-you can create it manually within buildout:directory/var/ or you can let buildout
-handle it::
+you can create it manually within buildout:directory/var/ or
+you can let buildout handle it::
 
     [buildout]
 
@@ -189,9 +202,9 @@ return this file instead of generating one based on context data.
 
 Content rules
 =============
-This package uses Plone Content-rules to notify users by email when an asynchronous
-ePub job is done. Thus 3 custom content-rules will be added within
-Plone > Site Setup > Content-rules
+This package uses Plone Content-rules to notify users by email when
+an asynchronous ePub job is done. Thus 3 custom content-rules will be added
+within Plone > Site Setup > Content-rules
 
 .. warning ::
 
