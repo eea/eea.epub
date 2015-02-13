@@ -37,6 +37,7 @@ EEA Epub features:
    If you find that the Document Pages added by the Epub process has broken links try to re-upload without this boolean flag.
 5. Possibility to temporarily disable dynamic ePub creation by adding an item
    called 'action-download-epub' within context
+6. Asynchronously generate ePub files and notify users by email when ePub is ready
 
 
 Epub compatibility
@@ -84,11 +85,79 @@ You can download a sample buildout at:
 
 https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/buildouts
 
+Asynchronous setup
+------------------
+By default all ePubs are NOT generated asynchronous, therefore some extra config is
+needed within your buildout in order for this to work properly.
+
+First of all you'll need a folder were to store generated ePub files. For this
+you can create it manually within buildout:directory/var/ or you can let buildout
+handle it::
+
+    [buildout]
+
+    parts +=
+        media-downloads
+        media-downloads-temp
+
+    media-downloads-path = ${buildout:directory}/var/downloads/pdf
+    media-downloads-temp = ${buildout:directory}/var/downloads/tmp
+
+    [media-downloads]
+    recipe = ore.recipe.fs:mkdir
+    path = ${buildout:media-downloads-path}
+    mode = 0700
+    createpath = true
+
+    [media-downloads-temp]
+    recipe = ore.recipe.fs:mkdir
+    path = ${buildout:media-downloads-temp}
+    mode = 0700
+    createpath = true
+
+This will create a folder named **downloads** within buildout:directory/var/
+
+Next, in order for this folder to be visible from your website and your users to
+be able to download generated ePubs you'll need to tell to your zope instances
+about it::
+
+    [buildout]
+
+    media-downloads-name = downloads
+    media-downloads-path = ${buildout:directory}/var/downloads/pdf
+    media-downloads-temp = ${buildout:directory}/var/downloads/tmp
+
+    [instance]
+
+    environment-vars +=
+      EEADOWNLOADS_NAME ${buildout:media-downloads-name}
+      EEADOWNLOADS_PATH ${buildout:media-downloads-path}
+      EEACONVERTER_TEMP ${buildout:media-downloads-temp}
+
+Also, don't forget to setup `plone.app.async`_
+
+::
+
+    [buildout]
+
+    [instance]
+    eggs +=
+        plone.app.async
+    zcml +=
+        plone.app.async-single_db_worker
+
 
 Getting started
 ===============
 
+Import
+------
 From "Add new" menu select "EpubFile" and upload an epub file.
+
+Export
+------
+Go to Home page and click on download as ePub icon at the bottom of the page
+ or directly access http://localhost:8080/Plone/front-page/download.epub
 
 
 Custom permissions
@@ -118,6 +187,20 @@ return this file instead of generating one based on context data.
 
   This works only with folderish items.
 
+Content rules
+=============
+This package uses Plone Content-rules to notify users by email when an asynchronous
+ePub job is done. Thus 3 custom content-rules will be added within
+Plone > Site Setup > Content-rules
+
+.. warning ::
+
+  As these content-rules are triggered by an asynchronous job, while
+  you customize the email template for these content-rules,
+  please **DO NOT USE OTHER** string substitutions **that the ones** that start
+  with **$download_** as you'll break the download chain.
+  Also if you disable these content-rules the users will never know when the
+  ePub is ready and what is the link where they can download the output ePub.
 
 Dependecies
 ===========
@@ -125,7 +208,10 @@ Dependecies
 1. BeautifulSoup
 2. Lxml
 3. Plone 4.x
-
+4. `plone.app.async`_
+5. `eea.converter`_
+6. `eea.downloads`_
+7. `eea.pdf`_ (optional)
 
 Live demo
 =========
@@ -171,3 +257,7 @@ Funding
 EEA_ - European Enviroment Agency (EU)
 
 .. _EEA: http://www.eea.europa.eu/
+.. _eea.converter: http://eea.github.com/docs/eea.converter
+.. _eea.downloads: http://eea.github.com/docs/eea.downloads
+.. _eea.pdf: http://eea.github.com/docs/eea.pdf
+.. _plone.app.async: https://github.com/plone/plone.app.async#ploneappasync
