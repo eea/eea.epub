@@ -61,7 +61,7 @@ def stream(filePath):
 class ExportView(BrowserView):
     """ ExportView Browserview
     """
-    template = ViewPageTemplateFile('epub.pt')
+    template = ViewPageTemplateFile('zpt/epub.pt')
 
     def abs_url(self, image_source):
         """ Return abs URL out of a `src` img attribute
@@ -396,7 +396,7 @@ class ExportView(BrowserView):
 class AsyncExportView(ExportView):
     """ Download ePub asynchronously
     """
-    template = ViewPageTemplateFile('download.pt')
+    template = ViewPageTemplateFile('zpt/download.pt')
 
     def __init__(self, context, request):
         super(AsyncExportView, self).__init__(context, request)

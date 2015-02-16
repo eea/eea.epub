@@ -25,6 +25,10 @@ from eea.epub.events.interfaces import IAsyncEPUBEvent
 from eea.epub.events.interfaces import IAsyncEPUBExportFail
 from eea.epub.events.interfaces import IAsyncEPUBExportSuccess
 
+#Subtypes
+from eea.epub.subtypes.interfaces import IEPUBAware
+from eea.epub.subtypes.interfaces import ICollectionEPUBAware
+
 __all__ = [
     ILayer.__name__,
     IEPUBEvent.__name__,
@@ -33,4 +37,6 @@ __all__ = [
     IAsyncEPUBEvent.__name__,
     IAsyncEPUBExportFail.__name__,
     IAsyncEPUBExportSuccess.__name__,
+    IEPUBAware.__name__,
+    ICollectionEPUBAware.__name__,
 ]
