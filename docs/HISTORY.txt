@@ -1,6 +1,9 @@
 Changelog
 =========
 
+6.0.dev0 - (unreleased)
+-----------------------
+
 5.9 - (2015-02-16)
 ------------------
 * Feature: Added possibility to add a fallback ePub file within context called
