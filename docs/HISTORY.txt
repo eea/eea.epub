@@ -1,12 +1,14 @@
 Changelog
 =========
 
-5.9.dev0 - (unreleased)
+6.0.dev0 - (unreleased)
 -----------------------
 * WIP:
   Feature: Added possibility to download documents as ePub asynchronously
   [voineali refs #22971]
 
+5.9 - (2015-02-16)
+------------------
 * Feature: Added possibility to add a fallback ePub file within context called
   **action-download-epub** in order to temporarily stop dynamic ePub
   generation and statically return this item.
