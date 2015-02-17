@@ -188,6 +188,69 @@ Assign this permission to roles that you want to be able to contextually customi
 the output ePub look and feel
 Default: Manager, Site Administrator
 
+Content rules
+=============
+This package uses Plone Content-rules to notify users by email when an asynchronous
+ePub job is done. Thus 3 custom content-rules will be added within
+Plone > Site Setup > Content-rules
+
+.. warning ::
+
+  As these content-rules are triggered by an asynchronous job, while
+  you customize the email template for these content-rules,
+  please **DO NOT USE OTHER** string substitutions **that the ones** that start
+  with **$download_** as you'll break the download chain.
+  Also if you disable these content-rules the users will never know when the
+  ePub is ready and what is the link where they can download the output ePub.
+
+ePub export succeeded
+---------------------
+Notify the person who requested a ePub export that the ePub successfully exported
+and provide a link to the downloadable ePub
+
+ePub export failed
+------------------
+Notify the person who requested a ePub export that the ePub export failed.
+
+ePub export failed (admin)
+--------------------------
+Notify admin that there were issues while exporting ePub
+
+
+Content rules email string substitution
+=======================================
+In order to be able to easily customize emails sent by this package the following
+custom email template string substitutions can be made
+
+
+${download_came_from_url}
+-------------------------
+The absolute URL of the Plone object which is downloaded as ePub
+
+${download_email}
+-----------------
+Email address of the user that triggered the download as ePub action
+
+${download_error}
+-----------------
+Error traceback when download as ePub job fails
+
+${download_from_email}
+----------------------
+Site Admin email address customizable via Plone > Site Setup > Mail
+
+${download_from_name}
+---------------------
+Site Admin name customizable via Plone > Site Setup > Mail
+
+${download_title}
+-----------------
+Title of the Plone object which is downloaded as ePub
+
+${download_url}
+---------------
+The absolute URL where the generated output ePub can be downloaded
+
 
 Disable ePub export
 ===================
@@ -224,7 +287,7 @@ Dependecies
 4. `plone.app.async`_
 5. `eea.converter`_
 6. `eea.downloads`_
-7. `eea.pdf`_ (optional)
+7. `eea.pdf`_ (optional for advanced themes and asynchronous download)
 
 Live demo
 =========

@@ -1,32 +1,20 @@
 """ Events
 """
-from zope.interface import Interface
-from zope.component.interfaces import IObjectEvent
+from eea.converter.interfaces import IExportFail, IExportSuccess
+from eea.converter.interfaces import IAsyncExportFail, IAsyncExportSuccess
 
-class IEPUBEvent(IObjectEvent):
-    """ Base Event Interface for all ePub events
-    """
-
-class IEPUBExportSuccess(IEPUBEvent):
+class IEPUBExportSuccess(IExportSuccess):
     """ ePub export succeeded
     """
 
-class IEPUBExportFail(IEPUBEvent):
+class IEPUBExportFail(IExportFail):
     """ ePub export failed
     """
 
-class IAsyncEPUBEvent(IEPUBEvent):
-    """ Base Event Interface for all Async ePub events
-    """
-
-class IAsyncEPUBExportSuccess(IAsyncEPUBEvent):
+class IAsyncEPUBExportSuccess(IAsyncExportSuccess):
     """ Async job for ePub export succeeded
     """
 
-class IAsyncEPUBExportFail(IAsyncEPUBEvent):
+class IAsyncEPUBExportFail(IAsyncExportFail):
     """ Async job for ePub export failed
-    """
-
-class IEPUBContextWrapper(Interface):
-    """ Context wrapper used by async events
     """

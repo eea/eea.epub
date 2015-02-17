@@ -4,14 +4,14 @@
 from zope.interface import implementer
 from eea.epub.events.interfaces import IEPUBExportFail
 from eea.epub.events.interfaces import IEPUBExportSuccess
-from eea.epub.events import EPUBEvent
+from eea.converter.events.sync import ExportFail, ExportSuccess
 
 @implementer(IEPUBExportFail)
-class EPUBExportFail(EPUBEvent):
+class EPUBExportFail(ExportFail):
     """ Event triggered when a ePub export job failed
     """
 
 @implementer(IEPUBExportSuccess)
-class EPUBExportSuccess(EPUBEvent):
+class EPUBExportSuccess(ExportSuccess):
     """ Event triggered when a ePub export job succeeded
     """

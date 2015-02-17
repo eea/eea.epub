@@ -10,17 +10,24 @@ import requests
 import logging
 import re
 
+from zope import event
 from zope.publisher.interfaces import NotFound
+from zope.component.hooks import getSite
 from App.Common import package_home
 from Products.Five import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter, queryUtility, queryAdapter
+from plone.app.async.interfaces import IAsyncService
 
+from eea.converter import async
 from eea.converter.utils import absolute_url
 from eea.converter.interfaces import IConvert, IPDFOptionsMaker
+from eea.converter.job import _output
 from eea.downloads.interfaces import IStorage
-from eea.epub.config import EEAMessageFactory as _
 
+from eea.epub.events.async import AsyncEPUBExportSuccess, AsyncEPUBExportFail
+from eea.epub.config import EEAMessageFactory as _
+from eea.epub.async import EpubJob
 
 logger = logging.getLogger('eea.epub')
 
@@ -62,6 +69,7 @@ class ExportView(BrowserView):
     """ ExportView Browserview
     """
     template = ViewPageTemplateFile('zpt/epub.pt')
+    _fallback = None
 
     def abs_url(self, image_source):
         """ Return abs URL out of a `src` img attribute
@@ -327,6 +335,21 @@ class ExportView(BrowserView):
 
         return soup.decode()
 
+    @property
+    def fallback(self):
+        """ Fallback ePub provided
+        """
+        if self._fallback is not None:
+            return self._fallback
+
+        fallback = self.context.restrictedTraverse('action-download-epub', None)
+        if fallback and fallback.absolute_url().startswith(
+                self.context.absolute_url()):
+            self._fallback = (
+                self.context.absolute_url() + '/action-download-epub'
+            )
+        return self._fallback
+
     def __call__(self):
 
         support = queryMultiAdapter((self.context, self.request),
@@ -335,11 +358,8 @@ class ExportView(BrowserView):
             raise NotFound(self.context, self.__name__, self.request)
 
         # Fallback ePub provided
-        fallback = self.context.restrictedTraverse('action-download-epub', None)
-        if fallback and fallback.absolute_url().startswith(
-                self.context.absolute_url()):
-            return self.request.response.redirect(
-                self.context.absolute_url() + '/action-download-epub')
+        if self.fallback:
+            return self.request.response.redirect(self.fallback)
 
         templateOutput = self.template(self)
         # This encoding circus was required for including context.getText()
@@ -482,7 +502,55 @@ class AsyncExportView(ExportView):
     def download(self, email='', **kwargs):
         """ Download
         """
-        logger.warn("Not implemented yet")
+        # Fallback ePub provided
+        if self.fallback:
+            self._link = self.fallback
+
+        storage = IStorage(self.context).of('epub')
+        filepath = storage.filepath()
+        fileurl = self.link()
+        url = self.context.absolute_url()
+        title = self.context.title_or_id()
+
+        portal = getSite()
+        from_name = portal.getProperty('email_from_name')
+        from_email = portal.getProperty('email_from_address')
+
+        if self.fallback or async.file_exists(filepath):
+            wrapper = async.ContextWrapper(self.context)(
+                fileurl=fileurl,
+                filepath=filepath,
+                email=email,
+                url=url,
+                from_name=from_name,
+                from_email=from_email,
+                title=title,
+                etype='epub'
+            )
+
+            event.notify(AsyncEPUBExportSuccess(wrapper))
+            return self.finish(email=email)
+
+        # Async generate PDF
+        out = _output(suffix='.epub')
+        cmd = self.context.absolute_url(1)
+        converter = EpubJob(cmd=cmd, output=out, timeout=60, cleanup=[out])
+        worker = queryUtility(IAsyncService)
+        worker.queueJob(
+            async.run_async_job,
+            self.context, converter,
+            success_event=AsyncEPUBExportSuccess,
+            fail_event=AsyncEPUBExportFail,
+            email=email,
+            filepath=filepath,
+            fileurl=fileurl,
+            url=url,
+            from_name=from_name,
+            from_email=from_email,
+            title=title,
+            etype='epub'
+        )
+
         return self.finish(email=email)
 
     def post(self, **kwargs):
@@ -507,8 +575,9 @@ class AsyncExportView(ExportView):
         support = queryMultiAdapter((self.context, self.request),
                                     name='pdf.support')
 
-        async = getattr(support, 'async', lambda: False)()
-        if not async:
+        asynchronously = getattr(support, 'async', lambda: False)()
+        if not asynchronously:
+            self.template = ExportView.template
             return super(AsyncExportView, self).__call__()
 
         # We have the email, continue
