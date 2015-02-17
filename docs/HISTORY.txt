@@ -3,6 +3,16 @@ Changelog
 
 6.0.dev0 - (unreleased)
 -----------------------
+* Upgrade step:
+  I. Within "Plone > Site setup > Add-ons" install "EEA Converter"
+  II. Within **Plone > Site setup > Content Rules**:
+  1. Filter by **Async PDF Export (fail)** and **Async PDF Export (success)**
+  2. Disable founded rules
+  3. Filter by **Async Export (fail)** and **Async Export (success)**
+  4. Update these rules **email texts** with previous disabled ones (PDF ones) by changing **PDF** with **${download_type}**
+  5. Delete **Async PDF Export (fail)** and **Async PDF Export (success)** related rules
+  [voineali refs #22971]
+
 * WIP:
   Feature: Added possibility to download documents as ePub asynchronously
   [voineali refs #22971]
