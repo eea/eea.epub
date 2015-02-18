@@ -1,10 +1,11 @@
 """ Functional Tests
 """
-
+from zope.interface import alsoProvides
 from StringIO import StringIO
 from eea.epub.tests.base import EpubFunctionalTestCase
 from zipfile import ZipFile
 from Products.Five.security import newInteraction
+from eea.epub.interfaces import ILayer
 
 
 class ExporterTest(EpubFunctionalTestCase):
@@ -21,6 +22,7 @@ class ExporterTest(EpubFunctionalTestCase):
         self.article.setText('TestText')
 
         context = self.article
+        alsoProvides(context.REQUEST, ILayer)
         view = context.restrictedTraverse('@@download.epub')
         self.response = view.request.response
         newInteraction()

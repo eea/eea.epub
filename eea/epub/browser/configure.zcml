@@ -5,8 +5,8 @@
   <browser:page
     for="*"
     name="download.epub"
-    class=".export.AsyncExportView"
-    permission="zope.Public"
+    class=".app.download.AsyncExportView"
+    permission="eea.epub.download"
     allowed_interface=".interfaces.IExportView"
     />
 
@@ -32,6 +32,23 @@
     class=".epub_utils.EpubUtils"
     permission="zope.Public"
     allowed_interface=".interfaces.IEpubUtils"
+    />
+
+  <browser:page
+    for="*"
+    name="epub.body"
+    layer="eea.epub.interfaces.ILayer"
+    class=".app.body.Body"
+    allowed_attributes="css"
+    permission="eea.epub.download"
+    />
+
+  <browser:page
+    for="*"
+    name="epub.cover"
+    layer="eea.epub.interfaces.ILayer"
+    class=".app.cover.Cover"
+    permission="eea.epub.download"
     />
 
     <configure zcml:condition="installed Products.NavigationManager">
