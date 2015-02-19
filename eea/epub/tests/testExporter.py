@@ -44,6 +44,7 @@ class ExporterTest(EpubFunctionalTestCase):
         fileNames = zipFile.namelist()
         self.failUnless('mimetype' in fileNames)
         self.failUnless('OEBPS/content.xhtml' in fileNames)
+        self.failUnless('OEBPS/Css/print.css' in fileNames)
 
 
 def test_suite():

@@ -12,9 +12,7 @@ Changelog
   4. Update these rules **email texts** with previous disabled ones (PDF ones) by changing **PDF** with **${download_type}**
   5. Delete **Async PDF Export (fail)** and **Async PDF Export (success)** related rules
   [voineali refs #22971]
-
-* WIP:
-  Feature: Added possibility to download documents as ePub asynchronously
+* Feature: Added possibility to download documents as ePub asynchronously
   [voineali refs #22971]
 
 5.9 - (2015-02-16)

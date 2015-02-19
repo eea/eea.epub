@@ -115,7 +115,9 @@ class Body(BrowserView):
     def publishTraverse(self, request, name):
         """ Custom traverser
         """
-        if name == 'Css' or name.endswith('.css'):
+        if name == 'css':
+            return self.css
+        elif name == 'Css' or name.endswith('.css'):
             return Css(self.context, self.request)
         return super(Body, self).publishTraverse(request, name)
 

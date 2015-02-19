@@ -199,12 +199,23 @@ class AsyncExportView(ExportView):
 
         # Async generate PDF
         out = _output(suffix='.epub')
-        cmd = self.context.absolute_url(1)
-        converter = EpubJob(cmd=cmd, output=out, timeout=60, cleanup=[out])
+        cmd = url
+        body = 'epub.body'
+        cover = 'epub.cover'
+
+        job = EpubJob(
+            cmd=cmd,
+            title=self.context.Title(),
+            body=body,
+            cover=cover,
+            cookies=self.request.cookies,
+            output=out, timeout=60, cleanup=[out]
+        )
+
         worker = queryUtility(IAsyncService)
         worker.queueJob(
             async.run_async_job,
-            self.context, converter,
+            self.context, job,
             success_event=AsyncEPUBExportSuccess,
             fail_event=AsyncEPUBExportFail,
             email=email,
