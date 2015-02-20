@@ -2,7 +2,6 @@
 """
 import os
 import tempfile
-import shutil
 from Products.Five import fiveconfigure as metaconfigure
 from Products.PloneTestCase import PloneTestCase
 from Products.PloneTestCase.layer import onsetup
