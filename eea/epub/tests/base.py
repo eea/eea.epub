@@ -33,11 +33,3 @@ PloneTestCase.setupPloneSite(extension_profiles=('eea.epub:default',))
 class EpubFunctionalTestCase(PloneTestCase.FunctionalTestCase):
     """ EpubFunctionalTestCase class
     """
-    def beforeTearDown(self):
-        """ Tear down
-        """
-        try:
-            shutil.rmtree(PATH)
-            shutil.rmtree(TEMP)
-        except OSError:
-            pass
