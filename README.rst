@@ -258,6 +258,11 @@ ${download_url}
 ---------------
 The absolute URL where the generated output ePub can be downloaded
 
+${download_type}
+----------------
+Download type. Default to EPUB for this package. It is package specific and it
+can be EPUB, PDF, etc.
+
 
 Disable ePub export
 ===================
