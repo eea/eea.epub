@@ -84,21 +84,27 @@ package is to work with installations based on `zc.buildout`_.
 Other types of installations should also be possible, but might turn out
 to be somewhat tricky.
 
-To get started you will simply need to add the package to your "eggs" and
-"zcml" sections, run buildout, restart your Plone instance and install the
-"eea.epub" package using the quick-installer or via the "Add-on
-Products" section in "Site Setup".
+To get started you will simply need to add the package to your **eggs** and
+**zcml** sections, run buildout, restart your Plone instance and install the
+**eea.epub** package using the quick-installer or via the "Add-on
+Products" section in "Site Setup"::
 
-.. _`zc.buildout`: http://pypi.python.org/pypi/zc.buildout/
+    [instance]
+    eggs =
+        eea.epub
+
+    zcml =
+        eea.epub
 
 You can download a sample buildout at:
 
-https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/buildouts
+https://github.com/eea/eea.epub/tree/master/buildouts/plone4
 
 Asynchronous setup
 ------------------
 By default all ePubs are **NOT** generated asynchronous. You'll need `eea.pdf`_
-installed in order to be able to enable asynchronous download.
+installed in order to be able to enable asynchronous download or you can
+provide an os environment called **EEACONVERTER_ASYNC**.
 
 Also some extra config is needed within your buildout in order for this
 to work properly.
@@ -146,6 +152,7 @@ about it::
       EEADOWNLOADS_NAME ${buildout:media-downloads-name}
       EEADOWNLOADS_PATH ${buildout:media-downloads-path}
       EEACONVERTER_TEMP ${buildout:media-downloads-temp}
+      EEACONVERTER_ASYNC True
 
 Also, don't forget to setup `plone.app.async`_
 
@@ -337,3 +344,4 @@ EEA_ - European Enviroment Agency (EU)
 .. _eea.downloads: http://eea.github.com/docs/eea.downloads
 .. _eea.pdf: http://eea.github.com/docs/eea.pdf
 .. _plone.app.async: https://github.com/plone/plone.app.async#ploneappasync
+.. _zc.buildout: https://pypi.python.org/pypi/zc.buildout
