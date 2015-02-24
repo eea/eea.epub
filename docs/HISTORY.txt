@@ -14,6 +14,8 @@ Changelog
   [voineali refs #22971]
 * Feature: Added possibility to download documents as ePub asynchronously
   [voineali refs #22971]
+* Bug fix: fixed UnicodeDecodeError within download.epub template
+  [voineali refs #23338]
 
 5.9 - (2015-02-16)
 ------------------
