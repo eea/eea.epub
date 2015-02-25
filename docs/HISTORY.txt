@@ -1,8 +1,8 @@
 Changelog
 =========
 
-6.0.dev0 - (unreleased)
------------------------
+6.0 - (2015-02-25)
+------------------
 * Upgrade step:
   I. Within "Plone > Site setup > Add-ons" install "EEA Converter"
   II. Within **Plone > Site setup > Content Rules**:
