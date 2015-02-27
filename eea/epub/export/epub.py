@@ -70,15 +70,30 @@ class Html2EPub(object):
             if not filename:
                 filename = "%s%s" % (itemid, url.strip('/').rsplit('/', 1)[-1])
                 filename = self.slugify(filename)
+
+            media_type = headers.get('content-type')
+            if not media_type:
+                if filename.endswith('png'):
+                    media_type = 'image/png'
+                elif filename.endswith('jpg') or filename.endswith('jpeg'):
+                    media_type = 'image/jpeg'
+                elif filename.endswith('gif'):
+                    media_type = 'image/gif'
+                elif filename.endswith('svg'):
+                    media_type = 'image/svg+xml'
+
+            if len(filename.split('.')) < 2:
+                ext = media_type.rstrip('+xml').split('/')[-1]
+                filename = "%s.%s" % (filename, ext)
+
             zipFile.writestr('OEBPS/Images/%s' % filename, resp.content)
             return ("Images/%s" % filename,
                     '<item href="Images/%s" id="%s" media-type="%s"/>'
-                    % (filename, itemid,
-                       headers.get('content-type') or 'image/jpeg'))
+                    % (filename, itemid, media_type))
         else:
             return '', ''
 
-    def handle_statics(self, body, zipFile, base_url='', cookies=None):
+    def handle_statics(self, body, zipFile, base_url='', cookies=None, css=''):
         """
         * Embedding images: looks for referenced images in content
         and properly save them in the epub
@@ -95,6 +110,8 @@ class Html2EPub(object):
                 src, manifest_entry = self.store_image(zipFile, url, itemid)
                 if src:
                     img['src'] = src
+                    if not img.get('alt'):
+                        img['alt'] = "Image at %s" % url
                     manifest.append(manifest_entry)
                 else:
                     img.extract()
@@ -104,17 +121,31 @@ class Html2EPub(object):
                 continue
             zipFile.writestr(rel_path, self.stream(rel_path))
             manifest.append('<item href="Images/%s" id="%s" media-type="%s" />'
-                            % (img, img, 'image/jpeg'))
+                            % (img, img, 'image/png'))
 
         for img in os.listdir(self.static_path("OEBPS/Fonts")):
             rel_path = "OEBPS/Fonts/%s" % img
             if not os.path.isfile(self.static_path(rel_path)):
                 continue
             zipFile.writestr(rel_path, self.stream(rel_path))
-            # manifest.append('<item href="Fonts/%s" id="%s" media-type="%s" />'
-            #                 % (img, img, 'image/jpeg'))
+            manifest.append('<item href="Fonts/%s" id="%s" media-type="%s" />'
+                             % (img, img, 'application/x-font-ttf'))
 
-        return (soup, manifest)
+        zipFile.writestr('OEBPS/Css/main.css',
+                         self.stream("OEBPS/Css/main.css"))
+        manifest.append(
+          '<item href="Css/main.css" id="main.css" media-type="text/css" />')
+
+        zipFile.writestr('OEBPS/Css/print.css', css)
+        manifest.append(
+          '<item href="Css/print.css" id="print.css" media-type="text/css" />')
+
+        zipFile.writestr('OEBPS/Css/fonts.css',
+                         self.stream("OEBPS/Css/fonts.css"))
+        manifest.append(
+          '<item href="Css/fonts.css" id="fonts.css" media-type="text/css" />')
+
+        return soup, manifest
 
     def set_cover(self, zipFile, cover, base_url=''):
         """ Look for image inside the object and set it as cover
@@ -207,7 +238,9 @@ class Html2EPub(object):
                                                               itemid, fname)
             if img_src:
                 iframe.replaceWith(
-                    BeautifulSoup("<img src='%s' />" % img_src).find("img"))
+                    BeautifulSoup("<img src='%s' alt='%s' />" % (
+                    img_src, "Chart at %s" % src
+                )).find("img"))
                 manifest.append(manifest_item)
             else:
                 chart_url = u'%s#tab-%s' % (base, chart)
@@ -234,16 +267,20 @@ class Html2EPub(object):
             body = body.decode('utf-8')
 
         zipFile = ZipFile(output, 'w')
+        zipFile.writestr('mimetype', 'application/epub+zip')
+        zipFile.writestr('META-INF/container.xml',
+                         self.stream('META-INF/container.xml'))
 
         cover = self.set_cover(zipFile, cover, base_url)
-        soup, statics = self.handle_statics(body, zipFile, base_url, cookies)
+        soup, statics = self.handle_statics(body, zipFile,
+                                            base_url, cookies, css)
         soup, daviz = self.fix_daviz(soup, zipFile, base_url, cookies)
         toc = self.set_toc(soup)
         body = soup.prettify()
 
-
         variables = {
             'TITLE': title,
+            'LANGUAGE': 'en', # make this dynamic
             'IDENTIFIER': base_url,
             'TOC': toc,
             'METADATA_MORE': '',
@@ -256,16 +293,7 @@ class Html2EPub(object):
                 'MANIFEST_MORE': '\n'.join(cover['manifest'] + statics + daviz),
             })
 
-        zipFile.writestr('mimetype', 'application/epub+zip')
-        zipFile.writestr('META-INF/container.xml',
-                         self.stream('META-INF/container.xml'))
-
         zipFile.writestr('OEBPS/content.xhtml', body.encode("utf-8"))
-        zipFile.writestr('OEBPS/Css/main.css',
-                         self.stream("OEBPS/Css/main.css"))
-        zipFile.writestr('OEBPS/Css/print.css', css)
-        zipFile.writestr('OEBPS/Css/fonts.css',
-                         self.stream("OEBPS/Css/fonts.css"))
         zipFile.writestr('OEBPS/content.opf',
                          self.replace('OEBPS/content.opf', variables))
         zipFile.writestr('OEBPS/toc.ncx',

@@ -4,13 +4,13 @@
             unique-identifier="bookid" version="2.0">
   <metadata>
     <dc:title>%(TITLE)s</dc:title>
+    <dc:language>%(LANGUAGE)s</dc:language>
     <dc:identifier id="bookid">%(IDENTIFIER)s</dc:identifier>
     %(METADATA_MORE)s
   </metadata>
   <manifest>
     <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
     <item id="content" href="content.xhtml" media-type="application/xhtml+xml"/>
-    <item href="Css/main.css" id="main.css" media-type="text/css"/>
     %(MANIFEST_MORE)s
   </manifest>
   <spine toc="ncx">

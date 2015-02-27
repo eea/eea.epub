@@ -3,6 +3,8 @@ Changelog
 
 6.1.dev0 - (unreleased)
 -----------------------
+* Bug fix: Fixed validation errors for exported ePubs (epubchecker)
+  [avoinea]
 
 6.0 - (2015-02-25)
 ------------------
