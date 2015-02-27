@@ -1,6 +1,9 @@
 Changelog
 =========
 
+6.2.dev0 - (unreleased)
+-----------------------
+
 6.1 - (2015-02-27)
 ------------------
 * Bug fix: Fixed validation errors for exported ePubs (epubchecker)
