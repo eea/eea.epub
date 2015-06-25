@@ -7,10 +7,10 @@ import logging
 
 logger = logging.getLogger('eea.epub: setuphandlers')
 
-def registerMimeType(self,  mimetype):
+def registerMimeType(self, mimetype):
     """ register mimetypes
     """
-    if type(mimetype) != InstanceType:
+    if not isinstance(mimetype, InstanceType):
         mimetype = mimetype()
     mimetypes_registry = getToolByName(self, 'mimetypes_registry')
     mimetypes_registry.register(mimetype)

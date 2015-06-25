@@ -62,7 +62,7 @@ def cleanNames(name):
         (x if (x.isalnum() or x in ['.', '/', '-', '#']) else '') for x in name)
 
 def checkFileName(fileName):
-    """ Check if fileName doesn't contain non allowed characters """ 
+    """ Check if fileName doesn't contain non allowed characters """
     bad_file_name = ''
     for i in fileName:
         if not i.isalnum() and i not in [".", "_", "-", '/', '#']:
@@ -147,7 +147,7 @@ class EpubFile(object):
         """
         props = getToolByName(self, 'portal_properties').site_properties
         clean_epub_names = props.getProperty('clean_epub_file_names')
-        
+
         if 'page_resources' in self.cache:
             return self.cache['page_resources']
 
@@ -215,7 +215,7 @@ class EpubFile(object):
             regex = r'(<a[^>]*)(/>)'
 
             html = re.sub(regex, repl, html)
-            html = str(BeautifulSoup(html , 'lxml'))
+            html = str(BeautifulSoup(html, 'lxml'))
 
             page_resources.append({
                 'id': elem.get('href'),
@@ -265,7 +265,7 @@ class EpubFile(object):
     def images(self):
         """ Returns the images of the epub
         """
-        
+
         if not 'images' in self.cache:
             self.cache['images'] = []
             for elem in self.rootFile.find('manifest').getchildren():
@@ -328,7 +328,7 @@ class ImportView(BrowserView):
     def importFile(self, epubFile):
         """ Imports the epub file
         """
-        
+
         zipFile = ZipFile(epubFile, 'r')
         epub = EpubFile(zipFile)
 
