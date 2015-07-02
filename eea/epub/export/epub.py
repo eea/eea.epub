@@ -185,10 +185,10 @@ class Html2EPub(object):
                 chapters.append((h1.text, ''))
             else:
                 chapters.append(('Content', ''))
-        chap_xmls = [chapter_tpl % ({'title': title,
+        chap_xmls = [chapter_tpl % ({'title': t,
                                      'i': (i + 1),
-                                     'offset': offset})
-                     for (i, (title, offset)) in enumerate(chapters)]
+                                     'offset': o})
+                     for (i, (t, o)) in enumerate(chapters)]
         return u"\n".join(chap_xmls).encode("utf-8")
 
     def fix_daviz(self, soup, zipFile, base_url='', cookies=None):
