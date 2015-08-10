@@ -37,6 +37,7 @@ setup(name=NAME,
           'eea.downloads > 1.0',
       ],
       entry_points="""
-      # -*- Entry points: -*-
-      """,
+      [z3c.autoinclude.plugin]
+      target = plone
+      """
       )
