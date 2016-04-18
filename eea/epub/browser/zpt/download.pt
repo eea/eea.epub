@@ -12,7 +12,7 @@
   <form tal:attributes="action string:${context/absolute_url}/${view/__name__}" method="post" tal:condition="not:view/email">
     <div class="field eea-epub-email">
       <input type="email" name="email" id="email" />
-      <input class="context" type="submit" name="form.button.download" value="Send" i18n:attributes="value">
+      <input class="context" type="submit" name="form.button.download" value="Send" i18n:attributes="value" />
       <span class="formHelp" tal:content="view/message">
         Message
       </span>
