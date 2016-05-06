@@ -2,19 +2,19 @@
 """
 
 from bs4 import BeautifulSoup
+import xml.etree.cElementTree as ET
+from zipfile import ZipFile
+import logging
+import re
+import urllib
 from Products.Five import BrowserView
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
-import xml.etree.cElementTree as ET
 from persistent.dict import PersistentDict
-from zipfile import ZipFile
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import alsoProvides
-import logging
-import re
 import transaction
-import urllib
 import lxml.html
 
 from zope.event import notify
@@ -266,7 +266,7 @@ class EpubFile(object):
         """ Returns the images of the epub
         """
 
-        if not 'images' in self.cache:
+        if 'images' not in self.cache:
             self.cache['images'] = []
             for elem in self.rootFile.find('manifest').getchildren():
                 if elem.get('media-type').startswith('image'):
@@ -283,7 +283,7 @@ class EpubFile(object):
     def creator(self):
         """ Sets the creator of the epub
         """
-        if not 'creator' in self.cache:
+        if 'creator' not in self.cache:
             elem = self.rootFile.find('metadata').find('creator')
             if elem != None:
                 self.cache['creator'] = elem.text

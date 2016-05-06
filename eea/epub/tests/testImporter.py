@@ -3,12 +3,11 @@
 
 from App.Common import package_home
 from StringIO import StringIO
+import os.path
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
 from eea.epub.tests.base import EpubFunctionalTestCase
-import os.path
-
 
 class ImporterTest(EpubFunctionalTestCase):
     """ ImporterTest class

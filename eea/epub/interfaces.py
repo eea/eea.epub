@@ -2,18 +2,6 @@
 """
 from zope.interface import Interface
 
-class IImportedBook(Interface):
-    """ Marker interface for epub root folder """
-
-class IImportedChapter(Interface):
-    """ Marker interface for each imported chapter """
-
-class IExportable(Interface):
-    """ Marker interface for all epub exporable content types """
-
-class IImportedImage(Interface):
-    """ Marker interface for imported epub images """
-
 # Browser layer
 from eea.epub.browser.interfaces import ILayer
 
@@ -26,6 +14,18 @@ from eea.epub.events.interfaces import IAsyncEPUBExportSuccess
 #Subtypes
 from eea.epub.subtypes.interfaces import IEPUBAware
 from eea.epub.subtypes.interfaces import ICollectionEPUBAware
+
+class IImportedBook(Interface):
+    """ Marker interface for epub root folder """
+
+class IImportedChapter(Interface):
+    """ Marker interface for each imported chapter """
+
+class IExportable(Interface):
+    """ Marker interface for all epub exporable content types """
+
+class IImportedImage(Interface):
+    """ Marker interface for imported epub images """
 
 __all__ = [
     ILayer.__name__,

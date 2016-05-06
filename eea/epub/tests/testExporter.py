@@ -2,8 +2,8 @@
 """
 from zope.interface import alsoProvides
 from StringIO import StringIO
-from eea.epub.tests.base import EpubFunctionalTestCase
 from zipfile import ZipFile
+from eea.epub.tests.base import EpubFunctionalTestCase
 from Products.Five.security import newInteraction
 from eea.epub.interfaces import ILayer
 

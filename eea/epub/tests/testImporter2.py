@@ -2,8 +2,8 @@
 """
 from App.Common import package_home
 from StringIO import StringIO
-from eea.epub.tests.base import EpubFunctionalTestCase
 import os.path
+from eea.epub.tests.base import EpubFunctionalTestCase
 
 
 class ImporterTest(EpubFunctionalTestCase):

@@ -4,12 +4,11 @@
 from zope.component.interfaces import IObjectEvent
 from plone.app.layout.navigation.interfaces import INavigationRoot
 from zope.interface import alsoProvides
+from zope.interface import implements
 
 class IEpubImportedEvent(IObjectEvent):
     """ Event interface which signals that a epub was imported
     """
-
-from zope.interface import implements
 
 class EpubImportedEvent(object):
     """ Sent if an epub file was imported
