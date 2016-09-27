@@ -11,6 +11,7 @@ from plone.app.async.interfaces import IAsyncService
 from Products.Five.browser import BrowserView
 
 from eea.converter import async
+from eea.converter.interfaces import IContextWrapper
 from eea.converter.job import _output
 from eea.downloads.interfaces import IStorage
 
@@ -18,6 +19,7 @@ from eea.epub.export.interfaces import IHtml2EPub
 from eea.epub.events.async import AsyncEPUBExportSuccess, AsyncEPUBExportFail
 from eea.epub.config import EEAMessageFactory as _
 from eea.epub.async import EpubJob
+
 
 class ExportView(BrowserView):
     """ Export View
@@ -187,7 +189,7 @@ class AsyncExportView(ExportView):
         from_email = portal.getProperty('email_from_address')
 
         if self.fallback or async.file_exists(filepath):
-            wrapper = async.ContextWrapper(self.context)(
+            wrapper = IContextWrapper(self.context)(
                 fileurl=fileurl,
                 filepath=filepath,
                 email=email,

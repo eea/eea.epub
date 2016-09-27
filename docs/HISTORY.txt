@@ -3,6 +3,8 @@ Changelog
 
 6.6.dev0 - (unreleased)
 -----------------------
+* Change: Updated to use plone.stringinterp IContextWrapper adapter
+  [avoinea]
 
 6.5 - (2016-05-19)
 ------------------
