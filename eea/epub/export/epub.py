@@ -4,9 +4,9 @@ import re
 import os
 import urlparse
 import logging
+from zipfile import ZipFile
 import requests
 from bs4 import BeautifulSoup
-from zipfile import ZipFile
 from zope.interface import implementer
 from App.Common import package_home
 from eea.epub.export.interfaces import IHtml2EPub
