@@ -1,26 +1,25 @@
 """ Browser Import
 """
 
-from bs4 import BeautifulSoup
 import xml.etree.cElementTree as ET
-from zipfile import ZipFile
 import logging
 import re
 import urllib
+from zipfile import ZipFile
+from bs4 import BeautifulSoup
 from Products.Five import BrowserView
+from Products.statusmessages.interfaces import IStatusMessage
+from Products.CMFCore.utils import getToolByName
 from eea.epub.interfaces import IImportedBook
 from eea.epub.interfaces import IImportedChapter
 from eea.epub.interfaces import IImportedImage
+from eea.epub.browser.events import EpubImportedEvent
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import alsoProvides
+from zope.event import notify
 import transaction
 import lxml.html
-
-from zope.event import notify
-from eea.epub.browser.events import EpubImportedEvent
-from Products.statusmessages.interfaces import IStatusMessage
-from Products.CMFCore.utils import getToolByName
 
 logger = logging.getLogger('eea.epub.browser.import')
 

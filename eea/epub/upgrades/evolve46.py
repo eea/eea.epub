@@ -1,8 +1,8 @@
 """ eea.epub 4.6 upgrade steps
 """
 import logging
-from Products.CMFCore.utils import getToolByName
 from types import InstanceType
+from Products.CMFCore.utils import getToolByName
 from eea.epub.mimetype import epub_mimetype
 
 logger = logging.getLogger('eea.epub: setuphandlers')

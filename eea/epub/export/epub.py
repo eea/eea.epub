@@ -2,9 +2,9 @@
 """
 import re
 import os
-import requests
 import urlparse
 import logging
+import requests
 from bs4 import BeautifulSoup
 from zipfile import ZipFile
 from zope.interface import implementer

@@ -1,8 +1,8 @@
 """ Other functional tests for importing epubs
 """
-from App.Common import package_home
 from StringIO import StringIO
 import os.path
+from App.Common import package_home
 from eea.epub.tests.base import EpubFunctionalTestCase
 
 

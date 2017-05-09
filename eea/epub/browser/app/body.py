@@ -1,8 +1,8 @@
 """ Epub Body
 """
 import logging
-import requests
 import urlparse
+import requests
 from bs4 import BeautifulSoup
 
 from zope.interface import implementer

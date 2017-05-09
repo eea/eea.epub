@@ -1,11 +1,11 @@
 """ Functional Tests
 """
-from zope.interface import alsoProvides
 from StringIO import StringIO
 from zipfile import ZipFile
+from zope.interface import alsoProvides
 from eea.epub.tests.base import EpubFunctionalTestCase
-from Products.Five.security import newInteraction
 from eea.epub.interfaces import ILayer
+from Products.Five.security import newInteraction
 
 
 class ExporterTest(EpubFunctionalTestCase):
