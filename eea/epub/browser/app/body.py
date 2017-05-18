@@ -15,6 +15,7 @@ from eea.converter.interfaces import IPDFOptionsMaker
 
 logger = logging.getLogger('eea.epub')
 
+
 @implementer(IPublishTraverse)
 class Css(BrowserView):
     """ Used for Css
@@ -26,6 +27,7 @@ class Css(BrowserView):
 
     def __call__(self, *args, **kwargs):
         return self.request.URL0
+
 
 @implementer(IPublishTraverse)
 class Body(BrowserView):
@@ -44,15 +46,13 @@ class Body(BrowserView):
         """
         if src.startswith(('http:', 'https:')):
             return src
-        else:
-            state = queryMultiAdapter(
-                (self.context.aq_inner, self.request),
-                 name=u'plone_context_state')
-            url = state.object_url()
-            if src.startswith('/'):
-                return urlparse.urljoin(url, src)
-            else:
-                return urlparse.urljoin("%s/" % url, src)
+        state = queryMultiAdapter(
+            (self.context.aq_inner, self.request),
+            name=u'plone_context_state')
+        url = state.object_url()
+        if src.startswith('/'):
+            return urlparse.urljoin(url, src)
+        return urlparse.urljoin("%s/" % url, src)
 
     def cleanup(self, soup):
         """ Remove unnecessary items

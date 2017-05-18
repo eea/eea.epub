@@ -25,8 +25,7 @@ class Html2EPub(object):
         if base_url:
             if src.startswith('/'):
                 return urlparse.urljoin(base_url, src)
-            else:
-                return urlparse.urljoin("%s/" % base_url, src)
+            return urlparse.urljoin("%s/" % base_url, src)
         return None
 
     def slugify(self, title):
