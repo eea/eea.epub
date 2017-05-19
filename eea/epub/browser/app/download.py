@@ -219,7 +219,8 @@ class AsyncExportView(ExportView):
         )
 
         worker = queryUtility(IAsyncService)
-        worker.queueJob(
+        queue = worker.getQueues()['']
+        worker.queueJobInQueue(queue, ('epub',),
             async.run_async_job,
             self.context, job,
             success_event=AsyncEPUBExportSuccess,
