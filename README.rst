@@ -1,6 +1,9 @@
 ========
 EEA Epub
 ========
+.. image:: http://ci.eionet.europa.eu/job/eea/job/eea.epub/job/master/badge/icon
+  :target: http://ci.eionet.europa.eu/job/eea/job/eea.epub/job/master/display/redirect
+
 A product which allows you to import in Plone epub files.
 
 
