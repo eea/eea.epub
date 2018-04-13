@@ -1,8 +1,12 @@
 ========
 EEA Epub
 ========
-.. image:: http://ci.eionet.europa.eu/job/eea/job/eea.epub/job/master/badge/icon
-  :target: http://ci.eionet.europa.eu/job/eea/job/eea.epub/job/master/display/redirect
+.. image:: https://ci.eionet.europa.eu/buildStatus/icon?job=eea/eea.epub/develop
+  :target: https://ci.eionet.europa.eu/job/eea/job/eea.epub/job/develop/display/redirect
+  :alt: Develop
+.. image:: https://ci.eionet.europa.eu/buildStatus/icon?job=eea/eea.epub/master
+  :target: https://ci.eionet.europa.eu/job/eea/job/eea.epub/job/master/display/redirect
+  :alt: Master
 
 A product which allows you to import in Plone epub files.
 
