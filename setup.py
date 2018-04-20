@@ -41,7 +41,7 @@ setup(name=NAME,
           'lxml',
           'requests',
           'plone.app.async',
-          'eea.converter > 10.7',
+          'eea.converter > 12.1',
           'eea.downloads > 1.0',
       ],
       entry_points="""
