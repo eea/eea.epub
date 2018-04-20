@@ -225,6 +225,7 @@ class AsyncExportView(ExportView):
             self.context, job,
             success_event=AsyncEPUBExportSuccess,
             fail_event=AsyncEPUBExportFail,
+            info=async.AsyncInfo(
             email=email,
             filepath=filepath,
             fileurl=fileurl,
@@ -233,7 +234,7 @@ class AsyncExportView(ExportView):
             from_email=from_email,
             title=title,
             etype='epub'
-        )
+        ))
 
         return self.finish(email=email)
 
