@@ -218,7 +218,13 @@ class AsyncExportView(ExportView):
             output=out, timeout=60, cleanup=[out]
         )
 
-        wrapper = IContextWrapper(self.context)(
+        worker = queryUtility(IAsyncService)
+        queue = worker.getQueues()['']
+        worker.queueJobInQueue(queue, ('epub',),
+            async.run_async_job,
+            self.context, job,
+            success_event=AsyncEPUBExportSuccess,
+            fail_event=AsyncEPUBExportFail,
             email=email,
             filepath=filepath,
             fileurl=fileurl,
@@ -228,14 +234,7 @@ class AsyncExportView(ExportView):
             title=title,
             etype='epub'
         )
-        worker = queryUtility(IAsyncService)
-        queue = worker.getQueues()['']
-        worker.queueJobInQueue(queue, ('epub',),
-            async.run_async_job,
-            wrapper, job,
-            success_event=AsyncEPUBExportSuccess,
-            fail_event=AsyncEPUBExportFail,
-        )
+
         return self.finish(email=email)
 
     def post(self, **kwargs):
