@@ -1,7 +1,7 @@
 Changelog
 =========
 
-7.2.dev0 - (unreleased)
+7.2 - (2018-04-24)
 -----------------------
  * Change: Make zc.async logs less verbose about ePub downloads
    [avoinea]
@@ -210,7 +210,7 @@ Changelog
 * Bug fix: Added dependencies to setup.py
   [voineali]
 
-4.0-dev - (2011-11-06)
+4.0 - (2011-11-06)
 ----------------------
 * Bug fix: proper parsing of html entities by using an html parser instead of
   an xml one
