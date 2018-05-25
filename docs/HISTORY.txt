@@ -1,6 +1,11 @@
 Changelog
 =========
 
+7.3 - (2018-05-25)
+-----------------------
+* Bug fix: Speed-up cache invalidation for backward-references
+  [avoinea refs #95020]
+
 7.2 - (2018-04-24)
 -----------------------
  * Change: Make zc.async logs less verbose about ePub downloads
@@ -263,4 +268,3 @@ Changelog
 0.1 - (2010-10-11)
 ------------------
 * Initial release
-
