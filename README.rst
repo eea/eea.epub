@@ -343,7 +343,7 @@ Live demo
 
 Here some live production demos at EEA (European Environment Agency)
 
-1. http://www.eea.europa.eu/soer/synthesis
+1. https://www.eea.europa.eu/soer/synthesis
 
 
 Source code
@@ -373,7 +373,7 @@ More details under docs/License.txt
 Links
 =====
 
-1. EEA Epub wiki page: http://taskman.eionet.europa.eu/projects/zope/wiki/HowToEpub
+1. EEA Epub wiki page: https://taskman.eionet.europa.eu/projects/zope/wiki/HowToEpub
 
 
 Funding
@@ -381,9 +381,9 @@ Funding
 
 EEA_ - European Enviroment Agency (EU)
 
-.. _EEA: http://www.eea.europa.eu/
-.. _eea.converter: http://eea.github.com/docs/eea.converter
-.. _eea.downloads: http://eea.github.com/docs/eea.downloads
-.. _eea.pdf: http://eea.github.com/docs/eea.pdf
+.. _EEA: https://www.eea.europa.eu/
+.. _eea.converter: https://eea.github.io/docs/eea.converter
+.. _eea.downloads: https://eea.github.io/docs/eea.downloads
+.. _eea.pdf: https://eea.github.io/docs/eea.pdf
 .. _plone.app.async: https://github.com/plone/plone.app.async#ploneappasync
 .. _zc.buildout: https://pypi.python.org/pypi/zc.buildout
