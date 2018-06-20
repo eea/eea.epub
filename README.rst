@@ -350,10 +350,10 @@ Source code
 ===========
 
 Latest source code (Plone 4 compatible):
-   https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/trunk
+   https://github.com/eea/eea.epub
 
 Plone 2 and 3 compatible:
-   https://svn.eionet.europa.eu/repositories/Zope/trunk/eea.epub/branches/plone25
+   https://github.com/eea/eea.epub/tree/plone25
 
 
 Copyright and license
