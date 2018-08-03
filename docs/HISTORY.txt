@@ -5,6 +5,8 @@ Changelog
 ---------------------
 * Change: updated URLs pointing to eea.europa.eu with https://
   [alecghica refs #95849]
+* Change: fixed the usage of BeautifulSoup
+  [alecghica refs #96974]
 
 7.3 - (2018-05-25)
 -----------------------

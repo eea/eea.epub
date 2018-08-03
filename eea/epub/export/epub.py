@@ -100,7 +100,7 @@ class Html2EPub(object):
 
         """
         manifest = []
-        soup = BeautifulSoup(body)
+        soup = BeautifulSoup(body, 'lxml')
         imgs = soup.find_all("img")
         for i, img in enumerate(imgs):
             if img.get('src'):
@@ -239,7 +239,7 @@ class Html2EPub(object):
                 iframe.replaceWith(
                     BeautifulSoup("<img src='%s' alt='%s' />" % (
                     img_src, "Chart at %s" % src
-                )).find("img"))
+                ), 'lxml').find("img"))
                 manifest.append(manifest_item)
             else:
                 chart_url = u'%s#tab-%s' % (base, chart)
@@ -251,7 +251,7 @@ class Html2EPub(object):
                     You may visit the online version at:
                   </span>
                   <a href="%(url)s">%(url)s</a>
-                </div>''' % {'url': chart_url})
+                </div>''' % {'url': chart_url}, 'lxml')
                 iframe.replaceWith(message.find("div"))
         return (soup, manifest)
 
