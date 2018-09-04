@@ -3,6 +3,8 @@ Changelog
 
 7.4-dev0 - (unreleased)
 ---------------------
+* Change: Added uninstall profile
+  [avoinea refs #96114]
 * Change: updated URLs pointing to eea.europa.eu with https://
   [alecghica refs #95849]
 * Change: fixed the usage of BeautifulSoup

@@ -9,4 +9,11 @@
       description="Extension profile for EEA Epub"
       provides="Products.GenericSetup.interfaces.EXTENSION" />
 
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="EEA Epub - uninstall"
+      directory="profiles/uninstall"
+      description="EEA Epub uninstall"
+      provides="Products.GenericSetup.interfaces.EXTENSION" />
+
 </configure>
