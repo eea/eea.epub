@@ -1,7 +1,7 @@
 Changelog
 =========
 
-7.4-dev0 - (unreleased)
+7.4 - (2018-09-06)
 ---------------------
 * Change: Added uninstall profile
   [avoinea refs #96114]
