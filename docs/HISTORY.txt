@@ -1,6 +1,15 @@
 Changelog
 =========
 
+7.4 - (2018-09-06)
+---------------------
+* Change: Added uninstall profile
+  [avoinea refs #96114]
+* Change: updated URLs pointing to eea.europa.eu with https://
+  [alecghica refs #95849]
+* Change: fixed the usage of BeautifulSoup
+  [alecghica refs #96974]
+
 7.3 - (2018-05-25)
 -----------------------
 * Bug fix: Speed-up cache invalidation for backward-references

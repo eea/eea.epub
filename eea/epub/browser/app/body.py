@@ -93,7 +93,7 @@ class Body(BrowserView):
 
         try:
             html = self.context.restrictedTraverse(path)
-            soup = BeautifulSoup(html())
+            soup = BeautifulSoup(html(), 'lxml')
             soup = self.cleanup(soup)
 
             # Print css
